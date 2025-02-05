@@ -1,123 +1,132 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
-
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  Modal,
-  Pressable,
-  LogBox,
-} from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { postIconOutlined } from '../../svg/svg-xml-list';
-import FloatingButton from '../../components/FloatingButton';
-import useAuth from '../../hooks/useAuth';
+import { useCallback, useEffect, useState } from 'react';
+import { LogBox, SafeAreaView } from 'react-native';
 import Explore from '../Explore';
-import GlobalFeed from '../GlobalFeed';
-import { getStyles } from './styles';
-import CreatePostModal from '../../components/CreatePostModal';
-import CustomTab from '../../components/CustomTab';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { TabName } from '../../enum/tabNameState';
+import { ComponentID, ElementID, PageID } from '../../enum/enumUIKitID';
+import { useUiKitConfig } from '../../hooks/useUiKitConfig';
+import CustomSocialTab from '../../components/CustomSocialTab/CustomSocialTab';
+import { useBehaviour } from '../../providers/BehaviourProvider';
+import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
+import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import AmityEmptyNewsFeedComponent from '../../components/AmityEmptyNewsFeedComponent/AmityEmptyNewsFeedComponent';
+import AmityNewsFeedComponent from '../../components/AmityNewsFeedComponent/AmityNewsFeedComponent';
+import AmitySocialHomeTopNavigationComponent from '../../components/AmitySocialHomeTopNavigationComponent/AmitySocialHomeTopNavigationComponent';
+import AmityMyCommunitiesComponent from '../../components/AmityMyCommunitiesComponent/AmityMyCommunitiesComponent';
 LogBox.ignoreAllLogs(true);
 export default function Home() {
-  // const { t, i18n } = useTranslation();
-  const styles = getStyles();
-  const { client } = useAuth();
+
+  const [newsFeedTab] = useUiKitConfig({
+    page: PageID.social_home_page,
+    component: ComponentID.WildCardComponent,
+    element: ElementID.newsfeed_button,
+    keys: ['text'],
+  }) as string[];
+  const [exploreTab] = useUiKitConfig({
+    page: PageID.social_home_page,
+    component: ComponentID.WildCardComponent,
+    element: ElementID.explore_button,
+    keys: ['text'],
+  }) as string[];
+  const [myCommunitiesTab] = useUiKitConfig({
+    page: PageID.social_home_page,
+    component: ComponentID.WildCardComponent,
+    element: ElementID.my_communities_button,
+    keys: ['text'],
+  }) as string[];
+
+  const { AmitySocialHomePageBehaviour } = useBehaviour();
+  // const styles = useStyles();
+  // const { client } = useAuth();
   const theme = useTheme() as MyMD3Theme;
-  const [activeTab, setActiveTab] = useState<TabName>(TabName.NewsFeed);
-  const [isVisible, setIsVisible] = useState(false);
+  // const dispatch = useDispatch();
+  // const { openPostTypeChoiceModal } = uiSlice.actions;
+  // const { excludes } = useConfig();
+  const [activeTab, setActiveTab] = useState<string>(newsFeedTab);
+  console.log('activeTab: ', activeTab);
+  const [myCommunities, setMyCommunities] = useState<Amity.Community[]>(null);
+  const [pageLoading, setPageLoading] = useState(true);
 
-  const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
-
-  const openCreatePostModal = () => {
-    setCreatePostModalVisible(true);
-  };
-  const closeCreatePostModal = () => {
-    setCreatePostModalVisible(false);
-    closeModal();
-  };
-  const openModal = () => {
-    setIsVisible(true);
-  };
-
-  const closeModal = () => {
-    Animated.timing(slideAnimation, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => setIsVisible(false));
-  };
-  const slideAnimation = useRef(new Animated.Value(0)).current;
+  // const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   useEffect(() => {
-    if (isVisible) {
-      Animated.timing(slideAnimation, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [isVisible, slideAnimation]);
+    const unsubscribe = CommunityRepository.getCommunities(
+      { membership: 'member', limit: 20 },
+      ({ data, error, loading }) => {
+        if (error) return;
+        setPageLoading(loading);
+        if (!loading) setMyCommunities(data);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
-  const modalStyle = {
-    transform: [
-      {
-        translateY: slideAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [600, 0], // Adjust this value to control the sliding distance
-        }),
-      },
-    ],
+
+
+
+  const onTabChange = useCallback(
+    (tabName: string) => {
+      if (AmitySocialHomePageBehaviour.onChooseTab)
+        return AmitySocialHomePageBehaviour.onChooseTab(tabName);
+      setActiveTab(tabName);
+    },
+    [AmitySocialHomePageBehaviour]
+  );
+
+  const onPressExploreCommunity = useCallback(() => {
+    onTabChange(exploreTab);
+  }, [exploreTab, onTabChange]);
+
+  const renderNewsFeed = () => {
+    if (pageLoading) return <NewsFeedLoadingComponent />;
+    if (activeTab === exploreTab) return <Explore />;
+    if (!myCommunities?.length)
+      return (
+        <AmityEmptyNewsFeedComponent
+          pageId={PageID.social_home_page}
+          onPressExploreCommunity={onPressExploreCommunity}
+        />
+      );
+    if (activeTab === newsFeedTab) {
+      return <AmityNewsFeedComponent pageId={PageID.social_home_page} />;
+    }
+    if (activeTab === myCommunitiesTab)
+      return (
+        <AmityMyCommunitiesComponent
+          pageId={PageID.social_home_page}
+          componentId={ComponentID.my_communities}
+        />
+      );
+    return null;
   };
+
   return (
-    <View>
-      <CustomTab
-        tabName={[TabName.NewsFeed, TabName.Explorer]}
+    <SafeAreaView
+      testID="social_home_page"
+      accessibilityLabel="social_home_page"
+      id="social_home_page"
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      {/* <CustomTab
+        tabName={
+          excludes.includes(ComponentID.StoryTab)
+            ? [TabName.NewsFeed, TabName.Explore]
+            : [TabName.NewsFeed, TabName.Explore, TabName.MyCommunities]
+        }
         onTabChange={setActiveTab}
+      /> */}
+      <AmitySocialHomeTopNavigationComponent currentTab={activeTab} />
+      <CustomSocialTab
+        tabNames={[newsFeedTab, exploreTab, myCommunitiesTab]}
+        onTabChange={onTabChange}
+        activeTab={activeTab}
       />
-      {activeTab === TabName.NewsFeed ? (
-        <View>
-          <GlobalFeed />
-          <FloatingButton onPress={openModal} />
-        </View>
-      ) : (
-        <View>
-          <Explore />
-        </View>
-      )}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={closeModal}
-      >
-        <Pressable onPress={closeModal} style={styles.modalContainer}>
-          <Animated.View style={[styles.modalContent, modalStyle]}>
-            <TouchableOpacity
-              onPress={openCreatePostModal}
-              style={styles.modalRow}
-            >
-              <SvgXml
-                xml={postIconOutlined(theme.colors.base)}
-                width="28"
-                height="28"
-              />
-              <Text style={styles.postText}>Post</Text>
-            </TouchableOpacity>
-            <CreatePostModal
-              visible={createPostModalVisible}
-              onClose={closeCreatePostModal}
-              userId={(client as Amity.Client).userId as string}
-              onSelect={closeCreatePostModal}
-            />
-          </Animated.View>
-        </Pressable>
-      </Modal>
-    </View>
+      {renderNewsFeed()}
+    </SafeAreaView>
   );
 }

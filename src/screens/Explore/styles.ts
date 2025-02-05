@@ -1,16 +1,16 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from 'src/providers/amity-ui-kit-provider';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
-export const getStyles = () => {
+export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.screenBackground,
+      backgroundColor: theme.colors.baseShade4,
     },
     recommendContainer: {
-      backgroundColor: theme.colors.screenBackground,
+      backgroundColor: theme.colors.baseShade4,
       paddingLeft: 15,
       paddingVertical: 10,
     },
@@ -115,17 +115,15 @@ export const getStyles = () => {
       width: 10,
       height: 17,
       marginRight: 10,
+      tintColor: theme.colors.base,
     },
     rowContainer: {
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      // paddingLeft: 10,
-      marginBottom: 10,
-    },
-    column: {
       alignItems: 'center',
-      flexDirection: 'row',
-      flex: 1,
+      width: '50%',
+      paddingHorizontal: 8,
+      marginBottom: 10,
     },
     columnText: {
       fontSize: 16,
@@ -133,6 +131,11 @@ export const getStyles = () => {
       marginLeft: 10,
       marginBottom: 10,
       color: theme.colors.base,
+      width: '70%',
+    },
+    wrapContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
     },
   });
   return styles;

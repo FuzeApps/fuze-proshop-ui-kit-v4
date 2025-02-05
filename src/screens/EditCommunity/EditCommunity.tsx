@@ -10,28 +10,27 @@ import {
   Pressable,
   FlatList,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import {
-  arrowOutlined,
-  closeIcon,
-  plusIcon,
-  privateIcon,
-  publicIcon,
-} from '../../svg/svg-xml-list';
+
 import { useStyles } from './styles';
 import ChooseCategoryModal from '../../components/ChooseCategoryModal';
 import { RadioButton } from 'react-native-radio-buttons-group';
 import AddMembersModal from '../../components/AddMembersModal';
-import type { UserInterface } from 'src/types/user.interface';
+import type { UserInterface } from '../../types/user.interface';
 import useAuth from '../../hooks/useAuth';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker'
 import { uploadImageFile } from '../../providers/file-provider';
 import { getAvatarURL } from '../../util/apiUtil';
 import { updateCommunity } from '../../providers/Social/communities-sdk';
 import { PrivacyState } from '../../enum/privacyState';
 import { useForm, Controller } from 'react-hook-form';
+import CloseIcon from '../../svg/CloseIcon';
+import PrivateIcon from '../../svg/PrivateIcon';
+import PublicIcon from '../../svg/PublicIcon';
+import { PlusIcon } from '../../svg/PlusIcon';
+import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
+import { AvatarIcon } from '../../svg/AvatarIcon';
 
 const EditCommunity = ({ navigation, route }) => {
   const styles = useStyles();
@@ -147,8 +146,8 @@ const EditCommunity = ({ navigation, route }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
       quality: 1,
+      allowsMultipleSelection: true,
     });
-
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0]?.uri);
     }
@@ -178,6 +177,9 @@ const EditCommunity = ({ navigation, route }) => {
     const removedUser = selectedUserList.filter((item) => item !== user);
     setSelectedUserList(removedUser);
   };
+  const avatarFileURL = (fileId: string) => {
+    return `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download?size=medium`;
+  };
 
   return (
     <ScrollView
@@ -203,9 +205,8 @@ const EditCommunity = ({ navigation, route }) => {
               </Text>
               <Text style={styles.inputLengthMeasure}>
                 {watch('community_name')
-                  ? `${
-                      watch('community_name').length
-                    } / ${MAX_COMMUNITY_NAME_LENGTH}`
+                  ? `${watch('community_name').length
+                  } / ${MAX_COMMUNITY_NAME_LENGTH}`
                   : `0/ ${MAX_COMMUNITY_NAME_LENGTH}`}
               </Text>
             </View>
@@ -236,9 +237,8 @@ const EditCommunity = ({ navigation, route }) => {
               <Text style={styles.inputTitle}>About</Text>
               <Text style={styles.inputLengthMeasure}>
                 {watch('community_description')
-                  ? `${
-                      watch('community_description').length
-                    } / ${MAX_ABOUT_TEXT_LENGTH}`
+                  ? `${watch('community_description').length
+                  } / ${MAX_ABOUT_TEXT_LENGTH}`
                   : `0/ ${MAX_ABOUT_TEXT_LENGTH}`}
               </Text>
             </View>
@@ -276,12 +276,7 @@ const EditCommunity = ({ navigation, route }) => {
               >
                 {categoryName.length > 0 ? categoryName : 'Select Category'}
               </Text>
-              <SvgXml
-                style={styles.arrowIcon}
-                xml={arrowOutlined(theme.colors.base)}
-                width={15}
-                height={15}
-              />
+              <ArrowOutlinedIcon width={15} height={15} color={theme.colors.base} />
             </Pressable>
           </View>
           <View style={styles.radioGroup}>
@@ -290,7 +285,7 @@ const EditCommunity = ({ navigation, route }) => {
               style={styles.listItem}
             >
               <View style={styles.avatar}>
-                <SvgXml width={20} height={20} xml={publicIcon} />
+                <PublicIcon width={20} height={20} />
               </View>
 
               <View style={styles.optionDescription}>
@@ -314,7 +309,8 @@ const EditCommunity = ({ navigation, route }) => {
               style={styles.listItem}
             >
               <View style={styles.avatar}>
-                <SvgXml width={24} height={24} xml={privateIcon()} />
+                <PrivateIcon width={24} height={24} />
+
               </View>
 
               <View style={styles.optionDescription}>
@@ -349,30 +345,27 @@ const EditCommunity = ({ navigation, route }) => {
                       <View style={styles.userItemWrap}>
                         <View style={styles.avatarRow}>
                           <View style={styles.avatarImageContainer}>
-                            <Image
-                              style={styles.avatarImage}
-                              source={
-                                item.avatarFileId
-                                  ? {
-                                      uri: getAvatarURL(
-                                        apiRegion,
-                                        item.avatarFileId
-                                      ),
+
+                            {
+                              item?.avatarFileId ?
+                                <Image
+                                  style={styles.avatar}
+                                  source={
+                                    {
+                                      uri: item.avatarFileId && avatarFileURL(item.avatarFileId),
                                     }
-                                  : require('../../../assets/icon/Placeholder.png')
-                              }
-                            />
+
+                                  }
+                                /> : <View style={styles.avatar}> <AvatarIcon /></View>
+                            }
+
                           </View>
                           <Text>{displayName(item.displayName)}</Text>
                         </View>
                         <TouchableOpacity
                           onPress={() => onDeleteUserPressed(item)}
                         >
-                          <SvgXml
-                            xml={closeIcon(theme.colors.base)}
-                            width={12}
-                            height={12}
-                          />
+                          <CloseIcon width={12} height={12} color={theme.colors.base} />
                         </TouchableOpacity>
                       </View>
                     )}
@@ -386,12 +379,7 @@ const EditCommunity = ({ navigation, route }) => {
                   style={styles.addIcon}
                 >
                   <View style={styles.avatar}>
-                    <SvgXml
-                      style={styles.arrowIcon}
-                      xml={plusIcon(theme.colors.base)}
-                      width={24}
-                      height={24}
-                    />
+                    <PlusIcon style={styles.arrowIcon} width={24} height={24} color={theme.colors.base} />
                   </View>
                 </Pressable>
               </View>
@@ -409,7 +397,8 @@ const EditCommunity = ({ navigation, route }) => {
         onSelect={handleAddMembers}
         onClose={() => setAddMembersModal(false)}
         visible={addMembersModal}
-        initUserList={selectedUserList}
+        initUserList={[]}
+        excludeUserList={[]}
       />
     </ScrollView>
   );
