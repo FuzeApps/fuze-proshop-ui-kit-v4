@@ -31,9 +31,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amityco/asc-react-native-ui-kit@workspace:.":
+"@amityco/react-native-social-ui-kit-example@workspace:example":
   version: 0.0.0-use.local
-  resolution: "@amityco/asc-react-native-ui-kit@workspace:."
+  resolution: "@amityco/react-native-social-ui-kit-example@workspace:example"
+  dependencies:
+    "@babel/core": ^7.20.0
+    "@expo/webpack-config": ^18.0.1
+    "@react-navigation/native": ^6.1.10
+    "@react-navigation/native-stack": ^6.9.18
+    "@react-navigation/stack": ^6.3.21
+    "@types/react-native": ^0.73.0
+    babel-loader: ^8.1.0
+    babel-plugin-module-resolver: ^5.0.0
+    expo: ~50.0.7
+    expo-status-bar: ~1.11.1
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-native: 0.73.4
+    react-native-safe-area-context: ^4.9.0
+    react-native-screens: ^3.29.0
+    react-native-web: ~0.19.6
+    reactotron-react-native: ^5.1.11
+  languageName: unknown
+  linkType: soft
+
+"@amityco/react-native-social-ui-kit@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@amityco/react-native-social-ui-kit@workspace:."
   dependencies:
     "@amityco/ts-sdk-react-native": ^6.34.0
     "@commitlint/config-conventional": ^17.0.2
@@ -95,29 +119,6 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  languageName: unknown
-  linkType: soft
-
-"@amityco/react-native-social-ui-kit-example@workspace:example":
-  version: 0.0.0-use.local
-  resolution: "@amityco/react-native-social-ui-kit-example@workspace:example"
-  dependencies:
-    "@babel/core": ^7.20.0
-    "@expo/webpack-config": ^18.0.1
-    "@react-navigation/native": ^6.1.10
-    "@react-navigation/native-stack": ^6.9.18
-    "@react-navigation/stack": ^6.3.21
-    "@types/react-native": ^0.73.0
-    babel-loader: ^8.1.0
-    babel-plugin-module-resolver: ^5.0.0
-    expo: ~50.0.7
-    expo-status-bar: ~1.11.1
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-native: 0.73.4
-    react-native-safe-area-context: ^4.9.0
-    react-native-screens: ^3.29.0
-    react-native-web: ~0.19.6
   languageName: unknown
   linkType: soft
 
@@ -18336,7 +18337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mitt@npm:^3.0.0":
+"mitt@npm:^3.0.0, mitt@npm:^3.0.1":
   version: 3.0.1
   resolution: "mitt@npm:3.0.1"
   checksum: b55a489ac9c2949ab166b7f060601d3b6d893a852515ae9eca4e11df01c013876df777ea109317622b5c1c60e8aae252558e33c8c94e14124db38f64a39614b1
@@ -21630,6 +21631,34 @@ __metadata:
   dependencies:
     loose-envify: ^1.1.0
   checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
+  languageName: node
+  linkType: hard
+
+"reactotron-core-client@npm:2.9.7":
+  version: 2.9.7
+  resolution: "reactotron-core-client@npm:2.9.7"
+  dependencies:
+    reactotron-core-contract: 0.2.5
+  checksum: 6149ad998c5cd8dccc41f9b93a21d96e44e1cde04eda2b5e0697327f7aa7d5366cbdf900d61846be269b281342de8d4b09ee8ba1d64aa2d613082e66c914178d
+  languageName: node
+  linkType: hard
+
+"reactotron-core-contract@npm:0.2.5":
+  version: 0.2.5
+  resolution: "reactotron-core-contract@npm:0.2.5"
+  checksum: 54b56322ba05559a9faa1d94407a45c6777c9e50f2efb2a1759eead2acf17e053f68c27e5c4338ac6f7f2d6eb649b4ad375153288659d836ef931df44859047a
+  languageName: node
+  linkType: hard
+
+"reactotron-react-native@npm:^5.1.11":
+  version: 5.1.12
+  resolution: "reactotron-react-native@npm:5.1.12"
+  dependencies:
+    mitt: ^3.0.1
+    reactotron-core-client: 2.9.7
+  peerDependencies:
+    react-native: ">=0.40.0"
+  checksum: 073a7ef85f39b731a1e54ada487a25c5ee75b1161ce2957e226a24acf4ebf6e8911478e5e94981c3eebe4f7ab1d95da70deae79cc94557593780763806bc0948
   languageName: node
   linkType: hard
 

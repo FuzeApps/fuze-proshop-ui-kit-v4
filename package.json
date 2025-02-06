@@ -1,5 +1,5 @@
 {
-  "name": "@amityco/asc-react-native-ui-kit",
+  "name": "@amityco/react-native-social-ui-kit",
   "version": "4.0.0",
   "description": "Social UIKit",
   "main": "lib/commonjs/index.js",
@@ -84,6 +84,7 @@
   "workspaces": [
     "example"
   ],
+  "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
