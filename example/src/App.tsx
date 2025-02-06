@@ -8,6 +8,10 @@ import {
 import config from '../uikit.config.json';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+if (__DEV__) {
+  require('../ReactotronConfig');
+}
+
 export default function App() {
   return (
     <SafeAreaProvider>
