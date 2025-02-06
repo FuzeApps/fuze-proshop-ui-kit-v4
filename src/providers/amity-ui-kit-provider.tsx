@@ -1,19 +1,19 @@
+import { hslToColorString, lighten, parseToHsl } from 'polished';
 import * as React from 'react';
 import { useColorScheme } from 'react-native';
 import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
+import { MenuProvider } from 'react-native-popup-menu';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
+import fallBackConfig from '../../uikit.config.json';
+import useValidateConfig from '../hooks/useValidateConfig';
+import { BehaviourProvider } from '../providers/BehaviourProvider';
 import { store } from '../redux/store';
+import { IBehaviour } from '../types/behaviour.interface';
 import { IConfigRaw } from '../types/config.interface';
 import { validateConfigColor } from '../util/colorUtil';
 import AuthContextProvider from './auth-provider';
 import { ConfigProvider } from './config-provider';
-
-import { hslToColorString, lighten, parseToHsl } from 'polished';
-import { MenuProvider } from 'react-native-popup-menu';
-import fallBackConfig from '../../uikit.config.json';
-import useValidateConfig from '../hooks/useValidateConfig';
-import { BehaviourProvider } from '../providers/BehaviourProvider';
-import { IBehaviour } from '../types/behaviour.interface';
 
 export type CusTomTheme = typeof DefaultTheme;
 export interface IAmityUIkitProvider {
@@ -119,7 +119,9 @@ export default function AmityUiKitProvider({
         >
           <ConfigProvider configs={configData}>
             <BehaviourProvider behaviour={behaviour}>
-              <PaperProvider theme={globalTheme}>{children}</PaperProvider>
+              <PaperProvider theme={globalTheme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </PaperProvider>
             </BehaviourProvider>
           </ConfigProvider>
         </AuthContextProvider>
