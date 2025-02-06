@@ -1,5 +1,5 @@
 {
-  "name": "fuze-proshop-ui-kit-v4",
+  "name": "@amityco/asc-react-native-ui-kit",
   "version": "4.0.0",
   "description": "Social UIKit",
   "main": "lib/commonjs/index.js",
