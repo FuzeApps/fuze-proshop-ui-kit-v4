@@ -17,18 +17,22 @@ import {
   type NativeScrollEvent,
 } from 'react-native';
 import debounce from 'lodash.debounce';
-import { getStyles } from './styles';
-import { SvgXml } from 'react-native-svg';
-import { circleCloseIcon, plusIcon, searchIcon } from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import type { ISearchItem } from '../../components/SearchItem';
 import SearchItem from '../../components/SearchItem';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SearchIcon } from '../../svg/SearchIcon';
+import { PlusIcon } from '../../svg/PlusIcon';
+import CircleCloseIcon from '../../svg/CircleCloseIcon';
+import CloseIcon from '../../svg/CloseIcon';
 
-export default function AllMyCommunity({ navigation }) {
+export default function AllMyCommunity() {
   const theme = useTheme() as MyMD3Theme;
-  const styles = getStyles();
+  const styles = useStyles();
   LogBox.ignoreAllLogs(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType] = useState('community');
@@ -37,6 +41,8 @@ export default function AllMyCommunity({ navigation }) {
   const [searchList, setSearchList] = useState<ISearchItem[]>([]);
   const scrollViewRef = useRef(null);
   const { data: communitiesArr = [], onNextPage } = communities ?? {};
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const onClickCreateCommunity = () => {
     navigation.navigate('CreateCommunity');
@@ -93,8 +99,8 @@ export default function AllMyCommunity({ navigation }) {
 
   const headerRight = useCallback(
     () => (
-      <TouchableOpacity onPress={onClickCreateCommunity}>
-        <SvgXml xml={plusIcon(theme.colors.base)} width="25" height="25" />
+      <TouchableOpacity style={styles.btnWrap} onPress={onClickCreateCommunity}>
+        <PlusIcon color={theme.colors.base} width={25} height={25}/>
       </TouchableOpacity>
     ),
     []
@@ -102,8 +108,19 @@ export default function AllMyCommunity({ navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+          style={styles.btnWrap}
+        >
+          <CloseIcon  color={theme.colors.base} />
+        </TouchableOpacity>
+      ),
       headerRight: () => headerRight(),
       headerTitle: 'My Community',
+
     });
     return () => {
       debouncedResults.cancel();
@@ -122,7 +139,7 @@ export default function AllMyCommunity({ navigation }) {
     <View style={styles.container}>
       <View style={styles.headerWrap}>
         <View style={styles.inputWrap}>
-          <SvgXml xml={searchIcon(theme.colors.base)} width="20" height="20" />
+       <SearchIcon color={theme.colors.base }/>
 
           <TextInput
             style={styles.input}
@@ -130,7 +147,7 @@ export default function AllMyCommunity({ navigation }) {
             onChangeText={handleChange}
           />
           <TouchableOpacity onPress={clearButton}>
-            <SvgXml xml={circleCloseIcon} width="20" height="20" />
+            <CircleCloseIcon width={20} height={20}/>
           </TouchableOpacity>
         </View>
 

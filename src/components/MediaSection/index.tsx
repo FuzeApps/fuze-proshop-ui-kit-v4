@@ -1,40 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
-  ImageStyle,
-  StyleProp,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-
-import { SvgXml } from 'react-native-svg';
-
-import { getStyles } from './styles';
+import { useStyles } from './styles';
 import useAuth from '../../hooks/useAuth';
 import { IVideoPost, MediaUri } from '../Social/PostList';
 import { getPostById } from '../../providers/Social/feed-sdk';
 import { useSelector } from 'react-redux';
 import ImageView from '../../components/react-native-image-viewing/dist';
 import { RootState } from '../../redux/store';
-import { playBtn } from '../../svg/svg-xml-list';
+import PollSection from '../PollSection/PollSection';
+import PlayIcon from '../../svg/PlayIcon';
 
 interface IMediaSection {
   childrenPosts: string[];
 }
-export default function MediaSection({ childrenPosts }: IMediaSection) {
+const MediaSection: React.FC<IMediaSection> = ({ childrenPosts }) => {
+
   const { apiRegion } = useAuth();
   const [imagePosts, setImagePosts] = useState<string[]>([]);
   const [videoPosts, setVideoPosts] = useState<IVideoPost[]>([]);
+  const [pollIds, setPollIds] = useState<{ pollId: string }[]>([]);
+
   const [imagePostsFullSize, setImagePostsFullSize] = useState<MediaUri[]>([]);
   const [videoPostsFullSize, setVideoPostsFullSize] = useState<MediaUri[]>([]);
   const [visibleFullImage, setIsVisibleFullImage] = useState<boolean>(false);
   const [imageIndex, setImageIndex] = useState<number>(0);
+  
 
-  const styles = getStyles();
-  let imageStyle: StyleProp<ImageStyle> | StyleProp<ImageStyle>[] =
+  const styles = useStyles();
+  let imageStyle: any =
     styles.imageLargePost;
-  let colStyle: StyleProp<ImageStyle> = styles.col2;
+  let colStyle: any = styles.col2;
   const { currentPostdetail } = useSelector(
     (state: RootState) => state.postDetail
   );
@@ -80,6 +80,14 @@ export default function MediaSection({ childrenPosts }: IMediaSection) {
           });
         } else if (item.dataType === 'video') {
           setVideoPosts((prev) => {
+            const isExisted = prev.some(
+              (video) =>
+                video.videoFileId.original === item.data.videoFileId.original
+            );
+            return !isExisted ? [...prev, item.data] : [...prev];
+          });
+        } else if (item.dataType === 'poll') {
+          setPollIds((prev) => {
             return !prev.includes(item.data) ? [...prev, item.data] : [...prev];
           });
         }
@@ -94,19 +102,19 @@ export default function MediaSection({ childrenPosts }: IMediaSection) {
   }, [childrenPosts, currentPostdetail, postList, postListGlobal, getPostInfo]);
 
   function onClickImage(index: number): void {
-    setIsVisibleFullImage(true);
-    setImageIndex(index);
+      setIsVisibleFullImage(true);
+      setImageIndex(index);
+
   }
 
   function renderMediaPosts() {
     const thumbnailFileIds: string[] =
       videoPosts.length > 0
         ? videoPosts.map((item) => {
-            return `https://api.${apiRegion}.amity.co/api/v3/files/${item?.thumbnailFileId}/download?size=medium`;
-          })
+          return `https://api.${apiRegion}.amity.co/api/v3/files/${item?.thumbnailFileId}/download?size=medium`;
+        })
         : [];
-    let mediaPosts: string[] = [];
-    mediaPosts =
+    const mediaPosts =
       [...imagePosts].length > 0 ? [...imagePosts] : [...thumbnailFileIds];
     const imageElement = mediaPosts.map((item: string, index: number) => {
       if (mediaPosts.length === 1) {
@@ -197,9 +205,8 @@ export default function MediaSection({ childrenPosts }: IMediaSection) {
               />
               {index === 3 && imagePosts.length > 4 && (
                 <View style={styles.overlay}>
-                  <Text style={styles.overlayText}>{`+ ${
-                    imagePosts.length - 3
-                  }`}</Text>
+                  <Text style={styles.overlayText}>{`+ ${imagePosts.length - 3
+                    }`}</Text>
                 </View>
               )}
             </View>
@@ -233,14 +240,18 @@ export default function MediaSection({ childrenPosts }: IMediaSection) {
   function renderPlayButton() {
     return (
       <View style={styles.playButton}>
-        <SvgXml xml={playBtn} width="50" height="50" />
+        <PlayIcon />
       </View>
     );
   }
 
   return (
     <View>
-      {renderMediaPosts()}
+      {pollIds.length > 0 ? (
+        <PollSection pollId={pollIds[0].pollId} />
+      ) : (
+        renderMediaPosts()
+      )}
       <ImageView
         images={
           imagePostsFullSize.length > 0
@@ -255,4 +266,6 @@ export default function MediaSection({ childrenPosts }: IMediaSection) {
       />
     </View>
   );
-}
+};
+
+export default React.memo(MediaSection);

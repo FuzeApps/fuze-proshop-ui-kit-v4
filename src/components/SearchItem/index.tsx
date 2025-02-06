@@ -1,18 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { getStyles } from './styles';
-import { SvgXml } from 'react-native-svg';
-import { communityIcon, userIcon } from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 import { CategoryRepository } from '@amityco/ts-sdk-react-native';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../../hooks/useAuth';
+import UserIcon from '../../svg/UserIcon';
+import CommunityIcon from '../../svg/CommunityIcon';
 export interface ISearchItem {
   targetId: string;
   targetType: string;
   displayName: string;
   categoryIds?: string[];
   avatarFileId?: string;
+  id?: string;
 }
 export default function SearchItem({
   target,
@@ -23,7 +24,7 @@ export default function SearchItem({
   onPress?: (target: ISearchItem) => void;
   userProfileNavigateEnabled?: boolean;
 }) {
-  const styles = getStyles();
+  const styles = useStyles();
   const { apiRegion } = useAuth();
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [categoryName, setCategoryName] = useState<string>('');
@@ -84,12 +85,8 @@ export default function SearchItem({
             }}
           />
         ) : (
-          <SvgXml
-            style={styles.avatar}
-            width={40}
-            height={40}
-            xml={target.targetType === 'user' ? userIcon() : communityIcon}
-          />
+
+          target.targetType === 'user' ? <UserIcon style={styles.avatar} width={40} height={40} /> : <CommunityIcon style={styles.avatar} width={40} height={40} />
         )}
         <View>
           <Text style={styles.itemText}>{displayName()}</Text>

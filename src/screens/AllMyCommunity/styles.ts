@@ -1,12 +1,17 @@
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import useConfig from '../../hooks/useConfig';
+import { ComponentID } from '../../util/enumUIKitID';
 
-export const getStyles = () => {
+export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
+  const { excludes } = useConfig();
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
+      paddingBottom: excludes.includes(ComponentID.StoryTab) ? 0 : 250,
+      height: '100%'
     },
     headerWrap: {
       flexDirection: 'row',
@@ -19,7 +24,7 @@ export const getStyles = () => {
       backgroundColor: theme.colors.secondary,
       color: theme.colors.base,
       paddingHorizontal: 10,
-      paddingVertical: Platform.OS === 'ios' ? 10 : 0,
+      paddingVertical: Platform.OS === 'android' ? 0 : 8,
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -43,6 +48,8 @@ export const getStyles = () => {
     },
     btnWrap: {
       padding: 10,
+      marginHorizontal: 8,
+
     },
   });
 

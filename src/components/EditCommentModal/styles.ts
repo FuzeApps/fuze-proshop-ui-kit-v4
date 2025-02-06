@@ -1,8 +1,8 @@
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from 'src/providers/amity-ui-kit-provider';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
-export const getStyles = () => {
+export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
 
   const styles = StyleSheet.create({
@@ -42,6 +42,7 @@ export const getStyles = () => {
       fontSize: 15,
       marginHorizontal: 3,
       color: theme.colors.base,
+      height: 120
     },
 
     AllInputWrap: {
@@ -58,7 +59,7 @@ export const getStyles = () => {
       paddingTop: 15,
       alignItems: 'center',
       borderTopWidth: 1,
-      borderTopColor: theme.colors.border,
+      borderTopColor: theme.colors.baseShade4,
     },
   });
   return styles;

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { getStyles } from './styles';
+import { useStyles } from './styles';
 import RoundCheckbox from '../RoundCheckbox/index';
-import type { UserInterface } from 'src/types/user.interface';
+import type { UserInterface } from '../../types/user.interface';
 import useAuth from '../../hooks/useAuth';
+import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
+import { SvgXml } from 'react-native-svg';
+import { userIcon } from '../../svg/svg-xml-list';
 
 export default function UserItem({
   user,
@@ -18,7 +21,7 @@ export default function UserItem({
   onPress?: (user: UserInterface) => void;
   onThreeDotTap?: (user: UserInterface) => void;
 }) {
-  const styles = getStyles();
+  const styles = useStyles();
   const { apiRegion } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
   const maxLength = 25;
@@ -39,22 +42,26 @@ export default function UserItem({
     return 'Display name';
   };
   const avatarFileURL = (fileId: string) => {
+    console.log('fileId: ', fileId);
     return `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download?size=medium`;
   };
 
   return (
     <TouchableOpacity style={styles.listItem} onPress={handleToggle}>
       <View style={styles.leftContainer}>
-        <Image
-          style={styles.avatar}
-          source={
-            user.avatarFileId
-              ? {
-                  uri: user.avatarFileId && avatarFileURL(user.avatarFileId!),
+        {
+          user.avatarFileId ?
+            <Image
+              style={styles.avatar}
+              source={
+                {
+                  uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
                 }
-              : require('../../../assets/icon/Placeholder.png')
-          }
-        />
+
+              }
+            /> :   <SvgXml style={styles.avatar} xml={userIcon()} />
+        }
+
         <Text style={styles.itemText}>{displayName()}</Text>
       </View>
       {!showThreeDot ? (
@@ -67,10 +74,8 @@ export default function UserItem({
             }
           }}
         >
-          <Image
-            source={require('../../../assets/icon/threeDot.png')}
-            style={styles.dotIcon}
-          />
+
+          <ThreeDotsIcon style={styles.dotIcon} />
         </TouchableOpacity>
       )}
     </TouchableOpacity>

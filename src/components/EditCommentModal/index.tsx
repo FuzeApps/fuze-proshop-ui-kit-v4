@@ -12,7 +12,7 @@ import {
 import { SvgXml } from 'react-native-svg';
 import { closeIcon } from '../../svg/svg-xml-list';
 
-import { getStyles } from './styles';
+import { useStyles } from './styles';
 
 import type { IComment } from '../Social/CommentList';
 import { editComment } from '../../providers/Social/comment-sdk';
@@ -33,7 +33,7 @@ const EditCommentModal = ({
   onFinishEdit,
 }: IModal) => {
   const theme = useTheme() as MyMD3Theme;
-  const styles = getStyles();
+  const styles = useStyles();
   const [inputMessage, setInputMessage] = useState(
     commentDetail?.data?.text ?? ''
   );
@@ -42,13 +42,17 @@ const EditCommentModal = ({
     if (inputMessage) {
       const editedComment = await editComment(
         inputMessage,
-        commentDetail.commentId
+        commentDetail.commentId,
+        'post'
       );
       if (editedComment) {
         onFinishEdit && onFinishEdit(inputMessage);
       }
     }
   };
+  const disabledState =
+    !inputMessage || inputMessage === commentDetail?.data?.text;
+  const disabledColor = disabledState && { color: theme.colors.baseShade2 };
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -62,8 +66,9 @@ const EditCommentModal = ({
         <TouchableOpacity
           onPress={handleEditComment}
           style={styles.headerTextContainer}
+          disabled={disabledState}
         >
-          <Text style={styles.headerText}>Save</Text>
+          <Text style={[styles.headerText, disabledColor]}>Save</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>

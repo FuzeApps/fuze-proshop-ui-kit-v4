@@ -1,9 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { FlatList, View, Text, ActivityIndicator, Image } from 'react-native';
-import { getStyles } from './styles';
+import {
+  FlatList,
+  View,
+  Text,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import { useStyles } from './styles';
 import CloseButton from '../../components/BackButton';
 import useAuth from '../../hooks/useAuth';
+import { SvgXml } from 'react-native-svg';
+import { communityIcon } from '../../svg/svg-xml-list';
 
 export default function CommunityList({ navigation, route }: any) {
   const { apiRegion } = useAuth();
@@ -12,7 +22,7 @@ export default function CommunityList({ navigation, route }: any) {
   const { categoryId, categoryName } = route.params;
   const [hasNextPage, setHasNextPage] = useState(false);
 
-  const styles = getStyles();
+  const styles = useStyles();
   const onNextPageRef = useRef<(() => void) | null>(null);
   const isFetchingRef = useRef(false);
   const onEndReachedCalledDuringMomentumRef = useRef(true);
@@ -52,22 +62,47 @@ export default function CommunityList({ navigation, route }: any) {
 
     loadCommunities();
   }, []);
-
+  const onPressCommunity = useCallback(
+    ({
+      communityId,
+      communityName,
+    }: {
+      communityId: string;
+      communityName: string;
+    }) => {
+      navigation.navigate('CommunityHome', { communityId, communityName });
+    },
+    []
+  );
+  const avatarFileURL = (fileId: string) => {
+    return `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download?size=medium`;
+  };
   const renderCommunity = ({ item }: { item: Amity.Community }) => {
     return (
-      <View style={styles.rowContainer}>
-        <Image
-          style={styles.avatar}
-          source={
-            item.avatarFileId
-              ? {
-                  uri: `https://api.${apiRegion}.amity.co/api/v3/files/${item.avatarFileId}/download`,
+      <TouchableOpacity
+        style={styles.rowContainer}
+        onPress={() =>
+          onPressCommunity({
+            communityId: item.communityId,
+            communityName: item.displayName,
+          })
+        }
+      >
+        {
+          item.avatarFileId ?
+            <Image
+              style={styles.avatar}
+              source={
+                {
+                  uri: item.avatarFileId && avatarFileURL(item.avatarFileId!),
                 }
-              : require('../../../assets/icon/Placeholder.png')
-          }
-        />
+
+              }
+            /> : <View style={styles.avatar}><SvgXml xml={communityIcon} /></View>
+        }
+
         <Text style={styles.categoryText}>{item.displayName}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -99,7 +134,6 @@ export default function CommunityList({ navigation, route }: any) {
         renderItem={renderCommunity}
         keyExtractor={(item) => item.communityId.toString()}
         ListFooterComponent={renderFooter}
-        // onEndReached={handleEndReached}
         onEndReached={handleEndReached}
         onMomentumScrollBegin={() =>
           (onEndReachedCalledDuringMomentumRef.current = false)
