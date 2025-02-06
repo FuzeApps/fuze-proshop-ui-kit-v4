@@ -1,10 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useStyles } from './styles';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
-
-
-
 import { useAmityPage } from '../../hooks/useUiKitReference';
 import { PageID, TabName } from '../../enum';
 import CustomTab from '../../components/CustomTab';

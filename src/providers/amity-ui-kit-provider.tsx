@@ -3,11 +3,11 @@ import { useColorScheme } from 'react-native';
 import { Provider } from 'react-redux';
 import AuthContextProvider from './auth-provider';
 import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
+import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import { ConfigProvider } from './config-provider';
 import { IConfigRaw } from '../types/config.interface';
 import { validateConfigColor } from '../util/colorUtil';
-
 import fallBackConfig from '../../uikit.config.json';
 import { BehaviourProvider } from '../providers/BehaviourProvider';
 import { IBehaviour } from '../types/behaviour.interface';
@@ -15,6 +15,7 @@ import { lighten, parseToHsl, hslToColorString } from 'polished';
 import { MenuProvider } from 'react-native-popup-menu';
 import useValidateConfig from '../hooks/useValidateConfig';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 export type CusTomTheme = typeof DefaultTheme;
 export interface IAmityUIkitProvider {
@@ -124,7 +125,6 @@ export default function AmityUiKitProvider({
                 <SafeAreaProvider>
                   {children}
                 </SafeAreaProvider>
-
               </PaperProvider>
             </BehaviourProvider>
           </ConfigProvider>

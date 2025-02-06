@@ -13,6 +13,10 @@ import {
 
 import config from '../uikit.config.json';
 
+if (__DEV__) {
+  require('../ReactotronConfig');
+}
+
 export default function App() {
   return (
     <AmityUiKitProvider
