@@ -7,12 +7,9 @@ import {
   LogBox,
   ScrollView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { getStyles } from './styles';
-import { SvgXml } from 'react-native-svg';
-import { circleCloseIcon, searchIcon } from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 import { useNavigation } from '@react-navigation/native';
-import CustomTab from '../../components/CustomTab';
+import CustomTab from '../../components/CustomTabV3';
 import {
   CommunityRepository,
   UserRepository,
@@ -22,6 +19,8 @@ import SearchItem from '../../components/SearchItem';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { TabName } from '../../enum/tabNameState';
+import CircleCloseIcon from '../../svg/CircleCloseIcon';
+import { SearchIcon } from '../../svg/SearchIcon';
 
 enum searchTypeEnum {
   user = 'user',
@@ -31,7 +30,7 @@ enum searchTypeEnum {
 export default function CommunitySearch() {
   const theme = useTheme() as MyMD3Theme;
   LogBox.ignoreAllLogs(true);
-  const styles = getStyles();
+  const styles = useStyles();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState(searchTypeEnum.community);
   const [communities, setCommunities] =
@@ -144,15 +143,11 @@ export default function CommunitySearch() {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.headerWrap}>
         <View style={styles.inputWrap}>
           <TouchableOpacity onPress={() => searchAccounts(searchTerm)}>
-            <SvgXml
-              xml={searchIcon(theme.colors.base)}
-              width="20"
-              height="20"
-            />
+            <SearchIcon width={20} height={20} color={theme.colors.base}/>
           </TouchableOpacity>
           <TextInput
             style={styles.input}
@@ -160,7 +155,7 @@ export default function CommunitySearch() {
             onChangeText={handleChange}
           />
           <TouchableOpacity onPress={clearButton}>
-            <SvgXml xml={circleCloseIcon} width="20" height="20" />
+            <CircleCloseIcon width={20} height={20}/>
           </TouchableOpacity>
         </View>
 
@@ -177,6 +172,6 @@ export default function CommunitySearch() {
           <SearchItem key={index} target={item} />
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }

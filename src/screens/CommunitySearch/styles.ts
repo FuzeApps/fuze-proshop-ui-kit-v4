@@ -1,8 +1,8 @@
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from 'src/providers/amity-ui-kit-provider';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
-export const getStyles = () => {
+export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
   const styles = StyleSheet.create({
     container: {
@@ -19,7 +19,7 @@ export const getStyles = () => {
       marginHorizontal: 16,
       backgroundColor: theme.colors.secondary,
       paddingHorizontal: 10,
-      paddingVertical: Platform.OS === 'ios' ? 10 : 0,
+      paddingVertical: Platform.OS === 'android' ? 0 : 8,
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'space-between',

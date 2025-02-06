@@ -13,15 +13,23 @@ const feedSlice = createSlice({
   initialState,
   reducers: {
     updateFeed: (state, action: PayloadAction<IPost[]>) => {
-      state.postList = [...action.payload];
+      const getUniqueArrayById = (arr: IPost[]) => {
+        const uniqueIds = new Set(state.postList.map((post) => post.postId));
+        return arr.filter((post) => !uniqueIds.has(post.postId));
+      };
+      state.postList = [
+        ...getUniqueArrayById(action.payload),
+        ...state.postList,
+      ];
     },
-
+    addPostToFeed: (state, action: PayloadAction<IPost>) => {
+      state.postList = [action.payload, ...state.postList];
+    },
     updateByPostId: (
       state,
       action: PayloadAction<{ postId: string; postDetail: IPost }>
     ) => {
       const { postId, postDetail } = action.payload;
-
       const index = state.postList.findIndex((item) => item.postId === postId);
       state.postList[index] = postDetail;
     },

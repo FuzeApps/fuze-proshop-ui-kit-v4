@@ -2,18 +2,19 @@
 import React, { useEffect, useState, useMemo } from 'react';
 // import { useTranslation } from 'react-i18next';
 
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { personXml } from '../../../svg/svg-xml-list';
-import { getStyles } from './styles';
+import { View, Text, TouchableOpacity, Image, StyleProp, ImageStyle } from 'react-native';
+
+import { useStyles } from './styles';
 
 import type { UserInterface } from '../../../types/user.interface';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useAuth from '../../../hooks/useAuth';
 import MediaSection from '../../../components/MediaSection';
-import { IMentionPosition } from '../../../screens/CreatePost';
+
 import { PostRepository } from '@amityco/ts-sdk-react-native';
+import PersonIcon from '../../../svg/PersonIcon';
+import { IMentionPosition } from '../../../types/type';
 
 export interface IPost {
   postId: string;
@@ -54,7 +55,7 @@ export default function PendingPostList({
   const [postData, setPostData] = useState<IPost>(postDetail);
 
   const { apiRegion } = useAuth();
-  const styles = getStyles();
+  const styles = useStyles();
   const [textPost, setTextPost] = useState<string>();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -201,14 +202,14 @@ export default function PendingPostList({
         <View style={styles.user}>
           {user?.avatarFileId ? (
             <Image
-              style={styles.avatar}
+              style={styles.avatar as StyleProp<ImageStyle>}
               source={{
                 uri: `https://api.${apiRegion}.amity.co/api/v3/files/${user?.avatarFileId}/download`,
               }}
             />
           ) : (
             <View style={styles.avatar}>
-              <SvgXml xml={personXml} width="20" height="16" />
+              <PersonIcon width={20} height={20}/>
             </View>
           )}
 

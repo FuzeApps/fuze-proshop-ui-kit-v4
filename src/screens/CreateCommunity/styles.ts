@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from 'src/providers/amity-ui-kit-provider';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
-export const getStyles = () => {
+export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
   const styles = StyleSheet.create({
     container: {
       paddingBottom: 320,
-      backgroundColor: theme.colors.screenBackground,
+      backgroundColor: theme.colors.background,
     },
     uploadContainer: {
       width: '100%',
@@ -63,7 +63,7 @@ export const getStyles = () => {
     },
     inputField: {
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: theme.colors.baseShade4,
       borderRadius: 5,
       marginTop: 5,
       paddingVertical: 16,
@@ -88,7 +88,7 @@ export const getStyles = () => {
       alignItems: 'center',
       paddingVertical: 16,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: theme.colors.baseShade4,
     },
     addIcon: {
       marginHorizontal: 6,
@@ -131,7 +131,7 @@ export const getStyles = () => {
     },
     radioGroup: {
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: theme.colors.baseShade4,
       marginBottom: 24,
     },
     createButton: {
@@ -152,7 +152,7 @@ export const getStyles = () => {
     addUsersContainer: {
       marginVertical: 6,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: theme.colors.baseShade4,
       paddingBottom: 24,
     },
     userItemWrap: {

@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "rootDir": ".",
     "paths": {
-      "@amityco/asc-react-native-ui-kit": ["./src/index"],
-      "~/*": ["./src/*"],
-      "react": ["./node_modules/@types/react"]
+      "@amityco/react-native-social-ui-kit": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

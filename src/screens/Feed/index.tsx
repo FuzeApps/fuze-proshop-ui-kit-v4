@@ -1,15 +1,14 @@
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useMemo,
   useState,
 } from 'react';
 
-// import { useTranslation } from 'react-i18next';
-
 import { FlatList, View } from 'react-native';
-import PostList from '../../components/Social/PostList';
-import { getStyles } from './styles';
+import { useStyles } from './styles';
 import {
   CommunityRepository,
   PostRepository,
@@ -20,125 +19,109 @@ import {
   subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
 import type { FeedRefType } from '../CommunityHome';
-import { deletePostById } from '../../providers/Social/feed-sdk';
 import { amityPostsFormatter } from '../../util/postDataFormatter';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import feedSlice from '../../redux/slices/feedSlice';
 import { useFocusEffect } from '@react-navigation/native';
+import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
+import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
 
 interface IFeed {
   targetId: string;
   targetType: string;
 }
 function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
-  const styles = getStyles();
-  const [postData, setPostData] =
-    useState<Amity.LiveCollection<Amity.Post<any>>>();
-  const { postList } = useSelector((state: RootState) => state.feed);
-  const { clearFeed, updateFeed, deleteByPostId } = feedSlice.actions;
-  const { data: posts, onNextPage, hasNextPage } = postData ?? {};
-  const [unSubFunc, setUnSubPageFunc] = useState<() => void>();
-  const dispatch = useDispatch();
-
-  const disposers: Amity.Unsubscriber[] = [];
+  const styles = useStyles();
+  const [postData, setPostData] = useState<Amity.Post>(null);
+  const [onNextPage, setOnNextPage] = useState(null);
+  const disposers: Amity.Unsubscriber[] = useMemo(() => [], []);
   let isSubscribed = false;
 
   const subscribePostTopic = useCallback((type: string, id: string) => {
     if (isSubscribed) return;
 
     if (type === 'user') {
-      let user = {} as Amity.User; // use getUser to get user by targetId
+      let user = {} as Amity.User;
       UserRepository.getUser(id, ({ data }) => {
         user = data;
       });
       disposers.push(
-        subscribeTopic(getUserTopic(user, SubscriptionLevels.POST), () => {
-          // use callback to handle errors with event subscription
-        })
+        subscribeTopic(getUserTopic(user, SubscriptionLevels.POST))
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
       isSubscribed = true;
       return;
     }
-
     if (type === 'community') {
       CommunityRepository.getCommunity(id, (data) => {
         if (data.data) {
-          subscribeTopic(getCommunityTopic(data.data, SubscriptionLevels.POST));
+          disposers.push(
+            subscribeTopic(
+              getCommunityTopic(data.data, SubscriptionLevels.POST)
+            )
+          );
         }
       });
     }
   }, []);
-  const getFeed = useCallback(() => {
-    const unsubscribe = PostRepository.getPosts(
-      {
-        targetId,
-        targetType,
-        sortBy: 'lastCreated',
-        limit: 10,
-        feedType: 'published',
-      },
-      (data) => {
-        setPostData(data);
-        subscribePostTopic(targetType, targetId);
-      }
-    );
-    setUnSubPageFunc(() => unsubscribe());
-  }, [subscribePostTopic, targetId, targetType]);
+
+  useEffect(() => {
+    return () => {
+      disposers.forEach((fn) => fn());
+    };
+  }, [disposers]);
+
   const handleLoadMore = () => {
-    if (hasNextPage) {
-      onNextPage && onNextPage();
+    if (onNextPage) {
+      onNextPage();
     }
   };
   useFocusEffect(
     useCallback(() => {
-      getFeed();
+      const unsubscribe = PostRepository.getPosts(
+        {
+          targetId,
+          targetType,
+          sortBy: 'lastCreated',
+          limit: 10,
+          feedType: 'published',
+        },
+        async ({ data, error, loading, hasNextPage, onNextPage: nextPage }) => {
+          if (!error && !loading) {
+            const filterData: any[] = data.map((item) => {
+              if (item.dataType === 'text') return item;
+            });
+            console.log(data.length);
+            setOnNextPage(hasNextPage ? () => nextPage : null);
+            const formattedPostList = await amityPostsFormatter(filterData);
+            setPostData(formattedPostList);
+            subscribePostTopic(targetType, targetId);
+          }
+        }
+      );
       return () => {
-        unSubFunc && unSubFunc();
-        dispatch(clearFeed());
+        unsubscribe();
       };
-    }, [clearFeed, dispatch, getFeed, unSubFunc])
-  );
-
-  const getPostList = useCallback(async () => {
-    if (posts.length > 0) {
-      const formattedPostList = await amityPostsFormatter(posts);
-      dispatch(updateFeed(formattedPostList));
-    }
-  }, [dispatch, posts, updateFeed]);
-
-  useFocusEffect(
-    useCallback(() => {
-      posts && getPostList();
-    }, [posts, getPostList])
+    }, [subscribePostTopic, targetId, targetType])
   );
 
   useImperativeHandle(ref, () => ({
     handleLoadMore,
   }));
 
-  const onDeletePost = async (postId: string) => {
-    const isDeleted = await deletePostById(postId);
-    if (isDeleted) {
-      dispatch(deleteByPostId({ postId }));
-    }
-  };
   return (
     <View style={styles.feedWrap}>
       <FlatList
         scrollEnabled={false}
-        data={postList}
-        renderItem={({ item, index }) => (
-          <PostList
-            onDelete={onDeletePost}
-            postDetail={item}
-            isGlobalfeed={false}
-            postIndex={index}
+        data={postData ?? []}
+        renderItem={({ item }) => (
+          <AmityPostContentComponent
+            post={item}
+            AmityPostContentComponentStyle={
+              AmityPostContentComponentStyleEnum.feed
+            }
           />
         )}
         keyExtractor={(_, index) => index.toString()}
-        extraData={postList}
+        extraData={postData}
       />
     </View>
   );

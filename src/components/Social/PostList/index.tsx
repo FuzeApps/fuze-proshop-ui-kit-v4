@@ -1,17 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-// import { useTranslation } from 'react-i18next';
-
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
-  TouchableWithoutFeedback,
   Modal,
   Pressable,
   Animated,
   Alert,
+  StyleProp,
+  ImageStyle,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import {
@@ -22,8 +20,7 @@ import {
   personXml,
   threeDots,
 } from '../../../svg/svg-xml-list';
-import { getStyles } from './styles';
-
+import { useStyles } from './styles';
 import type { UserInterface } from '../../../types/user.interface';
 import {
   addPostReaction,
@@ -32,7 +29,6 @@ import {
   reportTargetById,
   unReportTargetById,
 } from '../../../providers/Social/feed-sdk';
-import { getCommunityById } from '../../../providers/Social/communities-sdk';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useAuth from '../../../hooks/useAuth';
@@ -43,8 +39,16 @@ import MediaSection from '../../../components/MediaSection';
 import postDetailSlice from '../../../redux/slices/postDetailSlice';
 import { useDispatch } from 'react-redux';
 import globalFeedSlice from '../../../redux/slices/globalfeedSlice';
-import { IMentionPosition } from '../../../screens/CreatePost';
+
 import feedSlice from '../../../redux/slices/feedSlice';
+import { RootStackParamList } from '../../../routes/RouteParamList';
+import { useTimeDifference } from '../../../hooks/useTimeDifference';
+import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import RenderTextWithMention from '../../RenderTextWithMention /RenderTextWithMention';
+import { LinkPreview } from '../../PreviewLink/LinkPreview';
+import { IMentionPosition } from '../../../types/type';
+
+
 
 export interface IPost {
   postId: string;
@@ -62,6 +66,8 @@ export interface IPost {
   childrenPosts: string[];
   mentionees: string[];
   mentionPosition?: IMentionPosition[];
+  path: string;
+  analytics: Amity.Post<'analytics'>;
 }
 export interface IPostList {
   onDelete?: (postId: string) => void;
@@ -81,33 +87,30 @@ export interface IVideoPost {
 }
 export default function PostList({
   postDetail,
-  postIndex,
   onDelete,
-  isGlobalfeed = true,
 }: IPostList) {
-  const [postData, setPostData] = useState<IPost>(postDetail);
-
   const theme = useTheme() as MyMD3Theme;
   const { client, apiRegion } = useAuth();
-  const styles = getStyles();
+  const styles = useStyles();
   const [isLike, setIsLike] = useState<boolean>(false);
   const [likeReaction, setLikeReaction] = useState<number>(0);
   const [communityName, setCommunityName] = useState('');
-  const [textPost, setTextPost] = useState<string>();
-
+  const [isJoined, setIsJoined] = useState<boolean>(true);
+  const [textPost, setTextPost] = useState<string>('');
+  const [privateCommunityId, setPrivateCommunityId] = useState(null);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isReportByMe, setIsReportByMe] = useState<boolean>(false);
   const [editPostModalVisible, setEditPostModalVisible] =
     useState<boolean>(false);
   const slideAnimation = useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
 
   const [mentionPositionArr, setMentionsPositionArr] = useState<
     IMentionPosition[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const { updateByPostId: updateByPostIdGlobalFeed } = globalFeedSlice.actions;
   const { updateByPostId } = feedSlice.actions;
   const { updatePostDetail } = postDetailSlice.actions;
@@ -124,20 +127,14 @@ export default function PostList({
     childrenPosts = [],
     editedAt,
     mentionPosition,
-  } = postData ?? {};
+  } = postDetail ?? {};
+  const timeDifference = useTimeDifference(createdAt);
 
   useEffect(() => {
     if (mentionPosition) {
       setMentionsPositionArr(mentionPosition);
     }
   }, [mentionPosition]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
-    setPostData(postDetail);
-  }, [postDetail]);
 
   useEffect(() => {
     if (myReactions && myReactions?.length > 0) {
@@ -164,16 +161,34 @@ export default function PostList({
     }).start(() => setIsVisible(false));
   };
 
-  const checkIsReport = async () => {
+  const checkIsReport = useCallback(async () => {
     const isReport = await isReportTarget('post', postId);
     if (isReport) {
       setIsReportByMe(true);
     }
-  };
+  }, [postId]);
 
   useEffect(() => {
     checkIsReport();
-  }, [postDetail]);
+  }, [checkIsReport]);
+
+  useEffect(() => {
+    let unsubCommunity: () => void;
+    if (targetType === 'community' && targetId) {
+      unsubCommunity = CommunityRepository.getCommunity(
+        targetId,
+        ({ error, loading, data }) => {
+          if (error) return;
+          if (!loading) {
+            setCommunityName(data.displayName);
+            setIsJoined(data.isJoined);
+            !data.isPublic && setPrivateCommunityId(data.communityId);
+          }
+        }
+      );
+    }
+    return () => unsubCommunity && unsubCommunity();
+  }, [targetId, targetType]);
 
   useEffect(() => {
     setTextPost(data?.text);
@@ -183,108 +198,63 @@ export default function PostList({
     if (reactionCount?.like) {
       setLikeReaction(reactionCount?.like);
     }
-    if (targetType === 'community' && targetId) {
-      getCommunityInfo(targetId);
-    }
-  }, [postDetail]);
+  }, [data?.text, myReactions, reactionCount?.like, targetId, targetType]);
 
-  function renderLikeText(likeNumber: number | undefined): string {
-    if (!likeNumber) {
-      return '';
-    } else if (likeNumber === 1) {
-      return 'like';
-    } else {
+  const renderLikeText = useCallback(
+    (likeNumber: number | undefined): string => {
+      if (!likeNumber) return '';
+      if (likeNumber === 1) return 'like';
       return 'likes';
-    }
-  }
-  function renderCommentText(commentNumber: number | undefined): string {
-    if (commentNumber === 0) {
-      return '';
-    } else if (commentNumber === 1) {
-      return 'comment';
-    } else {
+    },
+    []
+  );
+  const renderCommentText = useCallback(
+    (commentNumber: number | undefined): string => {
+      if (!commentNumber) return '';
+      if (commentNumber === 1) return 'comment';
       return 'comments';
-    }
-  }
+    },
+    []
+  );
 
-  function getTimeDifference(timestamp: string): string {
-    // Convert the timestamp string to a Date object
-    const timestampDate = Date.parse(timestamp);
+  const addReactionToPost = useCallback(
+    async (isLiked) => {
+      setIsLike((prev) => !prev);
+      setLikeReaction((prev) => (isLiked ? prev - 1 : prev + 1));
+      const updatedLikeReaction = isLiked ? likeReaction - 1 : likeReaction + 1;
+      const updatedPost = {
+        ...postDetail,
+        reactionCount: { like: updatedLikeReaction },
+        myReactions: isLiked ? [] : ['like'],
+      };
 
-    // Get the current date and time
-    const currentDate = Date.now();
-
-    // Calculate the difference in milliseconds
-    const differenceMs = currentDate - timestampDate;
-
-    const differenceYear = Math.floor(
-      differenceMs / (1000 * 60 * 60 * 24 * 365)
-    );
-    const differenceDay = Math.floor(differenceMs / (1000 * 60 * 60 * 24));
-    const differenceHour = Math.floor(differenceMs / (1000 * 60 * 60));
-    const differenceMinutes = Math.floor(differenceMs / (1000 * 60));
-    const differenceSec = Math.floor(differenceMs / 1000);
-
-    if (differenceSec < 60) {
-      return 'Just now';
-    } else if (differenceMinutes < 60) {
-      return (
-        differenceMinutes +
-        ` ${differenceMinutes === 1 ? 'min ago' : 'mins ago'}`
-      );
-    } else if (differenceHour < 24) {
-      return (
-        differenceHour + ` ${differenceHour === 1 ? 'hour ago' : 'hours ago'}`
-      );
-    } else if (differenceDay < 365) {
-      return (
-        (differenceDay !== 1 ? differenceDay : '') +
-        ` ${differenceDay === 1 ? 'Yesterday' : 'days ago'}`
-      );
-    } else {
-      return (
-        differenceYear + ` ${differenceYear === 1 ? 'year ago' : 'years ago'}`
-      );
-    }
-  }
-  async function addReactionToPost() {
-    setIsLike((prev) => !prev);
-    if (isLike && likeReaction) {
-      setLikeReaction(likeReaction - 1);
-      let post: IPost = { ...postDetail };
-      post.reactionCount =
-        likeReaction - 1 > 0 ? { like: likeReaction - 1 } : {};
-      post.myReactions = [];
-      if (isGlobalfeed) {
+      try {
         dispatch(
-          updateByPostIdGlobalFeed({ postId: postId, postDetail: post })
+          updateByPostIdGlobalFeed({
+            postId: postId,
+            postDetail: updatedPost,
+          })
         );
-      } else {
-        dispatch(updateByPostId({ postId: postId, postDetail: post }));
+        dispatch(updateByPostId({ postId: postId, postDetail: updatedPost }));
+
+        if (isLiked) {
+          await removePostReaction(postId, 'like');
+        } else {
+          await addPostReaction(postId, 'like');
+        }
+      } catch (error) {
+        setLikeReaction((prev) => prev);
       }
-
-      await removePostReaction(postId, 'like');
-    } else {
-      setLikeReaction(likeReaction + 1);
-      let post: IPost = { ...postDetail };
-      post.reactionCount = { like: likeReaction + 1 };
-      post.myReactions = ['like'];
-      if (isGlobalfeed) {
-        dispatch(
-          updateByPostIdGlobalFeed({ postId: postId, postDetail: post })
-        );
-      } else {
-        dispatch(updateByPostId({ postId: post.postId, postDetail: post }));
-      }
-
-      await addPostReaction(postId, 'like');
-    }
-  }
-
-  async function getCommunityInfo(id: string) {
-    const { data: community } = await getCommunityById(id);
-    setCommunityName(community.data.displayName);
-  }
+    },
+    [
+      dispatch,
+      likeReaction,
+      postDetail,
+      postId,
+      updateByPostId,
+      updateByPostIdGlobalFeed,
+    ]
+  );
 
   function onClickComment() {
     dispatch(
@@ -295,11 +265,7 @@ export default function PostList({
         commentsCount: commentsCount,
       })
     );
-    navigation.navigate('PostDetail', {
-      postId: postDetail.postId,
-      postIndex: postIndex,
-      isFromGlobalfeed: isGlobalfeed,
-    });
+
   }
   const handleDisplayNamePress = () => {
     if (user?.userId) {
@@ -339,14 +305,14 @@ export default function PostList({
     if (isReportByMe) {
       const unReportPost = await unReportTargetById('post', postId);
       if (unReportPost) {
-        Alert.alert('Undo Report sent', '', []);
+        Alert.alert('Undo Report sent');
       }
       setIsVisible(false);
       setIsReportByMe(false);
     } else {
       const reportPost = await reportTargetById('post', postId);
       if (reportPost) {
-        Alert.alert('Report sent', '', []);
+        Alert.alert('Report sent');
       }
       setIsVisible(false);
       setIsReportByMe(true);
@@ -419,64 +385,20 @@ export default function PostList({
     setEditPostModalVisible(true);
   };
 
-  const handleOnFinishEdit = (postData: {
-    text: string;
-    mediaUrls: string[] | IVideoPost[];
-  }) => {
-    setTextPost(postData.text);
-    setEditPostModalVisible(false);
-    setIsEdit(true);
-  };
-
-  const RenderTextWithMention = () => {
-    if (mentionPositionArr.length === 0) {
-      return <Text style={styles.inputText}>{textPost}</Text>;
-    }
-    const mentionClick = (userId: string) => {
-      navigation.navigate('UserProfile', {
-        userId: userId,
-      });
-    };
-    let currentPosition = 0;
-    const result: (string | JSX.Element)[][] = mentionPositionArr.map(
-      ({ index, length, userId }, i) => {
-        // Add non-highlighted text before the mention
-        const nonHighlightedText = textPost.slice(currentPosition, index);
-
-        // Add highlighted text
-        const highlightedText = (
-          <Text
-            onPress={() => mentionClick(userId)}
-            key={`highlighted-${i}`}
-            style={styles.mentionText}
-          >
-            {textPost.slice(index, index + length)}
-          </Text>
-        );
-
-        // Update currentPosition for the next iteration
-        currentPosition = index + length;
-
-        // Return an array of non-highlighted and highlighted text
-        return [nonHighlightedText, highlightedText];
-      }
-    );
-
-    // Add any remaining non-highlighted text after the mentions
-    const remainingText = textPost.slice(currentPosition);
-    result.push([
-      <Text key="nonHighlighted-last" style={styles.inputText}>
-        {remainingText}
-      </Text>,
-    ]);
-
-    // Flatten the array and render
-    return <Text style={styles.inputText}>{result.flat()}</Text>;
-  };
-
-  const memoizedMediaSection = useMemo(() => {
-    return <MediaSection childrenPosts={childrenPosts} />;
-  }, [childrenPosts]);
+  const handleOnFinishEdit = useCallback(
+    (postData: { text: string; mediaUrls: string[] | IVideoPost[] }) => {
+      setTextPost(postData.text);
+      setEditPostModalVisible(false);
+      setIsEdit(true);
+    },
+    []
+  );
+  const onClickReactions = useCallback(() => {
+    navigation.navigate('ReactionList', {
+      referenceId: postId,
+      referenceType: 'post',
+    });
+  }, [navigation, postId]);
 
   return (
     <View key={postId} style={styles.postWrap}>
@@ -484,7 +406,7 @@ export default function PostList({
         <View style={styles.user}>
           {user?.avatarFileId ? (
             <Image
-              style={styles.avatar}
+              style={styles.avatar as StyleProp<ImageStyle>}
               source={{
                 uri: `https://api.${apiRegion}.amity.co/api/v3/files/${user?.avatarFileId}/download`,
               }}
@@ -495,14 +417,14 @@ export default function PostList({
             </View>
           )}
 
-          <View>
+          <View style={styles.fillSpace}>
             <View style={styles.headerRow}>
               <TouchableOpacity onPress={handleDisplayNamePress}>
                 <Text style={styles.headerText}>{user?.displayName}</Text>
               </TouchableOpacity>
 
               {communityName && (
-                <>
+                <View style={styles.communityNameContainer}>
                   <SvgXml
                     style={styles.arrow}
                     xml={arrowXml}
@@ -511,15 +433,19 @@ export default function PostList({
                   />
 
                   <TouchableOpacity onPress={handleCommunityNamePress}>
-                    <Text style={styles.headerText}>{communityName}</Text>
+                    <Text
+                      ellipsizeMode="tail"
+                      numberOfLines={3}
+                      style={styles.headerText}
+                    >
+                      {communityName}
+                    </Text>
                   </TouchableOpacity>
-                </>
+                </View>
               )}
             </View>
             <View style={styles.timeRow}>
-              <Text style={styles.headerTextTime}>
-                {getTimeDifference(createdAt)}
-              </Text>
+              <Text style={styles.headerTextTime}>{timeDifference}</Text>
               {(editedAt !== createdAt || isEdit) && (
                 <Text style={styles.dot}>·</Text>
               )}
@@ -535,22 +461,30 @@ export default function PostList({
       </View>
       <View>
         <View style={styles.bodySection}>
-          {/* {textPost && <Text style={styles.bodyText}>{textPost}</Text>} */}
-          {textPost && <RenderTextWithMention />}
-          {childrenPosts.length > 0 && (
-            <View style={styles.mediaWrap}>
-              {!loading && memoizedMediaSection}
-            </View>
+          {textPost && childrenPosts?.length === 0 && (
+            <LinkPreview
+              text={textPost}
+              mentionPositionArr={[...mentionPositionArr]}
+            />
+          )}
+          {textPost && childrenPosts?.length > 0 && (
+            <RenderTextWithMention
+              textPost={textPost}
+              mentionPositionArr={[...mentionPositionArr]}
+            />
+          )}
+          {childrenPosts?.length > 0 && !editPostModalVisible && (
+            <MediaSection childrenPosts={childrenPosts} />
           )}
         </View>
 
         {likeReaction === 0 && commentsCount === 0 ? (
           ''
         ) : (
-          <TouchableWithoutFeedback onPress={() => onClickComment()}>
+          <View>
             <View style={styles.countSection}>
               {likeReaction ? (
-                <Text style={styles.likeCountText}>
+                <Text style={styles.likeCountText} onPress={onClickReactions}>
                   {likeReaction} {renderLikeText(likeReaction)}
                 </Text>
               ) : (
@@ -563,41 +497,52 @@ export default function PostList({
                 </Text>
               )}
             </View>
-          </TouchableWithoutFeedback>
+          </View>
         )}
 
-        <View style={styles.actionSection}>
-          <TouchableOpacity
-            onPress={() => addReactionToPost()}
-            style={styles.likeBtn}
-          >
-            {isLike ? (
-              <SvgXml
-                xml={likedXml(theme.colors.primary)}
-                width="20"
-                height="16"
-              />
-            ) : (
-              <SvgXml xml={likeXml} width="20" height="16" />
-            )}
+        {targetType !== 'community' || isJoined !== false ? (
+          <View style={styles.actionSection}>
+            <TouchableOpacity
+              onPress={() => addReactionToPost(isLike)}
+              style={styles.likeBtn}
+            >
+              {isLike ? (
+                <SvgXml
+                  xml={likedXml(theme.colors.primary)}
+                  width="20"
+                  height="16"
+                />
+              ) : (
+                <SvgXml xml={likeXml} width="20" height="16" />
+              )}
 
-            <Text style={isLike ? styles.likedText : styles.btnText}>Like</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => onClickComment()}
-            style={styles.commentBtn}
-          >
-            <SvgXml xml={commentXml} width="20" height="16" />
-            <Text style={styles.btnText}>Comment</Text>
-          </TouchableOpacity>
-        </View>
+              <Text style={isLike ? styles.likedText : styles.btnText}>
+                Like
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onClickComment}
+              style={styles.commentBtn}
+            >
+              <SvgXml xml={commentXml} width="20" height="16" />
+              <Text style={styles.btnText}>Comment</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.actionSection}>
+            <Text style={styles.btnText}>
+              Join community to interact with all posts
+            </Text>
+          </View>
+        )}
       </View>
       {renderOptionModal()}
       {editPostModalVisible && (
         <EditPostModal
+          privateCommunityId={privateCommunityId}
           visible={editPostModalVisible}
           onClose={closeEditPostModal}
-          postDetail={postDetail}
+          postDetail={{ ...postDetail, data: { ...data, text: textPost } }}
           onFinishEdit={handleOnFinishEdit}
         />
       )}

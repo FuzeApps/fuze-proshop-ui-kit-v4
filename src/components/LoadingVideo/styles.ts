@@ -1,12 +1,14 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
+const { height, width } = Dimensions.get('window');
+
 export const createStyles = () => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      position: 'relative',
-      maxWidth: Dimensions.get('window').height / 4,
-      height: Dimensions.get('window').height / 5,
+      width: '100%',
+      minWidth: width * 0.25,
+      height: height / 6,
       margin: 3,
     },
     image: {
@@ -17,10 +19,17 @@ export const createStyles = () => {
       borderRadius: 5,
       backgroundColor: '#bcbcbc',
     },
+    thumbnail: {
+      flex: 1,
+      width: width,
+      height: height,
+      borderRadius: 5,
+    },
     overlay: {
-      ...StyleSheet.absoluteFillObject,
-      justifyContent: 'center',
-      alignItems: 'center',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: [{ translateX: -25 }, { translateY: -25 }],
     },
     progressBar: {
       marginVertical: 10,
