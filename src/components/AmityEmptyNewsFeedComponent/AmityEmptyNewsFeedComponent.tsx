@@ -29,8 +29,8 @@ const AmityEmptyNewsFeedComponent: FC<AmityEmptyNewsFeedComponentType> = ({
   return (
     <View
       style={styles.container}
-      testID={uiReference}
-      accessibilityLabel={uiReference}
+      // testID={uiReference}
+      // accessibilityLabel={uiReference}
     >
       {/* <Illustration /> */}
       <Title />
@@ -38,7 +38,7 @@ const AmityEmptyNewsFeedComponent: FC<AmityEmptyNewsFeedComponentType> = ({
       <ExploreCommunityButton
         onPressExploreCommunity={onPressExploreCommunity}
       />
-      {/*  <CreateCommunityButton /> */}
+      <CreateCommunityButton />
     </View>
   );
 };

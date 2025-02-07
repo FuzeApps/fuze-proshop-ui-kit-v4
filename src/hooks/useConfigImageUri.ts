@@ -72,7 +72,9 @@ export const useConfigImageUri = ({
         : require('../configAssets/icons/emptyFeedIcon_light.png');
     }
     if (fileUri === 'exploreCommunityIcon') {
+      console.log('JPN: exploreCommunityIcon is set here, image:', image);
       image = require('../configAssets/icons/exploreCommunityIcon.png');
+      console.log('JPN: exploreCommunityIcon is set here, image after:', image);
     }
     if (fileUri === 'badgeIcon') {
       image = require('../configAssets/icons/badgeIcon.png');
@@ -93,9 +95,14 @@ export const useConfigImageUri = ({
       image = require('../configAssets/icons/shareButtonIcon.png');
     }
 
-    // if (typeof image === 'number') {
-    //   return Image.resolveAssetSource(image)?.uri ?? defaultAvatarUri;
-    // }
+    if (typeof image === 'number') {
+      console.log(
+        'JPN: it is an image',
+        image,
+        Image.resolveAssetSource(image)?.uri
+      );
+      return Image.resolveAssetSource(image)?.uri ?? defaultAvatarUri;
+    }
 
     console.log('JPN: fileUri', fileUri);
     console.log('JPN: image', image);
