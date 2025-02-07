@@ -49,7 +49,7 @@ __metadata:
     react-dom: 18.2.0
     react-native: 0.73.4
     react-native-safe-area-context: ^4.9.0
-    react-native-screens: ^3.29.0
+    react-native-screens: 3.31.1
     react-native-web: ~0.19.6
     reactotron-react-native: ^5.1.11
   languageName: unknown
@@ -107,7 +107,7 @@ __metadata:
     react-native-progress: ^5.0.1
     react-native-radio-buttons-group: ^3.0.2
     react-native-safe-area-context: 4.7.1
-    react-native-screens: 3.20.0
+    react-native-screens: 3.31.1
     react-native-svg: 15.2.0
     react-native-swipe-gestures: ^1.0.5
     react-native-web: ^0.19.12
@@ -21306,29 +21306,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:3.20.0":
-  version: 3.20.0
-  resolution: "react-native-screens@npm:3.20.0"
+"react-native-screens@npm:3.31.1":
+  version: 3.31.1
+  resolution: "react-native-screens@npm:3.31.1"
   dependencies:
     react-freeze: ^1.0.0
     warn-once: ^0.1.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 94ab21378ee82765d329ccb8c92f5ca7cb15df916496fac7ce9a03c45e22579715000dae9c16f0a7d734a8fc1c2d0569fd82ecb71119a0b56046b5ea7533e7c2
-  languageName: node
-  linkType: hard
-
-"react-native-screens@npm:^3.29.0":
-  version: 3.29.0
-  resolution: "react-native-screens@npm:3.29.0"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: c1879eea8386f32c2655fedd79d41d8e25d2f4e7f883abbcad2c747ea7ac859f4a7f469475a519948e7c5ea317a7ebd8df92c6365627f6a5da1e4a208cece7e1
+  checksum: 1fc61cf7a223b3ef1c8000e74416c8953561c5fa0861557da43659db62a640e37fb51fbdc35dae810a665881a7aa9eeaf1873e90f67404b4dda53a672464a7fe
   languageName: node
   linkType: hard
 
