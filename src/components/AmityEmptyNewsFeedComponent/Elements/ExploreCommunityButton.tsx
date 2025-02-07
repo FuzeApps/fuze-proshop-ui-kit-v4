@@ -36,8 +36,9 @@ const ExploreCommunityButton: FC<ExploreCommunityButtonType> = ({
     excludes.includes(
       'social_home_page/empty_newsfeed/explore_communitties_button'
     )
-  )
+  ) {
     return null;
+  }
 
   return (
     <TouchableOpacity
