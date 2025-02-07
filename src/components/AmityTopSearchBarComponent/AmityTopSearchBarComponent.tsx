@@ -67,7 +67,7 @@ const AmityTopSearchBarComponent = ({
           testID="top_search_bar/search_icon"
           accessibilityLabel="top_search_bar/search_icon"
         /> */}
-        <SearchIcon/>
+        <SearchIcon />
         <TextInput
           value={inputValue}
           style={styles.input}
@@ -81,7 +81,7 @@ const AmityTopSearchBarComponent = ({
             testID="top_search_bar/clear_button"
             accessibilityLabel="top_search_bar/clear_button"
           >
-            <Image source={clearIcon} width={20} height={20} />
+            {/* <Image source={clearIcon} width={20} height={20} /> */}
           </TouchableOpacity>
         )}
       </View>

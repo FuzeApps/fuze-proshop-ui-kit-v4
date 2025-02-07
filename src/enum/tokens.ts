@@ -1,4 +1,4 @@
-import { CustomColors } from '~/providers/amity-ui-kit-provider';
+import { CustomColors } from '../providers/amity-ui-kit-provider';
 const spacing = {
   /**
    * 2 pixels spacing

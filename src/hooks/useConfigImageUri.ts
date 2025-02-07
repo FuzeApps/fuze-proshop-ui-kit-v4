@@ -14,13 +14,8 @@ export const useConfigImageUri = ({
   configPath: IUIKitConfigOptions;
   configKey: keyof UiKitConfigKeys;
 }): ImageSourcePropType => {
-  console.log('JPN: configPath', configPath);
-  console.log('JPN: configKey', configKey);
-
   const { getUiKitConfig } = useConfig();
   const { isDarkTheme } = useDarkMode();
-
-  console.log('JPN: getUiKitConfig', getUiKitConfig);
 
   const configImageUri = useMemo(() => {
     if (!configPath || !configKey) return defaultAvatarUri;
@@ -29,10 +24,6 @@ export const useConfigImageUri = ({
     if (!fileUri) return defaultAvatarUri;
 
     if (fileUri.includes('http')) return fileUri;
-
-    console.log('JPN: fileUri', fileUri);
-    console.log('JPN: configPath', configPath);
-    console.log('JPN: configKey', configKey);
 
     let image: number | string = defaultAvatarUri;
 
@@ -72,9 +63,7 @@ export const useConfigImageUri = ({
         : require('../configAssets/icons/emptyFeedIcon_light.png');
     }
     if (fileUri === 'exploreCommunityIcon') {
-      console.log('JPN: exploreCommunityIcon is set here, image:', image);
       image = require('../configAssets/icons/exploreCommunityIcon.png');
-      console.log('JPN: exploreCommunityIcon is set here, image after:', image);
     }
     if (fileUri === 'badgeIcon') {
       image = require('../configAssets/icons/badgeIcon.png');
@@ -96,18 +85,10 @@ export const useConfigImageUri = ({
     }
 
     if (typeof image === 'number') {
-      console.log(
-        'JPN: it is an image',
-        image,
-        Image.resolveAssetSource(image)?.uri
-      );
       return Image.resolveAssetSource(image)?.uri ?? defaultAvatarUri;
     }
 
-    console.log('JPN: fileUri', fileUri);
-    console.log('JPN: image', image);
-
     return image;
   }, [configPath, configKey, getUiKitConfig, isDarkTheme]);
-  return { uri: configImageUri };
+  return configImageUri;
 };
