@@ -32,8 +32,11 @@ export interface ITheme {
     base_shade4_color?: string;
     alert_color?: string;
     background_color?: string;
+    border_color: string;
+    screen_background_color: string;
   };
   dark?: {
+    [x: string]: string;
     primary_color?: string;
     secondary_color?: string;
     base_color?: string;
@@ -43,6 +46,8 @@ export interface ITheme {
     base_shade4_color?: string;
     alert_color?: string;
     background_color?: string;
+    border_color: string;
+    screen_background_color: string;
   };
 }
 

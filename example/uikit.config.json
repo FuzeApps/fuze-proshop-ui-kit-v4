@@ -1,5 +1,5 @@
 {
-  "preferred_theme": "light",
+  "preferred_theme": "dark",
   "theme": {
     "light": {
       "primary_color": "#1054DE",
@@ -10,18 +10,22 @@
       "base_shade3_color": "#a5a9b5",
       "base_shade4_color": "#ebecef",
       "alert_color": "#FA4D30",
-      "background_color": "#FFFFFF"
+      "background_color": "#FFFFFF",
+      "border_color": "#182230",
+      "screen_background_color": "#182230"
     },
     "dark": {
-      "primary_color": "#1054DE",
-      "secondary_color": "#292B32",
-      "base_color": "#ebecef",
-      "base_shade1_color": "#a5a9b5",
-      "base_shade2_color": "#6e7487",
-      "base_shade3_color": "#40434e",
-      "base_shade4_color": "#292b32",
+      "primary_color": "#118cf7",
+      "secondary_color": "#182230",
+      "base_color": "#fcfcfd",
+      "base_shade1_color": "#98a2b3",
+      "base_shade2_color": "#7f889e",
+      "base_shade3_color": "#182230",
+      "base_shade4_color": "#0C111D",
       "alert_color": "#FA4D30",
-      "background_color": "#191919"
+      "background_color": "#2c3748",
+      "border_color": "#182230",
+      "screen_background_color": "#182230"
     }
   },
   "excludes": [],
@@ -142,7 +146,7 @@
       "icon": "postCreationIcon"
     },
     "social_home_page/*/newsfeed_button": {
-      "text": "Newsfeed"
+      "text": "Feed"
     },
     "social_home_page/*/explore_button": {
       "text": "Explore"
