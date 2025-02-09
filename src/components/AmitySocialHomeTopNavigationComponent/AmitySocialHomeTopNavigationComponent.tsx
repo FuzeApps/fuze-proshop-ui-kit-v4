@@ -14,7 +14,6 @@ import { useUiKitConfig } from '../../hooks/useUiKitConfig';
 import SearchIconV4 from '../../svg/SearchIconV4';
 import PlusIconV4 from '../../svg/PlusIconV4';
 
-
 import {
   Menu,
   MenuOptions,
@@ -27,9 +26,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
 
-
-const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: string }) => {
-
+const AmitySocialHomeTopNavigationComponent = ({
+  currentTab,
+}: {
+  currentTab: string;
+}) => {
   const theme = useTheme() as MyMD3Theme;
   const { AmitySocialHomeTopNavigationComponentBehaviour } = useBehaviour();
   const [headerTitle] = useUiKitConfig({
@@ -38,17 +39,15 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
     component: ComponentID.top_navigation,
     element: ElementID.header_label,
   }) as string[];
-  const [openPostCreationMenu, setOpenPostCreationMenu] = useState<boolean>(false)
+  const [openPostCreationMenu, setOpenPostCreationMenu] =
+    useState<boolean>(false);
 
-
-  const {
-    userId,
-  } = useSelector((state: RootState) => state.ui);
+  const { userId } = useSelector((state: RootState) => state.ui);
   const [postType, setPostType] = useState<string>();
   const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
 
   const onChooseType = (type: string) => {
-    setOpenPostCreationMenu(false)
+    setOpenPostCreationMenu(false);
     setPostType(type);
     setCreatePostModalVisible(true);
   };
@@ -103,11 +102,11 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
       height: 32,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     icon: {
       tintColor: theme.colors.base,
-      padding: 4
+      padding: 4,
     },
     optionsContainer: {
       backgroundColor: theme.colors.background,
@@ -119,8 +118,7 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
       shadowOpacity: 0.2,
       shadowRadius: 8,
       elevation: 5,
-      marginTop: 40
-
+      marginTop: 40,
     },
     modalRow: {
       flexDirection: 'row',
@@ -140,11 +138,10 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
   }, [AmitySocialHomeTopNavigationComponentBehaviour, navigation]);
 
   const onClickPlusIcon = useCallback(() => {
-
     if (currentTab === TabName.MyCommunities) {
       navigation.navigate('CreateCommunity');
     } else {
-      setOpenPostCreationMenu(true)
+      setOpenPostCreationMenu(true);
     }
   }, [navigation, currentTab]);
 
@@ -168,7 +165,6 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
         {headerTitle}
       </Text>
       <View style={styles.flexContainer}>
-
         <TouchableOpacity
           style={styles.iconBtn}
           onPress={onPressSearch}
@@ -178,11 +174,13 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
           <SearchIconV4 color={theme.colors.base} />
         </TouchableOpacity>
 
-
         {/* <Image source={searchIcon} style={styles.icon} /> */}
-        {currentTab !== TabName.Explore &&
-          <Menu opened={openPostCreationMenu} onBackdropPress={() => setOpenPostCreationMenu(false)}>
-            <MenuTrigger >
+        {currentTab !== TabName.Explore && (
+          <Menu
+            opened={openPostCreationMenu}
+            onBackdropPress={() => setOpenPostCreationMenu(false)}
+          >
+            <MenuTrigger>
               <TouchableOpacity
                 style={styles.iconBtn}
                 onPress={onPressCreate}
@@ -191,12 +189,12 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
               >
                 {/* <Image source={createIcon} style={styles.icon} /> */}
                 <PlusIconV4 color={theme.colors.base} />
-
               </TouchableOpacity>
             </MenuTrigger>
-            <MenuOptions customStyles={{ optionsContainer: styles.optionsContainer }}>
-
-              <MenuOption >
+            <MenuOptions
+              customStyles={{ optionsContainer: styles.optionsContainer }}
+            >
+              <MenuOption>
                 <TouchableOpacity
                   onPress={() => onChooseType('post')}
                   style={styles.modalRow}
@@ -205,7 +203,7 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
                   <Text style={styles.postText}>Post</Text>
                 </TouchableOpacity>
               </MenuOption>
-              <MenuOption >
+              <MenuOption>
                 <TouchableOpacity
                   onPress={() => onChooseType('poll')}
                   style={styles.modalRow}
@@ -216,7 +214,7 @@ const AmitySocialHomeTopNavigationComponent = ({ currentTab }: { currentTab: str
               </MenuOption>
             </MenuOptions>
           </Menu>
-        }
+        )}
         <CreatePostChooseTargetModal
           visible={createPostModalVisible}
           onClose={closeCreatePostModal}

@@ -23,12 +23,17 @@ import { amityPostsFormatter } from '../../util/postDataFormatter';
 import { useFocusEffect } from '@react-navigation/native';
 import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
 import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
+import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
 
 interface IFeed {
   targetId: string;
   targetType: string;
+  tags?: string[];
 }
-function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
+function Feed(
+  { targetId, targetType, tags }: IFeed,
+  ref: React.Ref<FeedRefType>
+) {
   const styles = useStyles();
   const [postData, setPostData] = useState<Amity.Post>(null);
   const [onNextPage, setOnNextPage] = useState(null);
@@ -74,8 +79,18 @@ function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
       onNextPage();
     }
   };
+
   useFocusEffect(
     useCallback(() => {
+      console.log('JPN: params', {
+        targetId,
+        targetType,
+        sortBy: 'lastCreated',
+        limit: 10,
+        feedType: 'published',
+        tags,
+      });
+
       const unsubscribe = PostRepository.getPosts(
         {
           targetId,
@@ -83,6 +98,7 @@ function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
           sortBy: 'lastCreated',
           limit: 10,
           feedType: 'published',
+          tags,
         },
         async ({ data, error, loading, hasNextPage, onNextPage: nextPage }) => {
           if (!error && !loading) {
@@ -100,7 +116,7 @@ function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
       return () => {
         unsubscribe();
       };
-    }, [subscribePostTopic, targetId, targetType])
+    }, [subscribePostTopic, tags, targetId, targetType])
   );
 
   useImperativeHandle(ref, () => ({
@@ -109,20 +125,24 @@ function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
 
   return (
     <View style={styles.feedWrap}>
-      <FlatList
-        scrollEnabled={false}
-        data={postData ?? []}
-        renderItem={({ item }) => (
-          <AmityPostContentComponent
-            post={item}
-            AmityPostContentComponentStyle={
-              AmityPostContentComponentStyleEnum.feed
-            }
-          />
-        )}
-        keyExtractor={(_, index) => index.toString()}
-        extraData={postData}
-      />
+      {postData ? (
+        <FlatList
+          scrollEnabled={false}
+          data={postData ?? []}
+          renderItem={({ item }) => (
+            <AmityPostContentComponent
+              post={item}
+              AmityPostContentComponentStyle={
+                AmityPostContentComponentStyleEnum.feed
+              }
+            />
+          )}
+          keyExtractor={(_, index) => index.toString()}
+          extraData={postData}
+        />
+      ) : (
+        <NewsFeedLoadingComponent />
+      )}
     </View>
   );
 }

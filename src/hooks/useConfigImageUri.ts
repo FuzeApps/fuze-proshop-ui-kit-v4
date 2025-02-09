@@ -1,4 +1,4 @@
-import {  ImageSourcePropType } from 'react-native';
+import { Image, ImageSourcePropType } from 'react-native';
 
 import { useMemo } from 'react';
 import useConfig from './useConfig';
@@ -6,7 +6,6 @@ import { IUIKitConfigOptions } from '../types/config.interface';
 import { UiKitConfigKeys } from '../enum';
 import { useDarkMode } from './useDarkMode';
 import { defaultAvatarUri } from '../assets';
-
 
 export const useConfigImageUri = ({
   configPath,
@@ -17,12 +16,20 @@ export const useConfigImageUri = ({
 }): ImageSourcePropType => {
   const { getUiKitConfig } = useConfig();
   const { isDarkTheme } = useDarkMode();
+
+  console.log('JPN: useConfigImageUri configPath', configPath);
+  console.log('JPN: useConfigImageUri configKey', configKey);
+
   const configImageUri = useMemo(() => {
     if (!configPath || !configKey) return defaultAvatarUri;
     const fileUri = getUiKitConfig(configPath)?.[configKey] as string;
+
     if (!fileUri) return defaultAvatarUri;
+
     if (fileUri.includes('http')) return fileUri;
+
     let image: number | string = defaultAvatarUri;
+
     if (fileUri === 'mute.png') {
       image = require('../configAssets/icons/mute.png');
     }
@@ -79,10 +86,12 @@ export const useConfigImageUri = ({
     if (fileUri === 'shareButtonIcon') {
       image = require('../configAssets/icons/shareButtonIcon.png');
     }
-    // if (typeof image === 'number') {
-    //   return Image.resolveAssetSource(image)?.uri ?? defaultAvatarUri;
-    // }
+
+    if (typeof image === 'number') {
+      return Image.resolveAssetSource(image)?.uri ?? defaultAvatarUri;
+    }
+
     return image;
   }, [configPath, configKey, getUiKitConfig, isDarkTheme]);
-  return { uri: configImageUri };
+  return configImageUri;
 };

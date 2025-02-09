@@ -28,7 +28,7 @@ export interface IAmityUIkitProvider {
   behaviour?: IBehaviour;
 }
 
-interface CustomColors {
+export interface CustomColors {
   primary?: string;
   primaryShade1?: string;
   primaryShade2?: string;
@@ -46,6 +46,8 @@ interface CustomColors {
   baseShade3?: string;
   baseShade4?: string;
   alert?: string;
+  border?: string;
+  screenBackground?: string;
 }
 export interface MyMD3Theme extends MD3Theme {
   colors: MD3Theme['colors'] & CustomColors;
@@ -103,6 +105,10 @@ export default function AmityUiKitProvider({
       baseShade3: validateConfigColor(themeColor?.base_shade3_color),
       baseShade4: validateConfigColor(themeColor?.base_shade4_color),
       alert: validateConfigColor(themeColor?.alert_color),
+      border: validateConfigColor(themeColor?.border_color),
+      screenBackground: validateConfigColor(
+        themeColor?.screen_background_color
+      ),
     },
   };
 

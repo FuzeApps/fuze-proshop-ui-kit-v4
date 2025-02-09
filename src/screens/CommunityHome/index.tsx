@@ -46,7 +46,6 @@ import PrimaryDot from '../../svg/PrimaryDotIcon';
 import EditIcon from '../../svg/EditIcon';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
 
-
 export type FeedRefType = {
   handleLoadMore: () => void;
 };
@@ -59,7 +58,7 @@ export default function CommunityHome({ route }: any) {
   const dispatch = useDispatch();
   const { openPostTypeChoiceModal } = uiSlice.actions;
   const { apiRegion, client } = useAuth();
-  const { communityId, communityName,} = route.params as {
+  const { communityId, communityName } = route.params as {
     communityId: string;
     communityName: string;
   };
@@ -215,7 +214,7 @@ export default function CommunityHome({ route }: any) {
           style={styles.joinCommunityButton}
           onPress={onJoinCommunityTap}
         >
-          <PlusIcon color='#FFF' width={24} />
+          <PlusIcon color="#FFF" width={24} />
           <Text style={styles.joinCommunityText}>Join</Text>
         </TouchableOpacity>
       </View>
@@ -245,8 +244,8 @@ export default function CommunityHome({ route }: any) {
             <Text style={styles.pendingDescriptionText}>
               {isUserHasPermission
                 ? (pendingPosts.length > 30 && 'More than ') +
-                pendingPosts.length +
-                ' posts need approval'
+                  pendingPosts.length +
+                  ' posts need approval'
                 : 'Your posts are pending for review'}
             </Text>
           </View>
@@ -276,19 +275,31 @@ export default function CommunityHome({ route }: any) {
   };
 
   const renderTabs = () => {
-    if (currentTab === TabName.Timeline)
-      return (
-        <Feed targetType="community" targetId={communityId} ref={feedRef} />
-      );
-    if (currentTab === TabName.Gallery)
-      return (
-        <GalleryComponent
-          targetId={communityId}
-          ref={feedRef}
-          targetType="community"
-        />
-      );
-    return null;
+    switch (currentTab) {
+      case TabName.Timeline:
+        return (
+          <Feed targetType="community" targetId={communityId} ref={feedRef} />
+        );
+      case TabName.Activity:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={['activity']}
+          />
+        );
+      case TabName.Gallery:
+        return (
+          <GalleryComponent
+            targetId={communityId}
+            ref={feedRef}
+            targetType="community"
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -306,8 +317,8 @@ export default function CommunityHome({ route }: any) {
             source={
               avatarUrl
                 ? {
-                  uri: avatarUrl,
-                }
+                    uri: avatarUrl,
+                  }
                 : require('../../assets/icon/Placeholder.png')
             }
           />
@@ -354,13 +365,10 @@ export default function CommunityHome({ route }: any) {
         {!isJoin && joinCommunityButton()}
         {isJoin && isShowPendingArea && pendingPostArea()}
         <CustomTab
-          tabName={[TabName.Timeline, TabName.Gallery]}
+          tabName={[TabName.Timeline, TabName.Activity, TabName.Gallery]}
           onTabChange={handleTab}
         />
-        <View style={styles.tabBackground} >
-          {renderTabs()}
-        </View>
-
+        <View style={styles.tabBackground}>{renderTabs()}</View>
       </ScrollView>
       {isJoin && (
         <FloatingButton onPress={handleOnPressPostBtn} isGlobalFeed={false} />

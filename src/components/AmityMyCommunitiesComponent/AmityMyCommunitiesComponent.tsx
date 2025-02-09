@@ -99,6 +99,7 @@ const AmityMyCommunitiesComponent: FC<AmityMyCommunitiesComponentType> = ({
             {item.categoryIds.slice(0, 3).map((categoryId) => {
               return (
                 <CategoryElement
+                  key={categoryId}
                   style={styles.categoryName}
                   pageID={pageId}
                   componentID={componentId}

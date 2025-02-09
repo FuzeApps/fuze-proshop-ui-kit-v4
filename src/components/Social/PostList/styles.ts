@@ -11,6 +11,7 @@ export const useStyles = () => {
       marginTop: 8,
       paddingHorizontal: 16,
       paddingTop: 4,
+      borderWidth: 3,
     },
     headerSection: {
       paddingVertical: 8,

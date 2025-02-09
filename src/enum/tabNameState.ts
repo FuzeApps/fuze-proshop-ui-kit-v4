@@ -2,6 +2,7 @@ export enum TabName {
   NewsFeed = 'NewsFeed',
   Explore = 'Explore',
   Timeline = 'Timeline',
+  Activity = 'Activity',
   Gallery = 'Gallery',
   Communities = 'Communities',
   Accounts = 'Accounts',

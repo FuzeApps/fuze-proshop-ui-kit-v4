@@ -1,3 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { memo, useEffect, useRef } from 'react';
 import {
   Animated,
   Modal,
@@ -5,42 +8,51 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import React, { memo, useEffect, useRef, useState } from 'react';
-import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
-import { useStyles } from './style';
-import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCommunity } from '../../hooks';
+import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import uiSlice from '../../redux/slices/uiSlice';
 import { RootState } from '../../redux/store';
-import { PostIconOutlined } from '../../svg/PostIconOutlined';
 import { PollIcon } from '../../svg/PollIcon';
+import { PostIconOutlined } from '../../svg/PostIconOutlined';
+import { useStyles } from './style';
 
 const PostTypeChoiceModal = () => {
   const styles = useStyles();
   const theme = useTheme() as MyMD3Theme;
   const dispatch = useDispatch();
   const { closePostTypeChoiceModal } = uiSlice.actions;
-  const {
-    showPostTypeChoiceModal,
-    userId,
-    targetId,
-    targetName,
-    targetType,
-  } = useSelector((state: RootState) => state.ui);
-  const [postType, setPostType] = useState<string>();
-  const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
+  const { showPostTypeChoiceModal, targetId, targetName, targetType } =
+    useSelector((state: RootState) => state.ui);
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { community } = useCommunity(targetId);
 
   const onChooseType = (type: string) => {
-    if (targetId && targetName && targetType) {
+    if (targetId && targetName && targetType && community && type == 'post') {
       closeCreatePostModal();
-    } else {
-      setPostType(type);
-      setCreatePostModalVisible(true);
+      navigation.navigate('CreatePost', {
+        targetId,
+        targetType,
+        community: targetType === 'community' ? community : undefined,
+      });
+    } else if (
+      targetId &&
+      targetName &&
+      targetType &&
+      community &&
+      type == 'poll'
+    ) {
+      closeCreatePostModal();
+      navigation.navigate('CreatePoll', {
+        targetId,
+        targetType,
+        community: targetType === 'community' ? community : undefined,
+      });
     }
   };
   const closeCreatePostModal = () => {
-    setCreatePostModalVisible(false);
     closeModal();
   };
 
@@ -99,13 +111,6 @@ const PostTypeChoiceModal = () => {
             <PollIcon color={theme.colors.base} />
             <Text style={styles.postText}>Poll</Text>
           </TouchableOpacity>
-          <CreatePostChooseTargetModal
-            visible={createPostModalVisible}
-            onClose={closeCreatePostModal}
-            userId={userId}
-            onSelect={closeCreatePostModal}
-            postType={postType}
-          />
         </Animated.View>
       </Pressable>
     </Modal>

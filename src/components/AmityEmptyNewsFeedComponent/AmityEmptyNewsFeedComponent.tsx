@@ -9,7 +9,6 @@ import {
   CreateCommunityButton,
 } from './Elements';
 
-
 import useConfig from '../../hooks/useConfig';
 import { ComponentID, PageID } from '../../enum';
 
@@ -30,8 +29,8 @@ const AmityEmptyNewsFeedComponent: FC<AmityEmptyNewsFeedComponentType> = ({
   return (
     <View
       style={styles.container}
-      testID={uiReference}
-      accessibilityLabel={uiReference}
+      // testID={uiReference}
+      // accessibilityLabel={uiReference}
     >
       <Illustration />
       <Title />

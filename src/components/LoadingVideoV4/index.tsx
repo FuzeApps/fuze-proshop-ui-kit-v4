@@ -64,10 +64,7 @@ const LoadingVideo = ({
   const videoRef = React.useRef(null);
 
   const playVideoFullScreen = async (fileUrl: string) => {
-    console.log('fileUrl: ', fileUrl);
-
     if (videoRef) {
-      console.log('fileUrl2: ', fileUrl);
       await videoRef.current.loadAsync({
         uri: fileUrl,
       });
@@ -75,7 +72,6 @@ const LoadingVideo = ({
       await videoRef.current.presentFullscreenPlayer();
       await videoRef.current.playAsync();
     }
-
   };
 
   const handleLoadEnd = () => {
@@ -167,20 +163,25 @@ const LoadingVideo = ({
         </TouchableOpacity>
       )}
 
-      <Video style={{display: 'none'}} ref={videoRef} resizeMode={ResizeMode.CONTAIN} />
-      {
-        thumbNailImage ? (
-          <Image
-            resizeMode="cover"
-            source={{ uri: thumbNailImage }}
-            style={[
+      <Video
+        style={{ display: 'none' }}
+        ref={videoRef}
+        resizeMode={ResizeMode.CONTAIN}
+      />
+      {thumbNailImage ? (
+        <Image
+          resizeMode="cover"
+          source={{ uri: thumbNailImage }}
+          style={
+            [
               styles.image,
               loading ? styles.loadingImage : styles.loadedImage,
-            ] as any}
-          />
-        ) : (
-          <View style={styles.image} />
-        )}
+            ] as any
+          }
+        />
+      ) : (
+        <View style={styles.image} />
+      )}
 
       {loading ? (
         <View style={styles.overlay}>

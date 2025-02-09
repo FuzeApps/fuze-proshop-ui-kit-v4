@@ -1,23 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { LogBox, SafeAreaView } from 'react-native';
-import Explore from '../Explore';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { ComponentID, ElementID, PageID } from '../../enum/enumUIKitID';
-import { useUiKitConfig } from '../../hooks/useUiKitConfig';
-import CustomSocialTab from '../../components/CustomSocialTab/CustomSocialTab';
-import { useBehaviour } from '../../providers/BehaviourProvider';
-import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
-import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import AmityEmptyNewsFeedComponent from '../../components/AmityEmptyNewsFeedComponent/AmityEmptyNewsFeedComponent';
+import AmityMyCommunitiesComponent from '../../components/AmityMyCommunitiesComponent/AmityMyCommunitiesComponent';
 import AmityNewsFeedComponent from '../../components/AmityNewsFeedComponent/AmityNewsFeedComponent';
 import AmitySocialHomeTopNavigationComponent from '../../components/AmitySocialHomeTopNavigationComponent/AmitySocialHomeTopNavigationComponent';
-import AmityMyCommunitiesComponent from '../../components/AmityMyCommunitiesComponent/AmityMyCommunitiesComponent';
+import CustomSocialTab from '../../components/CustomSocialTab/CustomSocialTab';
+import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
+import { ComponentID, ElementID, PageID } from '../../enum/enumUIKitID';
+import { useUiKitConfig } from '../../hooks/useUiKitConfig';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { useBehaviour } from '../../providers/BehaviourProvider';
+import Explore from '../Explore';
 LogBox.ignoreAllLogs(true);
 export default function Home() {
-
   const [newsFeedTab] = useUiKitConfig({
     page: PageID.social_home_page,
     component: ComponentID.WildCardComponent,
@@ -45,7 +43,6 @@ export default function Home() {
   // const { openPostTypeChoiceModal } = uiSlice.actions;
   // const { excludes } = useConfig();
   const [activeTab, setActiveTab] = useState<string>(newsFeedTab);
-  console.log('activeTab: ', activeTab);
   const [myCommunities, setMyCommunities] = useState<Amity.Community[]>(null);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -62,9 +59,6 @@ export default function Home() {
     );
     return () => unsubscribe();
   }, []);
-
-
-
 
   const onTabChange = useCallback(
     (tabName: string) => {

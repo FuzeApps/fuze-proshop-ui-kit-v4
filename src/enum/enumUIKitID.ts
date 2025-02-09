@@ -29,6 +29,8 @@ export enum ComponentID {
   detailed_media_attachment = 'detailed_media_attachment',
   create_post_menu = 'create_post_menu',
 }
+
+// These are the icons...
 export enum ElementID {
   CloseBtn = 'close_button',
   AspectRatioBtn = 'aspect_ratio_button',
