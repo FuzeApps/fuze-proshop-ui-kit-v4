@@ -1,3 +1,4 @@
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -6,51 +7,50 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-
 } from 'react-native';
-import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import {
-  ImageSizeState,
-  PageID,
-  mediaAttachment,
-} from '../../enum';
+import { ImageSizeState, PageID, mediaAttachment } from '../../enum';
 
 import { useStyles } from './styles';
 
-
-
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 import { useDispatch } from 'react-redux';
-import uiSlice from '../../redux/slices/uiSlice';
-import { amityPostsFormatter } from '../../util/postDataFormatter';
 import useAuth from '../../hooks/useAuth';
-import globalfeedSlice from '../../redux/slices/globalfeedSlice';
 import {
   createPostToFeed,
   editPost,
   getPostById,
 } from '../../providers/Social/feed-sdk';
-import * as ImagePicker from 'expo-image-picker';
+import globalfeedSlice from '../../redux/slices/globalfeedSlice';
+import uiSlice from '../../redux/slices/uiSlice';
+import { amityPostsFormatter } from '../../util/postDataFormatter';
 
-
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../routes/RouteParamList';
 import { PostRepository, UserRepository } from '@amityco/ts-sdk-react-native';
-import { AmityPostComposerMode, AmityPostComposerPageType, IDisplayImage } from '../../types/global.interface';
-import { TSearchItem, useAmityPage, useIsCommunityModerator, useKeyboardStatus } from '../../hooks';
-import { IMentionPosition } from '../../types/type';
-import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AmityDetailedMediaAttachmentComponent from '../../components/AmityDetailedMediaAttachmentComponent/AmityDetailedMediaAttachmentComponent';
+import AmityMediaAttachmentComponent from '../../components/AmityMediaAttachmentComponent/AmityMediaAttachmentComponent';
 import LoadingImage from '../../components/LoadingImageV4';
 import LoadingVideo from '../../components/LoadingVideoV4';
-import AmityMediaAttachmentComponent from '../../components/AmityMediaAttachmentComponent/AmityMediaAttachmentComponent';
-import AmityDetailedMediaAttachmentComponent from '../../components/AmityDetailedMediaAttachmentComponent/AmityDetailedMediaAttachmentComponent';
+import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
+import {
+  TSearchItem,
+  useAmityPage,
+  useIsCommunityModerator,
+  useKeyboardStatus,
+} from '../../hooks';
 import { useFileV4 } from '../../hooks/useFilev4';
+import { RootStackParamList } from '../../routes/RouteParamList';
 import CloseIcon from '../../svg/CloseIcon';
-
+import {
+  AmityPostComposerMode,
+  AmityPostComposerPageType,
+  IDisplayImage,
+} from '../../types/global.interface';
+import { IMentionPosition } from '../../types/type';
 
 const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
   mode,
@@ -59,7 +59,6 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
   community,
   post,
 }) => {
-
   const pageId = PageID.post_composer_page;
   const { isExcluded, themeStyles, accessibilityId } = useAmityPage({ pageId });
   const styles = useStyles(themeStyles);
@@ -461,29 +460,29 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
               allowsEditing: false,
               aspect: [4, 3],
             });
-        if (
-          result.assets &&
-          result.assets.length > 0 &&
-          result.assets[0] !== null &&
-          result.assets[0]
-        ) {
-          if (result.assets[0].type?.includes('image')) {
-            const imagesArr: string[] = [];
-            imagesArr.push(result.assets[0].uri as string);
-            const mediaOj = processMedia(imagesArr);
-            setDisplayImages((prev) => [...prev, ...mediaOj]);
-          } else {
-            const selectedVideos = result.assets;
-            const imageUriArr: string[] = selectedVideos.map(
-              (item) => item.uri
-            ) as string[];
-            const videosArr: string[] = [];
-            const totalVideos: string[] = videosArr.concat(imageUriArr);
-            const mediaOj = processMedia(totalVideos);
-            setDisplayVideos((prev) => [...prev, ...mediaOj]);
+          if (
+            result.assets &&
+            result.assets.length > 0 &&
+            result.assets[0] !== null &&
+            result.assets[0]
+          ) {
+            if (result.assets[0].type?.includes('image')) {
+              const imagesArr: string[] = [];
+              imagesArr.push(result.assets[0].uri as string);
+              const mediaOj = processMedia(imagesArr);
+              setDisplayImages((prev) => [...prev, ...mediaOj]);
+            } else {
+              const selectedVideos = result.assets;
+              const imageUriArr: string[] = selectedVideos.map(
+                (item) => item.uri
+              ) as string[];
+              const videosArr: string[] = [];
+              const totalVideos: string[] = videosArr.concat(imageUriArr);
+              const mediaOj = processMedia(totalVideos);
+              setDisplayVideos((prev) => [...prev, ...mediaOj]);
+            }
           }
         }
-      }
       } catch (error) {
         console.log(error);
       }

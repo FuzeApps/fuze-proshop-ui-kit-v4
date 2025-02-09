@@ -39,8 +39,6 @@ import {
 } from '@amityco/ts-sdk-react-native';
 import { amityPostsFormatter } from '../../util/postDataFormatter';
 
-
-
 import {
   createComment,
   createReplyComment,
@@ -67,12 +65,17 @@ import EditPostModal from '../../components/EditPostModal';
 import { getCommunityById } from '../../providers/Social/communities-sdk';
 import uiSlice from '../../redux/slices/uiSlice';
 
-
-
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TSearchItem, useAmityPage, useIsCommunityModerator } from '../../hooks';
+import {
+  TSearchItem,
+  useAmityPage,
+  useIsCommunityModerator,
+} from '../../hooks';
 import { IMentionPosition } from '../../types/type';
-import { comment_contains_inapproproate_word, text_contain_blocked_word } from '../../types/constants';
+import {
+  comment_contains_inapproproate_word,
+  text_contain_blocked_word,
+} from '../../types/constants';
 import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
 import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
 import AmityPostCommentComponent from '../../components/AmityPostCommentComponent/AmityPostCommentComponent';
@@ -83,7 +86,6 @@ type AmityPostDetailPageType = {
 };
 
 const AmityPostDetailPage: FC<AmityPostDetailPageType> = ({ postId }) => {
-  console.log('postId: ', postId);
   const { top, bottom } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
 
@@ -351,7 +353,6 @@ const AmityPostDetailPage: FC<AmityPostDetailPageType> = ({ postId }) => {
             hasSubscribed = true;
           }
           const posts = await amityPostsFormatter([data]);
-          console.log('posts: ', posts);
           setPostData(posts[0]);
         }
       }

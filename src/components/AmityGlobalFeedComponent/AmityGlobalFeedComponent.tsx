@@ -19,7 +19,6 @@ import { FeedRepository, PostRepository } from '@amityco/ts-sdk-react-native';
 import { usePostImpression } from '../../hooks/usePostImpression';
 import NewsFeedLoadingComponent from '../NewsFeedLoadingComponent/NewsFeedLoadingComponent';
 
-
 type AmityGlobalFeedComponentType = {
   pageId?: PageID;
 };
@@ -57,9 +56,7 @@ const AmityGlobalFeedComponent: FC<AmityGlobalFeedComponentType> = ({
     }
   };
   const handleLoadMore = () => {
-
-      getGlobalFeedList(nextPage);
-  
+    getGlobalFeedList(nextPage);
   };
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -125,45 +122,43 @@ const AmityGlobalFeedComponent: FC<AmityGlobalFeedComponentType> = ({
 
   if (isExcluded) return null;
 
-  return (
-
-    postData ?
-      <FlatList
-        initialNumToRender={10}
-        testID={accessibilityId}
-        accessibilityLabel={accessibilityId}
-        style={styles.feedWrap}
-        data={postList}
-        renderItem={({ item }) => (
-          <AmityPostContentComponent
-            post={item}
-            AmityPostContentComponentStyle={
-              AmityPostContentComponentStyleEnum.feed
-            }
-          />
-        )}
-        keyExtractor={(item) => item.postId.toString()}
-        onEndReachedThreshold={0.5}
-        onEndReached={handleLoadMore}
-        ref={flatListRef}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['lightblue']}
-            tintColor="lightblue"
-          />
-        }
-        keyboardShouldPersistTaps="handled"
-        viewabilityConfig={{ viewAreaCoveragePercentThreshold: 60 }}
-        onViewableItemsChanged={handleViewChange}
-        extraData={postList}
-      /> :
-      <View  style={styles.feedWrap}>
-        <NewsFeedLoadingComponent />
-      </View>
-
-
+  return postData ? (
+    <FlatList
+      initialNumToRender={10}
+      testID={accessibilityId}
+      accessibilityLabel={accessibilityId}
+      style={styles.feedWrap}
+      contentContainerStyle={styles.contentContainerStyle}
+      data={postList}
+      renderItem={({ item }) => (
+        <AmityPostContentComponent
+          post={item}
+          AmityPostContentComponentStyle={
+            AmityPostContentComponentStyleEnum.feed
+          }
+        />
+      )}
+      keyExtractor={(item) => item.postId.toString()}
+      onEndReachedThreshold={0.5}
+      onEndReached={handleLoadMore}
+      ref={flatListRef}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={['lightblue']}
+          tintColor="lightblue"
+        />
+      }
+      keyboardShouldPersistTaps="handled"
+      viewabilityConfig={{ viewAreaCoveragePercentThreshold: 60 }}
+      onViewableItemsChanged={handleViewChange}
+      extraData={postList}
+    />
+  ) : (
+    <View style={styles.feedWrap}>
+      <NewsFeedLoadingComponent />
+    </View>
   );
 };
 

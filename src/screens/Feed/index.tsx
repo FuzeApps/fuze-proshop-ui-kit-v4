@@ -23,6 +23,7 @@ import { amityPostsFormatter } from '../../util/postDataFormatter';
 import { useFocusEffect } from '@react-navigation/native';
 import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
 import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
+import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
 
 interface IFeed {
   targetId: string;
@@ -109,20 +110,24 @@ function Feed({ targetId, targetType }: IFeed, ref: React.Ref<FeedRefType>) {
 
   return (
     <View style={styles.feedWrap}>
-      <FlatList
-        scrollEnabled={false}
-        data={postData ?? []}
-        renderItem={({ item }) => (
-          <AmityPostContentComponent
-            post={item}
-            AmityPostContentComponentStyle={
-              AmityPostContentComponentStyleEnum.feed
-            }
-          />
-        )}
-        keyExtractor={(_, index) => index.toString()}
-        extraData={postData}
-      />
+      {postData ? (
+        <FlatList
+          scrollEnabled={false}
+          data={postData ?? []}
+          renderItem={({ item }) => (
+            <AmityPostContentComponent
+              post={item}
+              AmityPostContentComponentStyle={
+                AmityPostContentComponentStyleEnum.feed
+              }
+            />
+          )}
+          keyExtractor={(_, index) => index.toString()}
+          extraData={postData}
+        />
+      ) : (
+        <NewsFeedLoadingComponent />
+      )}
     </View>
   );
 }

@@ -17,8 +17,6 @@ export const useStyles = () => {
       paddingHorizontal: 12,
       paddingVertical: 8,
       marginHorizontal: 4,
-      borderWidth: 1,
-      borderColor: theme.colors.baseShade4,
       backgroundColor: theme.colors.background,
     },
     tabName: {

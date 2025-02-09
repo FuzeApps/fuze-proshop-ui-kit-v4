@@ -7,6 +7,9 @@ export const useStyle = (themeStyle: MyMD3Theme) => {
       backgroundColor: themeStyle.colors.baseShade4,
       height: '100%',
     },
+    contentContainerStyle: {
+      paddingBottom: 120,
+    },
   });
   return styles;
 };

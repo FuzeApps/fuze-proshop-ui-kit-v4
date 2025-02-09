@@ -8,8 +8,6 @@ export const useStyles = (theme: MyMD3Theme) => {
       borderBottomColor: theme.colors.baseShade4,
     },
     actionSection: {
-      borderTopColor: theme.colors.baseShade4,
-      borderTopWidth: 1,
       flexDirection: 'row',
       marginTop: 8,
       marginBottom: 4,

@@ -42,25 +42,22 @@ export default function UserItem({
     return 'Display name';
   };
   const avatarFileURL = (fileId: string) => {
-    console.log('fileId: ', fileId);
     return `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download?size=medium`;
   };
 
   return (
     <TouchableOpacity style={styles.listItem} onPress={handleToggle}>
       <View style={styles.leftContainer}>
-        {
-          user.avatarFileId ?
-            <Image
-              style={styles.avatar}
-              source={
-                {
-                  uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
-                }
-
-              }
-            /> :   <SvgXml style={styles.avatar} xml={userIcon()} />
-        }
+        {user.avatarFileId ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
+            }}
+          />
+        ) : (
+          <SvgXml style={styles.avatar} xml={userIcon()} />
+        )}
 
         <Text style={styles.itemText}>{displayName()}</Text>
       </View>
@@ -74,7 +71,6 @@ export default function UserItem({
             }
           }}
         >
-
           <ThreeDotsIcon style={styles.dotIcon} />
         </TouchableOpacity>
       )}
