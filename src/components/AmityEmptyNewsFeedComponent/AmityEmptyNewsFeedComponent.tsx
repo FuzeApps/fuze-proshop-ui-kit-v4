@@ -32,7 +32,7 @@ const AmityEmptyNewsFeedComponent: FC<AmityEmptyNewsFeedComponentType> = ({
       // testID={uiReference}
       // accessibilityLabel={uiReference}
     >
-      {/* <Illustration /> */}
+      <Illustration />
       <Title />
       <Description />
       <ExploreCommunityButton

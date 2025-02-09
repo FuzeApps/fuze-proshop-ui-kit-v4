@@ -43,9 +43,8 @@ import PostDetail from '../screens/PostDetail';
 import EditPost from '../screens/EditPost/EditPost';
 import Toast from '../components/Toast/Toast';
 
-
 interface INavigator {
-  screen?: string
+  screen?: string;
 }
 
 export default function SocialNavigator({ screen = 'Home' }: INavigator) {
@@ -53,7 +52,6 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
   const { isConnected, client } = useAuth();
 
   const theme = useTheme() as MyMD3Theme;
-
 
   const styles = useStyles();
   return (
@@ -74,9 +72,17 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
           }}
           initialRouteName={screen as keyof RootStackParamList}
         >
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Community" component={Home} />
-          <Stack.Screen name="Explore" component={Explore} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Explore"
+            component={Explore}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="PreloadCommunityHome"
             component={PreloadCommunityHome}
@@ -84,14 +90,17 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
               headerShown: false,
             }}
           />
-          <Stack.Screen name="PostDetail" component={PostDetail}
+          <Stack.Screen
+            name="PostDetail"
+            component={PostDetail}
             options={{
               headerShown: false,
-            }} />
+            }}
+          />
           <Stack.Screen
             name="CategoryList"
             component={CategoryList}
-            options={({ }) => ({
+            options={({}) => ({
               title: 'Category',
             })}
           />
@@ -101,7 +110,12 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             options={({
               navigation,
               route: {
-                params: { communityName, communityId, isModerator, isBackEnabled = true },
+                params: {
+                  communityName,
+                  communityId,
+                  isModerator,
+                  isBackEnabled = true,
+                },
               },
             }: any) => ({
               headerLeft: () => isBackEnabled && <BackButton backTwice />,
@@ -189,11 +203,18 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             })}
             initialParams={{ userId: (client as Amity.Client).userId }}
           />
-          <Stack.Screen name="MyUserProfile" component={MyUserprofile}
+          <Stack.Screen
+            name="MyUserProfile"
+            component={MyUserprofile}
             options={{
               headerShown: false,
-            }} />
-          <Stack.Screen name="Newsfeed" component={AmityNewsFeedComponent} options={{ headerShown: false }} />
+            }}
+          />
+          <Stack.Screen
+            name="Newsfeed"
+            component={AmityNewsFeedComponent}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen
             name="EditCommunity"
@@ -220,7 +241,7 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
         </Stack.Navigator>
       )}
       <PostTypeChoiceModal />
-      <Toast/>
+      <Toast />
     </NavigationContainer>
   );
 }
