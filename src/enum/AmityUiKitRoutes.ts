@@ -1,3 +1,6 @@
+/**
+ * Enum for Amity UI Kit Routes
+ */
 export enum AmityUiKitRoutes {
   Explore = 'Explore',
   MyCommunity = 'MyCommunity',

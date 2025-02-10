@@ -1,4 +1,5 @@
 import { UserRepository } from '@amityco/ts-sdk-react-native';
+import { AmityUserMetadataKeys } from '../enum';
 
 /**
  * Given a community ID, add the community ID to the user's joinedCommunities metadata.
@@ -16,7 +17,10 @@ const addToJoinedCommunities = async (userId: string, communityId: string) => {
             await UserRepository.updateUser(userId, {
               metadata: {
                 ...data.metadata,
-                joinedCommunities: [...joinedCommunities, communityId],
+                [AmityUserMetadataKeys.JoinedCommunities]: [
+                  ...joinedCommunities,
+                  communityId,
+                ],
               },
             });
           }
@@ -49,9 +53,8 @@ export const removeFromJoinedCommunities = async (
             await UserRepository.updateUser(userId, {
               metadata: {
                 ...data.metadata,
-                joinedCommunities: joinedCommunities?.filter(
-                  (item) => item !== customerId
-                ),
+                [AmityUserMetadataKeys.JoinedCommunities]:
+                  joinedCommunities?.filter((item) => item !== customerId),
               },
             });
           }
