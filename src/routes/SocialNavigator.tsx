@@ -42,6 +42,7 @@ import MyUserprofile from '../screens/MyUserProfile';
 import PostDetail from '../screens/PostDetail';
 import EditPost from '../screens/EditPost/EditPost';
 import Toast from '../components/Toast/Toast';
+import { AmityUiKitRoutes } from '../enum';
 
 interface INavigator {
   screen?: string;
@@ -73,39 +74,39 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
           initialRouteName={screen as keyof RootStackParamList}
         >
           <Stack.Screen
-            name="Home"
+            name={AmityUiKitRoutes.Home}
             component={Home}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Community" component={Home} />
+          <Stack.Screen name={AmityUiKitRoutes.Community} component={Home} />
           <Stack.Screen
-            name="Explore"
+            name={AmityUiKitRoutes.Explore}
             component={Explore}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="PreloadCommunityHome"
+            name={AmityUiKitRoutes.PreloadCommunityHome}
             component={PreloadCommunityHome}
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-            name="PostDetail"
+            name={AmityUiKitRoutes.PostDetail}
             component={PostDetail}
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-            name="CategoryList"
+            name={AmityUiKitRoutes.CategoryList}
             component={CategoryList}
             options={({}) => ({
               title: 'Category',
             })}
           />
           <Stack.Screen
-            name="CommunityHome"
+            name={AmityUiKitRoutes.CommunityHome}
             component={CommunityHome}
             options={({
               navigation,
@@ -136,16 +137,19 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
               ),
             })}
           />
-          <Stack.Screen name="PendingPosts" component={PendingPosts} />
           <Stack.Screen
-            name="CommunitySearch"
+            name={AmityUiKitRoutes.PendingPosts}
+            component={PendingPosts}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.CommunitySearch}
             component={CommunitySearch}
             options={{
               headerShown: false, // Remove the back button
             }}
           />
           <Stack.Screen
-            name="CommunityMemberDetail"
+            name={AmityUiKitRoutes.CommunityMemberDetail}
             component={CommunityMemberDetail}
             options={{
               headerLeft: () => <BackButton />,
@@ -154,7 +158,7 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             }}
           />
           <Stack.Screen
-            name="CommunitySetting"
+            name={AmityUiKitRoutes.CommunitySetting}
             component={CommunitySetting}
             options={({
               route: {
@@ -166,32 +170,38 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
               headerLeft: () => <BackButton />,
             })}
           />
-          <Stack.Screen name="CreateCommunity" component={CreateCommunity} />
-          <Stack.Screen name="CommunityList" component={CommunityList} />
           <Stack.Screen
-            name="AmitySocialGlobalSearchPage"
+            name={AmityUiKitRoutes.CreateCommunity}
+            component={CreateCommunity}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.CommunityList}
+            component={CommunityList}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.AmitySocialGlobalSearchPage}
             component={AmitySocialGlobalSearchPage}
             options={{
               headerShown: false, // Remove the back button
             }}
           />
           <Stack.Screen
-            name="MyCommunity"
+            name={AmityUiKitRoutes.MyCommunity}
             options={{ headerShown: false }}
             component={AmityMyCommunitiesComponent}
           />
           <Stack.Screen
-            name="CreatePost"
+            name={AmityUiKitRoutes.CreatePost}
             component={CreatePost}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="CreatePoll"
+            name={AmityUiKitRoutes.CreatePoll}
             component={CreatePoll}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="UserProfile"
+            name={AmityUiKitRoutes.UserProfile}
             component={UserProfile}
             options={({
               route: {
@@ -204,20 +214,23 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             initialParams={{ userId: (client as Amity.Client).userId }}
           />
           <Stack.Screen
-            name="MyUserProfile"
+            name={AmityUiKitRoutes.MyUserProfile}
             component={MyUserprofile}
             options={{
               headerShown: false,
             }}
           />
           <Stack.Screen
-            name="Newsfeed"
+            name={AmityUiKitRoutes.Newsfeed}
             component={AmityNewsFeedComponent}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen
-            name="EditCommunity"
+            name={AmityUiKitRoutes.EditProfile}
+            component={EditProfile}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.EditCommunity}
             component={EditCommunity}
             options={({
               navigation,
@@ -230,11 +243,11 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             })}
           />
           <Stack.Screen
-            name="UserProfileSetting"
+            name={AmityUiKitRoutes.UserProfileSetting}
             component={UserProfileSetting}
           />
           <Stack.Screen
-            name="EditPost"
+            name={AmityUiKitRoutes.EditPost}
             component={EditPost}
             options={{ headerShown: false }}
           />

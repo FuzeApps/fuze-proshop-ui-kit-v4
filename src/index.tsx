@@ -2,35 +2,40 @@ import React from 'react';
 import AmityUiKitProvider from './providers/amity-ui-kit-provider';
 import AmityUiKitSocial from './routes/SocialNavigator';
 import { PostTag } from './enum/enumPostTag';
+import { AmityUiKitRoutes } from './enum';
 
-const exploreScreen = () => {
-  return <AmityUiKitSocial screen="Explore" />;
+const ExploreScreen = () => {
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.Explore} />;
 };
 const MyCommunityScreen = () => {
-  return <AmityUiKitSocial screen="MyCommunity" />;
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.MyCommunity} />;
 };
 const NewsfeedScreen = () => {
-  return <AmityUiKitSocial screen="Newsfeed" />;
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.Newsfeed} />;
 };
 
-const UserProfile = () => {
-  return <AmityUiKitSocial screen="UserProfile" />;
+const UserProfileScreen = () => {
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.UserProfile} />;
 };
-const PreloadCommunityHome = () => {
-  return <AmityUiKitSocial screen="PreloadCommunityHome" />;
+const PreloadCommunityHomeScreen = () => {
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.PreloadCommunityHome} />;
 };
-const MyUserProfile = () => {
-  return <AmityUiKitSocial screen="MyUserProfile" />;
+const MyUserProfileScreen = () => {
+  return <AmityUiKitSocial screen={AmityUiKitRoutes.MyUserProfile} />;
 };
 
 export {
+  // Providers
   AmityUiKitProvider,
   AmityUiKitSocial,
-  exploreScreen as ExplorePage,
-  MyCommunityScreen as MyCommunityPage,
-  NewsfeedScreen as Newsfeed,
-  UserProfile,
-  PreloadCommunityHome as CommunityHome,
-  MyUserProfile,
+  //Screens
+  ExploreScreen,
+  MyCommunityScreen,
+  NewsfeedScreen,
+  UserProfileScreen,
+  PreloadCommunityHomeScreen,
+  MyUserProfileScreen,
+  // Enums
   PostTag,
+  AmityUiKitRoutes,
 };

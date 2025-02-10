@@ -6,3 +6,4 @@ export * from './enumTabName';
 export * from './post';
 export * from './mediaAttachmentEnum';
 export * from './tokens';
+export * from './AmityUiKitRoutes';
