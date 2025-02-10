@@ -45,6 +45,7 @@ import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
 import EditIcon from '../../svg/EditIcon';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
+import { PostTag } from '../../enum/enumPostTag';
 
 export type FeedRefType = {
   handleLoadMore: () => void;
@@ -286,7 +287,7 @@ export default function CommunityHome({ route }: any) {
             targetType="community"
             targetId={communityId}
             ref={feedRef}
-            tags={['activity']}
+            tags={[PostTag.Activity]}
           />
         );
       case TabName.Gallery:

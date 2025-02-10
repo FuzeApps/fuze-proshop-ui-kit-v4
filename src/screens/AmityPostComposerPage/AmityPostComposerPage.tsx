@@ -319,6 +319,7 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
           mentionsPosition
         );
       } else {
+        //JPN: Creating post here...
         response = await createPostToFeed(
           targetType,
           targetId,

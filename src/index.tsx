@@ -1,6 +1,7 @@
 import React from 'react';
 import AmityUiKitProvider from './providers/amity-ui-kit-provider';
 import AmityUiKitSocial from './routes/SocialNavigator';
+import { PostTag } from './enum/enumPostTag';
 
 const exploreScreen = () => {
   return <AmityUiKitSocial screen="Explore" />;
@@ -31,4 +32,5 @@ export {
   UserProfile,
   PreloadCommunityHome as CommunityHome,
   MyUserProfile,
+  PostTag,
 };

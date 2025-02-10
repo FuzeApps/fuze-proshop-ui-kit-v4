@@ -22,7 +22,6 @@ import CommentButtonIconElement from '../../../Elements/CommentButtonIconElement
 import { useAmityComponent } from '../../../hooks/useUiKitReference';
 import LikeReaction from '../../../svg/LikeReactionIcon';
 
-
 const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
   community,
   postId,
@@ -49,7 +48,7 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
         );
         setPostData(data);
         setTotalReactions(data.reactionsCount);
-        setIsLike(data.myReactions.length > 0);
+        setIsLike(data?.myReactions?.length > 0);
       }
     });
     return () => unsubscribe && unsubscribe();
@@ -111,7 +110,10 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
         <View style={styles.countSection}>
           {totalReactions ? (
             <View style={styles.row}>
-              <LikeReaction  circleColor={themeStyles.colors.background} style={{ marginRight: 4 }} />
+              <LikeReaction
+                circleColor={themeStyles.colors.background}
+                style={{ marginRight: 4 }}
+              />
               <Text style={styles.likeCountText} onPress={onClickReactions}>
                 {totalReactions} {renderLikeText(totalReactions)}
               </Text>
@@ -132,7 +134,7 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
         <View style={styles.row}>
           <TouchableOpacity onPress={addReactionToPost} style={styles.likeBtn}>
             {isLike ? (
-              <LikeReaction  />
+              <LikeReaction />
             ) : (
               <LikeButtonIconElement
                 pageID={pageId}
