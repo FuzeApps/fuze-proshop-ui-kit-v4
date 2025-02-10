@@ -1,4 +1,4 @@
-import { AmityPostComposerPageType } from "../types/global.interface";
+import { AmityPostComposerPageType } from '../types/global.interface';
 
 export type RootStackParamList = {
   Home: { postIdCallBack?: string };

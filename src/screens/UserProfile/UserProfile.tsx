@@ -49,7 +49,7 @@ import { defaultAvatarUri } from '../../assets';
 import { ImageSizeState } from '../../enum';
 
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
-import {  } from '../../hooks';
+import {} from '../../hooks';
 import { TabName } from '../../enum/enumTabName';
 import { useFileV4 } from '../../hooks/useFilev4';
 
@@ -94,9 +94,8 @@ export default function UserProfile({ route }: any) {
     });
   };
   const onFollowTap = async () => {
-    const { data: followStatus } = await UserRepository.Relationship.follow(
-      userId
-    );
+    const { data: followStatus } =
+      await UserRepository.Relationship.follow(userId);
     if (followStatus) {
       setFollowStatus(followStatus.status);
     }
@@ -369,7 +368,7 @@ export default function UserProfile({ route }: any) {
         {!isBlocked && (
           <>
             <CustomTab
-              tabName={[TabName.Timeline, TabName.Gallery] as TabName[] }
+              tabName={[TabName.Timeline, TabName.Gallery] as TabName[]}
               onTabChange={setCurrentTab}
             />
             {renderTabs()}

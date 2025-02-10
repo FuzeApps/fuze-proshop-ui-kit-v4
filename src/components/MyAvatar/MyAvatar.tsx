@@ -7,7 +7,6 @@ import { ImageSizeState } from '../../enum';
 import useAuth from '../../hooks/useAuth';
 import { useFileV4 } from '../../hooks/useFilev4';
 
-
 type MyAvatarProp = Partial<ImageProps>;
 const MyAvatar: FC<MyAvatarProp> = (props) => {
   const { client } = useAuth();
