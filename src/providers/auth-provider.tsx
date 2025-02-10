@@ -85,6 +85,7 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
       setLoading(false);
     }
   };
+
   useEffect(() => {
     login();
   }, [userId]);

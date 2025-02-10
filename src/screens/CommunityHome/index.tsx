@@ -7,44 +7,46 @@ import {
 } from '@amityco/ts-sdk-react-native';
 import React, {
   type MutableRefObject,
-  useRef,
-  useState,
   useCallback,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 import {
-  View,
   Image,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Pressable,
+  ScrollView,
   Text,
   TouchableOpacity,
-  ScrollView,
-  type NativeSyntheticEvent,
-  type NativeScrollEvent,
-  Pressable,
+  View,
 } from 'react-native';
 import CustomTab from '../../components/CustomTabV3';
-import { useStyles } from './styles';
-import Feed from '../Feed';
 import useAuth from '../../hooks/useAuth';
+import Feed from '../Feed';
+import { useStyles } from './styles';
 
-import { useTheme } from 'react-native-paper';
-import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { IPost } from '../../components/Social/PostList';
-import { amityPostsFormatter } from '../../util/postDataFormatter';
-import { checkCommunityPermission } from '../../providers/Social/communities-sdk';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import FloatingButton from '../../components/FloatingButton';
+import { useTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
+import FloatingButton from '../../components/FloatingButton';
+import { IPost } from '../../components/Social/PostList';
+import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { checkCommunityPermission } from '../../providers/Social/communities-sdk';
+import { amityPostsFormatter } from '../../util/postDataFormatter';
 
-import { TabName } from '../../enum/tabNameState';
-import uiSlice from '../../redux/slices/uiSlice';
+import GalleryComponent from '../../components/Gallery/GalleryComponent';
+import { PostTag } from '../../enum/enumPostTag';
 import { PostTargetType } from '../../enum/postTargetType';
+import { TabName } from '../../enum/tabNameState';
 import useFile from '../../hooks/useFile';
+import uiSlice from '../../redux/slices/uiSlice';
+import EditIcon from '../../svg/EditIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
-import EditIcon from '../../svg/EditIcon';
-import GalleryComponent from '../../components/Gallery/GalleryComponent';
+import metadataHandlers from '../../util/metadataHandlers';
 
 export type FeedRefType = {
   handleLoadMore: () => void;
@@ -192,6 +194,7 @@ export default function CommunityHome({ route }: any) {
       isModerator: isUserHasPermission,
     });
   };
+
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
       feedRef.current.handleLoadMore(); // Call the function inside the child component
@@ -201,6 +204,10 @@ export default function CommunityHome({ route }: any) {
   const onJoinCommunityTap = async () => {
     const isJoined = await CommunityRepository.joinCommunity(communityId);
     if (isJoined) {
+      await metadataHandlers.addToJoinedCommunities(
+        (client as Amity.Client).userId,
+        communityId
+      );
       setIsJoin(isJoined);
       return isJoined;
     }
@@ -286,7 +293,7 @@ export default function CommunityHome({ route }: any) {
             targetType="community"
             targetId={communityId}
             ref={feedRef}
-            tags={['activity']}
+            tags={[PostTag.Activity]}
           />
         );
       case TabName.Gallery:

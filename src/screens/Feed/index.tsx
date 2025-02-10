@@ -82,15 +82,6 @@ function Feed(
 
   useFocusEffect(
     useCallback(() => {
-      console.log('JPN: params', {
-        targetId,
-        targetType,
-        sortBy: 'lastCreated',
-        limit: 10,
-        feedType: 'published',
-        tags,
-      });
-
       const unsubscribe = PostRepository.getPosts(
         {
           targetId,

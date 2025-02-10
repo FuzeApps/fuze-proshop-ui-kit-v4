@@ -17,9 +17,6 @@ export const useConfigImageUri = ({
   const { getUiKitConfig } = useConfig();
   const { isDarkTheme } = useDarkMode();
 
-  console.log('JPN: useConfigImageUri configPath', configPath);
-  console.log('JPN: useConfigImageUri configKey', configKey);
-
   const configImageUri = useMemo(() => {
     if (!configPath || !configKey) return defaultAvatarUri;
     const fileUri = getUiKitConfig(configPath)?.[configKey] as string;

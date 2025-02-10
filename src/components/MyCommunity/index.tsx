@@ -63,9 +63,12 @@ export default function MyCommunity() {
         <Text style={styles.title}>My Community</Text>
         <TouchableOpacity onPress={onClickSeeAll}>
           <View style={styles.arrowIcon}>
-            <ArrowOutlinedIcon width={17} height={17} color={theme.colors.base} />
+            <ArrowOutlinedIcon
+              width={17}
+              height={17}
+              color={theme.colors.base}
+            />
           </View>
-
         </TouchableOpacity>
       </View>
 
@@ -83,7 +86,11 @@ export default function MyCommunity() {
         ))}
         <TouchableOpacity onPress={onClickSeeAll} style={styles.seeAllBtn}>
           <View style={styles.seeAllIcon}>
-            <ArrowOutlinedIcon width={15} height={15} color={theme.colors.base} />
+            <ArrowOutlinedIcon
+              width={15}
+              height={15}
+              color={theme.colors.base}
+            />
           </View>
           <Text style={styles.seeAllText}>See all</Text>
         </TouchableOpacity>

@@ -91,7 +91,7 @@ export default function UserProfileSetting({
         userSettingData.map((setting) => {
           setting.data.unshift({
             type: 'manage',
-            leftIcon: <UnfollowIcon/>,
+            leftIcon: <UnfollowIcon />,
             label: 'Unfollow',
             callBack: handleUnfollowPress,
           });
@@ -132,14 +132,9 @@ export default function UserProfileSetting({
           style={styles.rowContainer}
           onPress={item.callBack}
         >
-          <View style={styles.iconContainer}>
-            {item.leftIcon}
-          </View>
+          <View style={styles.iconContainer}>{item.leftIcon}</View>
           <Text style={styles.rowText}>{item.label}</Text>
-          {item.rightIcon && (
-            item.rightIcon
-
-          )}
+          {item.rightIcon && item.rightIcon}
         </TouchableOpacity>
       );
     },

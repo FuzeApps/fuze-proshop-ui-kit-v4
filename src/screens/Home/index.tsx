@@ -96,15 +96,19 @@ export default function Home() {
     return null;
   };
 
+  const safeAreaStyles = React.useMemo(() => {
+    return {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    };
+  }, [theme.colors.background]);
+
   return (
     <SafeAreaView
       testID="social_home_page"
       accessibilityLabel="social_home_page"
       id="social_home_page"
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}
+      style={safeAreaStyles}
     >
       {/* <CustomTab
         tabName={
@@ -116,7 +120,7 @@ export default function Home() {
       /> */}
       <AmitySocialHomeTopNavigationComponent currentTab={activeTab} />
       <CustomSocialTab
-        tabNames={[newsFeedTab, exploreTab, myCommunitiesTab]}
+        tabNames={[newsFeedTab, myCommunitiesTab, exploreTab]}
         onTabChange={onTabChange}
         activeTab={activeTab}
       />

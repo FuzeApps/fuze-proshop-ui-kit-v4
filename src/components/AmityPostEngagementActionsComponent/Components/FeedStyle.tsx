@@ -31,7 +31,6 @@ import { useAmityComponent } from '../../../hooks/useUiKitReference';
 
 import LikeReactionIcon from '../../../svg/LikeReactionIcon';
 
-
 const FeedStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
   postId,
   pageId,
@@ -41,7 +40,6 @@ const FeedStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
     pageId: PageID.post_detail_page,
     componentId: ComponentID.post_content,
   });
-
 
   const styles = useStyles(themeStyles);
   const navigation =
@@ -55,7 +53,7 @@ const FeedStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
       if (!error && !loading) {
         setPostData(data);
         setTotalReactions(data.reactionsCount);
-        setIsLike(data.myReactions.length > 0);
+        setIsLike(data?.myReactions?.length > 0);
       }
     });
     return () => unsubscribeRef?.current && unsubscribeRef?.current();
@@ -97,7 +95,11 @@ const FeedStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
             //   height="20"
             // />
 
-            <LikeReactionIcon circleColor={themeStyles.colors.background} width={20} height={20} />
+            <LikeReactionIcon
+              circleColor={themeStyles.colors.background}
+              width={20}
+              height={20}
+            />
           ) : (
             <LikeButtonIconElement
               pageID={pageId}

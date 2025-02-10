@@ -137,7 +137,7 @@
       "close_icon": "close.png"
     },
     "social_home_page/top_navigation/header_label": {
-      "text": "Community"
+      "text": "Clubhouse"
     },
     "social_home_page/top_navigation/global_search_button": {
       "icon": "searchButtonIcon"
@@ -149,10 +149,10 @@
       "text": "Feed"
     },
     "social_home_page/*/explore_button": {
-      "text": "Explore"
+      "text": "Find Groups"
     },
     "social_home_page/*/my_communities_button": {
-      "text": "My Communities"
+      "text": "My Groups"
     },
     "social_home_page/empty_newsfeed/illustration": {
       "icon": "emptyFeedIcon"

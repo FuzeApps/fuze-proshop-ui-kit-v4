@@ -1,18 +1,14 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  SectionList,
-  Alert,
-} from 'react-native';
+import { View, Text, TouchableOpacity, SectionList, Alert } from 'react-native';
 import { useStyles } from './styles';
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import { SvgXml } from 'react-native-svg';
-import {  communitySettingMemberIcon } from '../../svg/svg-xml-list';
+import { communitySettingMemberIcon } from '../../svg/svg-xml-list';
+import metadataHandlers from '../../util/metadataHandlers';
+import useAuth from '../../hooks/useAuth';
 
 interface ChatDetailProps {
   navigation: any;
@@ -30,6 +26,8 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 }) => {
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
+  const { client } = useAuth();
+
   const { communityId, isModerator } = route.params;
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
@@ -40,15 +38,20 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 
   const handleLeaveCommunityPress = async () => {
     const hasLeft = await CommunityRepository.leaveCommunity(communityId);
+
+    await metadataHandlers.removeFromJoinedCommunities(
+      (client as Amity.Client).userId,
+      communityId
+    );
+
     if (hasLeft) {
       navigation.goBack();
     }
   };
 
   const onCloseCommunity = async () => {
-    const deletedCommunity = await CommunityRepository.deleteCommunity(
-      communityId
-    );
+    const deletedCommunity =
+      await CommunityRepository.deleteCommunity(communityId);
     if (deletedCommunity) return navigation.navigate('Home');
     Alert.alert(
       'Unable to close community',
@@ -83,9 +86,16 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
       data: [
         {
           name: 'Members',
-          leftIcon: <SvgXml width={30} height={30} xml={communitySettingMemberIcon} color={theme.colors.base}/>,
+          leftIcon: (
+            <SvgXml
+              width={30}
+              height={30}
+              xml={communitySettingMemberIcon}
+              color={theme.colors.base}
+            />
+          ),
           callBack: handleMembersPress,
-          rightIcon: <ArrowOutlinedIcon width={24} color={theme.colors.base}/>,
+          rightIcon: <ArrowOutlinedIcon width={24} color={theme.colors.base} />,
           type: SettingType.basicInfo,
         },
       ],
@@ -115,9 +125,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     if (item.type === SettingType.basicInfo) {
       return (
         <TouchableOpacity style={styles.rowContainer} onPress={item.callBack}>
-          <View style={styles.iconContainer}>
-            {item.leftIcon}
-          </View>
+          <View style={styles.iconContainer}>{item.leftIcon}</View>
           <Text style={styles.rowText}>{item.name}</Text>
           {item.rightIcon}
         </TouchableOpacity>
