@@ -79,7 +79,7 @@ __metadata:
     eslint-config-prettier: ^9.0.0
     eslint-plugin-prettier: ^5.0.1
     expo-asset: ^8.9.1
-    expo-av: ^13.10.5
+    expo-av: ^14.0.0
     expo-constants: ^14.2.1
     expo-image-picker: ^14.1.1
     expo-modules-core: ^1.5.4
@@ -12672,12 +12672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-av@npm:^13.10.5":
-  version: 13.10.6
-  resolution: "expo-av@npm:13.10.6"
+"expo-av@npm:^14.0.0":
+  version: 14.0.7
+  resolution: "expo-av@npm:14.0.7"
   peerDependencies:
     expo: "*"
-  checksum: 66f4b2e885f574e0815d2340e6ea9aa82b2599f4796fe84a8ca08795f3076c306d6b6983599d7be9c246cdc787f9d682f15f236d295606ef31089c5c6e9f78f4
+  checksum: 7518a8972b0d1b3b362d4dc9c4d21a39c7cf98b46abbdbb2349451115f4edf6e97fb6c723674fd3c62fa037fc77e00172955082d21b1c3fdf5273f33781ce78d
   languageName: node
   linkType: hard
 

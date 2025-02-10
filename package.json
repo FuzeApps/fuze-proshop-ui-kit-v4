@@ -168,7 +168,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@rntext/more-or-less": "^2.0.2",
     "expo-asset": "^8.9.1",
-    "expo-av": "^13.10.5",
+    "expo-av": "^14.0.0",
     "expo-constants": "^14.2.1",
     "expo-image-picker": "^14.1.1",
     "expo-modules-core": "^1.5.4",
