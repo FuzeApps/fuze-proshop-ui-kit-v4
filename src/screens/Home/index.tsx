@@ -1,7 +1,7 @@
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { LogBox, SafeAreaView } from 'react-native';
+import { LogBox, SafeAreaView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AmityEmptyNewsFeedComponent from '../../components/AmityEmptyNewsFeedComponent/AmityEmptyNewsFeedComponent';
 import AmityMyCommunitiesComponent from '../../components/AmityMyCommunitiesComponent/AmityMyCommunitiesComponent';
@@ -96,15 +96,19 @@ export default function Home() {
     return null;
   };
 
+  const safeAreaStyles = React.useMemo(() => {
+    return {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    };
+  }, [theme.colors.background]);
+
   return (
     <SafeAreaView
       testID="social_home_page"
       accessibilityLabel="social_home_page"
       id="social_home_page"
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}
+      style={safeAreaStyles}
     >
       {/* <CustomTab
         tabName={

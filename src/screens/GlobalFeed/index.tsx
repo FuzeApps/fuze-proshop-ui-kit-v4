@@ -18,7 +18,6 @@ import { RootState } from '../../redux/store';
 import { useFocusEffect } from '@react-navigation/native';
 import { RefreshControl } from 'react-native';
 
-
 export default function GlobalFeed() {
   const { postList } = useSelector((state: RootState) => state.globalFeed);
   const [refreshing, setRefreshing] = useState(false);

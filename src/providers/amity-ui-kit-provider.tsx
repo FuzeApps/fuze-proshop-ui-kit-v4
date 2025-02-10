@@ -14,6 +14,7 @@ import { IConfigRaw } from '../types/config.interface';
 import { validateConfigColor } from '../util/colorUtil';
 import AuthContextProvider from './auth-provider';
 import { ConfigProvider } from './config-provider';
+import AuthStaticProvider from './auth-static-provider';
 
 export type CusTomTheme = typeof DefaultTheme;
 export interface IAmityUIkitProvider {
@@ -123,13 +124,22 @@ export default function AmityUiKitProvider({
           apiEndpoint={apiEndpoint}
           authToken={authToken}
         >
-          <ConfigProvider configs={configData}>
-            <BehaviourProvider behaviour={behaviour}>
-              <PaperProvider theme={globalTheme}>
-                <SafeAreaProvider>{children}</SafeAreaProvider>
-              </PaperProvider>
-            </BehaviourProvider>
-          </ConfigProvider>
+          <AuthStaticProvider
+            userId={userId}
+            displayName={displayName || userId}
+            apiKey={apiKey}
+            apiRegion={apiRegion}
+            apiEndpoint={apiEndpoint}
+            authToken={authToken}
+          >
+            <ConfigProvider configs={configData}>
+              <BehaviourProvider behaviour={behaviour}>
+                <PaperProvider theme={globalTheme}>
+                  <SafeAreaProvider>{children}</SafeAreaProvider>
+                </PaperProvider>
+              </BehaviourProvider>
+            </ConfigProvider>
+          </AuthStaticProvider>
         </AuthContextProvider>
       </MenuProvider>
     </Provider>
