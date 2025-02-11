@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { amityUIKitTokens } from '../../enum';
+import { officialIcon } from '../../svg/svg-xml-list';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -101,7 +102,7 @@ export const useStyles = () => {
     },
     memberTextContainer: {
       alignItems: 'flex-start',
-      paddingBottom: 10, // Added to horizontally center the text within memberContainer
+      flexDirection: 'row',
     },
     memberText: {
       fontSize: 18,
@@ -109,6 +110,8 @@ export const useStyles = () => {
       marginRight: 4,
       color: theme.colors.base,
     },
+    memberTextWrapper: { maxWidth: '90%' },
+
     memberCount: {
       fontSize: 13,
       fontWeight: '400',
@@ -184,6 +187,11 @@ export const useStyles = () => {
       lineHeight: 24,
       fontWeight: '600',
       color: theme.colors.base,
+    },
+    officialIconWrapper: {
+      position: 'absolute',
+      marginLeft: 55,
+      bottom: 0,
     },
   });
   return styles;

@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useAuth from '../../hooks/useAuth';
 import CommunityIcon from '../../svg/CommunityIcon';
-import { chevronRightIcon } from '../../svg/svg-xml-list';
+import { chevronRightIcon, officialIcon } from '../../svg/svg-xml-list';
 import { SvgXml } from 'react-native-svg';
 import { amityUIKitTokens } from '../../enum';
 
@@ -95,16 +95,18 @@ export default function Explore() {
                 handleCategoryClick(category.categoryId, category.name)
               }
             >
-              <Image
-                style={styles.categoryAvatar}
-                source={
-                  category.avatarFileId
-                    ? {
-                        uri: `https://api.${apiRegion}.amity.co/api/v3/files/${category.avatarFileId}/download`,
-                      }
-                    : require('../../assets/icon/Placeholder.png')
-                }
-              />
+              <View>
+                <Image
+                  style={styles.categoryAvatar}
+                  source={
+                    category.avatarFileId
+                      ? {
+                          uri: `https://api.${apiRegion}.amity.co/api/v3/files/${category.avatarFileId}/download`,
+                        }
+                      : require('../../assets/icon/Placeholder.png')
+                  }
+                />
+              </View>
               <View style={styles.categoryTextWrapper}>
                 <Text
                   ellipsizeMode="tail"
@@ -196,12 +198,18 @@ export default function Explore() {
                 {/* <Text style={styles.number}>{index + 1}</Text> */}
                 <View style={styles.memberContainer}>
                   <View style={styles.memberTextContainer}>
-                    <Text style={styles.memberText}>
-                      {community.displayName}
-                    </Text>
-                    {/* <Text style={styles.memberCount}>
-                      {community.membersCount} members
-                    </Text> */}
+                    <View style={styles.memberTextWrapper}>
+                      <Text numberOfLines={1} style={styles.memberText}>
+                        {community.displayName}
+                      </Text>
+                    </View>
+                    {community.isOfficial && (
+                      <SvgXml
+                        width={24}
+                        height={24}
+                        xml={officialIcon(amityUIKitTokens.colors.primary)}
+                      />
+                    )}
                   </View>
                 </View>
               </View>
