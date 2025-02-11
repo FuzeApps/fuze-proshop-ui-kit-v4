@@ -12,7 +12,6 @@ import AvatarElement from '../../Elements/CommonElements/AvatarElement';
 import ImageElement from '../../Elements/CommonElements/ImageElement';
 import TextElement from '../../Elements/CommonElements/TextElement';
 
-
 type SearchResultItemType = {
   pageId?: PageID;
   componentId?: ComponentID;
@@ -43,7 +42,6 @@ const SearchResultItem: FC<SearchResultItemType> = ({
   const memberText = item?.membersCount > 1 ? 'members' : 'member';
 
   const onPressSearchResultItem = useCallback(() => {
-
     if (searchType === TabName.Communities) {
       navigation.navigate('CommunityHome', {
         communityId: item.communityId,

@@ -96,8 +96,8 @@ const CreatePostChooseTargetModal = ({
           source={
             myUser
               ? {
-                uri: `https://api.${apiRegion}.amity.co/api/v3/files/${myUser.avatarFileId}/download`,
-              }
+                  uri: `https://api.${apiRegion}.amity.co/api/v3/files/${myUser.avatarFileId}/download`,
+                }
               : require('./../../../assets/icon/Placeholder.png')
           }
         />
@@ -120,33 +120,28 @@ const CreatePostChooseTargetModal = ({
     navigation.navigate(targetscreen(), {
       targetId,
       targetType,
-      community
-
+      community,
     });
   };
   const renderCommunity = ({ item }: { item: Amity.Community }) => {
     return (
       <TouchableOpacity
         key={item.communityId}
-        onPress={() =>
-          onSelectFeed(
-            item.communityId,
-            'community',
-            item
-          )
-        }
+        onPress={() => onSelectFeed(item.communityId, 'community', item)}
         style={styles.rowContainer}
       >
-        {item.avatarFileId ?
+        {item.avatarFileId ? (
           <Image
             style={styles.avatar}
-            source={
-              { uri: `https://api.${apiRegion}.amity.co/api/v3/files/${item.avatarFileId}/download` }
-
-            }
-          /> : <View style={{ marginRight: 12 }}>
+            source={{
+              uri: `https://api.${apiRegion}.amity.co/api/v3/files/${item.avatarFileId}/download`,
+            }}
+          />
+        ) : (
+          <View style={{ marginRight: 12 }}>
             <SvgXml width={40} height={40} xml={communityIcon} />
-          </View>}
+          </View>
+        )}
 
         <Text style={styles.communityText}>{item.displayName}</Text>
       </TouchableOpacity>

@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
@@ -11,7 +10,7 @@ export const useStyles = () => {
       position: 'absolute',
       bottom: 35,
       right: 10,
-      flex: 1
+      flex: 1,
     },
     otherFeedContainer: {
       position: 'absolute',

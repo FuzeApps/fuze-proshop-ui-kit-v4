@@ -4,7 +4,6 @@ import { RootStackParamList } from '../../routes/RouteParamList';
 import { AmityPostComposerMode } from '../../types/global.interface';
 import AmityPostComposerPage from '../AmityPostComposerPage/AmityPostComposerPage';
 
-
 type IEditPost = NativeStackScreenProps<RootStackParamList, 'EditPost'>;
 
 const EditPost: FC<IEditPost> = ({ route }) => {

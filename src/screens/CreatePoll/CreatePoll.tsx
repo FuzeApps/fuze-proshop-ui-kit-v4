@@ -25,7 +25,6 @@ import { TSearchItem } from '../../hooks/useSearch';
 import { text_contain_blocked_word } from '../../util/constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 const CreatePoll = ({ navigation, route }) => {
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();

@@ -19,11 +19,7 @@ import Modal from 'react-native-modalbox';
 
 import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
 import { SvgXml } from 'react-native-svg';
-import {
-  fileSearch,
-  likeReaction,
-  loveReaction,
-} from '../../svg/svg-xml-list';
+import { fileSearch, likeReaction, loveReaction } from '../../svg/svg-xml-list';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/RouteParamList';
@@ -79,10 +75,10 @@ const AmityReactionListComponent: FC<AmityReactionListComponentType> = ({
         selectedReactionIndex === 0
           ? allReactionList
           : selectedReactionIndex === 1
-          ? likeReactionList
-          : selectedReactionIndex === 2
-          ? loveReactionList
-          : null;
+            ? likeReactionList
+            : selectedReactionIndex === 2
+              ? loveReactionList
+              : null;
       if (currentUsers?.length > 0) {
         const userList = currentUsers.map((item) => item.userId);
         try {
@@ -231,10 +227,10 @@ const AmityReactionListComponent: FC<AmityReactionListComponentType> = ({
         {loading
           ? renderContentLoading()
           : hasError
-          ? errorContent()
-          : reactors
-          ? renderReactionList()
-          : null}
+            ? errorContent()
+            : reactors
+              ? renderReactionList()
+              : null}
       </View>
     </Modal>
   );

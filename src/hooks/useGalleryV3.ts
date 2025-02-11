@@ -47,8 +47,8 @@ export const useGallery = ({
               dataType === 'image'
                 ? getFile(mediaData.data.fileId)
                 : dataType === 'video'
-                ? getFile(mediaData.data.thumbnailFileId)
-                : null;
+                  ? getFile(mediaData.data.thumbnailFileId)
+                  : null;
             return {
               dataType,
               ...mediaData.data,

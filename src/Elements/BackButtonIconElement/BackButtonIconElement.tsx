@@ -42,7 +42,7 @@ const BackButtonIconElement: FC<BackButtonIconElementType> = ({
     //   source={props.source ?? imageSource}
     //   {...props}
     // />
-    <BackButton  {...props}/>
+    <BackButton {...props} />
   );
 };
 

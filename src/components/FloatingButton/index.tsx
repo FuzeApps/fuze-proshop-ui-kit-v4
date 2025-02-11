@@ -11,7 +11,7 @@ export default function FloatingButton({
   onPress,
   isGlobalFeed = true,
 }: IBackBtn) {
-  const styles = useStyles()
+  const styles = useStyles();
   return (
     <View style={!isGlobalFeed ? styles.otherFeedContainer : styles.container}>
       <Pressable
@@ -20,7 +20,7 @@ export default function FloatingButton({
         }}
         style={styles.button}
       >
-        <PostIcon color='#fff' />
+        <PostIcon color="#fff" />
       </Pressable>
     </View>
   );

@@ -4,12 +4,8 @@ import { TabName } from '../../enum/enumTabName';
 
 import { ComponentID, PageID } from '../../enum';
 
-
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import SearchResultItem from '../SearchResultItem/SearchResultItem';
-
-
-
 
 type AmityCommunitySearchResultComponentType = {
   pageId?: PageID;

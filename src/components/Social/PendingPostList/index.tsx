@@ -2,7 +2,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
 // import { useTranslation } from 'react-i18next';
 
-import { View, Text, TouchableOpacity, Image, StyleProp, ImageStyle } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleProp,
+  ImageStyle,
+} from 'react-native';
 
 import { useStyles } from './styles';
 
@@ -209,7 +216,7 @@ export default function PendingPostList({
             />
           ) : (
             <View style={styles.avatar}>
-              <PersonIcon width={20} height={20}/>
+              <PersonIcon width={20} height={20} />
             </View>
           )}
 

@@ -8,7 +8,6 @@ import { useAmityGlobalSearchViewModel } from '../../hooks/useAmityGlobalSearchV
 import AmityCommunitySearchResultComponent from '../../components/AmityCommunitySearchResultComponent/AmityCommunitySearchResultComponent';
 import AmityTopSearchBarComponent from '../../components/AmityTopSearchBarComponent/AmityTopSearchBarComponent';
 
-
 const AmitySocialGlobalSearchPage = () => {
   const pageId = PageID.social_global_search_page;
   const { isExcluded, themeStyles } = useAmityPage({ pageId });
@@ -22,19 +21,19 @@ const AmitySocialGlobalSearchPage = () => {
   if (isExcluded) return null;
   return (
     <SafeAreaProvider>
-    <SafeAreaView style={styles.container}>
-      <AmityTopSearchBarComponent setSearchValue={setSearchValue} />
-      <CustomTab
-        onTabChange={setSearchType}
-        tabName={[TabName.Communities, TabName.Users]}
-      />
-      <AmityCommunitySearchResultComponent
-        pageId={pageId}
-        searchType={searchType}
-        searchResult={searchResult}
-        onNextPage={onNextPage}
-      />
-    </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <AmityTopSearchBarComponent setSearchValue={setSearchValue} />
+        <CustomTab
+          onTabChange={setSearchType}
+          tabName={[TabName.Communities, TabName.Users]}
+        />
+        <AmityCommunitySearchResultComponent
+          pageId={pageId}
+          searchType={searchType}
+          searchResult={searchResult}
+          onNextPage={onNextPage}
+        />
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 };

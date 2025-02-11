@@ -36,7 +36,6 @@ import EditCommentModal from '../../../components/EditCommentModal';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 
-
 import { ComponentID, PageID } from '../../../enum';
 import AmityReactionListComponent from '../../AmityReactionListComponent/AmityReactionListComponent';
 
@@ -333,7 +332,7 @@ const ReplyCommentList = ({
               styles.modalContent,
               modalStyle,
               user?.userId === (client as Amity.Client).userId &&
-              styles.twoOptions,
+                styles.twoOptions,
             ]}
           >
             {user?.userId === (client as Amity.Client).userId ? (

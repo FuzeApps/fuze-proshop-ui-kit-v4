@@ -294,7 +294,7 @@ export default function ReplyCommentList({
           />
         ) : (
           <View style={styles.avatar}>
-          <PersonIcon width={20} height={16} />
+            <PersonIcon width={20} height={16} />
           </View>
         )}
         <View style={styles.rightSection}>
@@ -323,9 +323,17 @@ export default function ReplyCommentList({
               style={styles.likeBtn}
             >
               {isLike ? (
-                           <LikedIcon color={theme.colors.primary} width={20} height={16} />
+                <LikedIcon
+                  color={theme.colors.primary}
+                  width={20}
+                  height={16}
+                />
               ) : (
-                <LikeIcon color={theme.colors.baseShade2} width={20} height={16} />
+                <LikeIcon
+                  color={theme.colors.baseShade2}
+                  width={20}
+                  height={16}
+                />
               )}
 
               <Text style={isLike ? styles.likedText : styles.btnText}>
@@ -334,13 +342,13 @@ export default function ReplyCommentList({
             </TouchableOpacity>
 
             <TouchableOpacity onPress={openModal} style={styles.threeDots}>
-            <ThreeDotsIcon color={theme.colors.base}/>
+              <ThreeDotsIcon color={theme.colors.base} />
             </TouchableOpacity>
           </View>
           <View>
             {childrenComment.length > 0 && (
               <Pressable style={styles.viewMoreReplyBtn}>
-               <ExpandIcon/>
+                <ExpandIcon />
                 <Text style={styles.viewMoreText}>
                   View {childrenNumber} replies
                 </Text>

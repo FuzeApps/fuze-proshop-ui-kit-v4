@@ -1,7 +1,6 @@
 import { Text } from 'react-native';
 import React, { memo } from 'react';
 
-
 import { useStyles } from './styles/styles';
 import { useUiKitConfig } from '../../../hooks/useUiKitConfig';
 import { ComponentID, ElementID, PageID } from '../../../enum';

@@ -36,7 +36,6 @@ import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentC
 import { PostTargetType } from '../../enum/postTargetType';
 import TimestampElement from '../../Elements/TimestampElement/TimestampElement';
 
-
 import {
   deletePostById,
   isReportTarget,
@@ -428,9 +427,13 @@ const AmityPostContentComponent = ({
         </View>
         {AmityPostContentComponentStyle ===
         AmityPostContentComponentStyleEnum.feed ? (
-          <Pressable onPress={openModal} hitSlop={12}>
-          <ThreeDotsIcon/>
-          </Pressable>
+          <TouchableOpacity
+            style={styles.threeDotsPressable}
+            onPress={openModal}
+            activeOpacity={0.5}
+          >
+            <ThreeDotsIcon />
+          </TouchableOpacity>
         ) : (
           <View style={styles.threeDots} />
         )}
@@ -465,7 +468,6 @@ const AmityPostContentComponent = ({
         />
       </View>
       {renderOptionModal()}
-      
     </View>
   );
 };

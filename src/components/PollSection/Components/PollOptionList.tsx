@@ -32,7 +32,6 @@ const PollOptionList: FC<IPollOptionList> = ({
   totalVote,
   onSubmit,
 }) => {
-
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
   const [options, setOptions] = useState(data.slice(0, 2) || []);
@@ -121,9 +120,17 @@ const PollOptionList: FC<IPollOptionList> = ({
             onPress={() => onPressOption(option.id)}
           >
             <View style={styles.pollOptionContainerRow}>
-              {!isPollClosed && !isAlreadyVoted && (
-                selectedItem ? <RadioOnIcon width={20} height={20} color={theme.colors.primary} /> : <RadioOffIcon width={20} height={20} />
-              )}
+              {!isPollClosed &&
+                !isAlreadyVoted &&
+                (selectedItem ? (
+                  <RadioOnIcon
+                    width={20}
+                    height={20}
+                    color={theme.colors.primary}
+                  />
+                ) : (
+                  <RadioOffIcon width={20} height={20} />
+                ))}
               <Text style={styles.optionText}>{option.data}</Text>
             </View>
             {(isPollClosed || isAlreadyVoted) && (

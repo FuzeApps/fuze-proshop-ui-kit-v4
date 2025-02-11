@@ -13,6 +13,6 @@ declare const useAnimatedComponents: () => readonly [
   {
     [key: string]: Animated.Value;
   }[],
-  (isVisible: boolean) => void
+  (isVisible: boolean) => void,
 ];
 export default useAnimatedComponents;

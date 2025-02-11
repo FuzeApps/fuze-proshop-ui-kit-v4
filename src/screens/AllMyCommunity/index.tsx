@@ -100,7 +100,7 @@ export default function AllMyCommunity() {
   const headerRight = useCallback(
     () => (
       <TouchableOpacity style={styles.btnWrap} onPress={onClickCreateCommunity}>
-        <PlusIcon color={theme.colors.base} width={25} height={25}/>
+        <PlusIcon color={theme.colors.base} width={25} height={25} />
       </TouchableOpacity>
     ),
     []
@@ -115,12 +115,11 @@ export default function AllMyCommunity() {
           }}
           style={styles.btnWrap}
         >
-          <CloseIcon  color={theme.colors.base} />
+          <CloseIcon color={theme.colors.base} />
         </TouchableOpacity>
       ),
       headerRight: () => headerRight(),
       headerTitle: 'My Community',
-
     });
     return () => {
       debouncedResults.cancel();
@@ -139,7 +138,7 @@ export default function AllMyCommunity() {
     <View style={styles.container}>
       <View style={styles.headerWrap}>
         <View style={styles.inputWrap}>
-       <SearchIcon color={theme.colors.base }/>
+          <SearchIcon color={theme.colors.base} />
 
           <TextInput
             style={styles.input}
@@ -147,7 +146,7 @@ export default function AllMyCommunity() {
             onChangeText={handleChange}
           />
           <TouchableOpacity onPress={clearButton}>
-            <CircleCloseIcon width={20} height={20}/>
+            <CircleCloseIcon width={20} height={20} />
           </TouchableOpacity>
         </View>
 

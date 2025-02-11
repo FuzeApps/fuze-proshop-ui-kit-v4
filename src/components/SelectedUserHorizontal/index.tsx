@@ -31,21 +31,19 @@ const AvatarListItem = ({
     <View style={styles.avatarContainer}>
       <View style={styles.avatar}>
         <View style={styles.avatarImageContainer}>
-
-          {
-            user?.avatarFileId ?
-              <Image
-                style={styles.avatar}
-                source={
-                  {
-                    uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
-                  }
-
-                }
-              /> : <View style={styles.avatar}> <AvatarIcon /></View>
-
-          }
-
+          {user?.avatarFileId ? (
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
+              }}
+            />
+          ) : (
+            <View style={styles.avatar}>
+              {' '}
+              <AvatarIcon />
+            </View>
+          )}
         </View>
         <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
           <Text style={styles.deleteButtonText}>✕</Text>

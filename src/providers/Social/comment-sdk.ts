@@ -7,7 +7,6 @@ import { Alert } from 'react-native';
 import { text_contain_blocked_word } from '../../util/constants';
 import { IMentionPosition } from '../../types/type';
 
-
 export interface ICommentRes {
   data: Amity.Comment[];
   onNextPage: () => any;
@@ -78,9 +77,8 @@ export async function createComment(
           metadata: { mentioned: mentionPosition },
         };
 
-        const { data: comment } = await CommentRepository.createComment(
-          newComment
-        );
+        const { data: comment } =
+          await CommentRepository.createComment(newComment);
         resolve(comment);
       } catch (error) {
         if (error.message.includes(text_contain_blocked_word)) {
@@ -117,9 +115,8 @@ export async function createReplyComment(
           parentId: parentId,
         };
 
-        const { data: comment } = await CommentRepository.createComment(
-          newComment
-        );
+        const { data: comment } =
+          await CommentRepository.createComment(newComment);
         resolve(comment);
       } catch (error) {
         if (error.message.includes(text_contain_blocked_word)) {

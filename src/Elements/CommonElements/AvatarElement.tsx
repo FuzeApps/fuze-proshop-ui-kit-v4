@@ -7,7 +7,6 @@ import { SvgXml } from 'react-native-svg';
 import { communityIcon, userIcon } from '../../svg/svg-xml-list';
 import { useFileV4 } from '../../hooks/useFilev4';
 
-
 type AvatarElementType = Partial<ImageProps> & {
   avatarId: string;
   pageID?: PageID;
@@ -25,7 +24,16 @@ const AvatarElement: FC<AvatarElementType> = ({
   ...props
 }) => {
   const defaultAvatar =
-    targetType === 'community' ? <SvgXml  width={40} height={40} xml={communityIcon} /> : <SvgXml style={{marginRight: 12}} width={40} height={40} xml={userIcon()} />;
+    targetType === 'community' ? (
+      <SvgXml width={40} height={40} xml={communityIcon} />
+    ) : (
+      <SvgXml
+        style={{ marginRight: 12 }}
+        width={40}
+        height={40}
+        xml={userIcon()}
+      />
+    );
   const [avatarUrl, setAvatarUrl] = useState<string>('');
   const { excludes } = useConfig();
   const configId = `${pageID}/${componentID}/${elementID}`;
@@ -47,16 +55,15 @@ const AvatarElement: FC<AvatarElementType> = ({
 
   if (excludes.includes(configId)) return null;
 
-  return (
-    avatarId ?
-      <Image
-        testID={configId}
-        accessibilityLabel={configId}
-        source={{ uri: avatarUrl }}
-        {...props}
-      /> : defaultAvatar
-
-
+  return avatarId ? (
+    <Image
+      testID={configId}
+      accessibilityLabel={configId}
+      source={{ uri: avatarUrl }}
+      {...props}
+    />
+  ) : (
+    defaultAvatar
   );
 };
 

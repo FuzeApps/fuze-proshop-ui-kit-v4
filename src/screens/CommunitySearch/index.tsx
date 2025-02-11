@@ -147,7 +147,7 @@ export default function CommunitySearch() {
       <View style={styles.headerWrap}>
         <View style={styles.inputWrap}>
           <TouchableOpacity onPress={() => searchAccounts(searchTerm)}>
-            <SearchIcon width={20} height={20} color={theme.colors.base}/>
+            <SearchIcon width={20} height={20} color={theme.colors.base} />
           </TouchableOpacity>
           <TextInput
             style={styles.input}
@@ -155,7 +155,7 @@ export default function CommunitySearch() {
             onChangeText={handleChange}
           />
           <TouchableOpacity onPress={clearButton}>
-            <CircleCloseIcon width={20} height={20}/>
+            <CircleCloseIcon width={20} height={20} />
           </TouchableOpacity>
         </View>
 

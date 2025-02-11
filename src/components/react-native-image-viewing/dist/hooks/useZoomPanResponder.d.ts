@@ -21,6 +21,6 @@ declare const useZoomPanResponder: ({
 }: Props) => readonly [
   GestureResponderHandlers,
   Animated.Value,
-  Animated.ValueXY
+  Animated.ValueXY,
 ];
 export default useZoomPanResponder;

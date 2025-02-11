@@ -1,8 +1,24 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
 
-const GalleryIcon = ({ color = '#292B32', width = 25, height = 24, style }: { color?: string, width?: number, height?: number, style?: any }) => (
-  <Svg width={width} height={height} viewBox="0 0 25 24" fill="none" style={style}>
+const GalleryIcon = ({
+  color = '#292B32',
+  width = 25,
+  height = 24,
+  style,
+}: {
+  color?: string;
+  width?: number;
+  height?: number;
+  style?: any;
+}) => (
+  <Svg
+    width={width}
+    height={height}
+    viewBox="0 0 25 24"
+    fill="none"
+    style={style}
+  >
     <Path
       d="M21 4.5H4.5C4.08579 4.5 3.75 4.83579 3.75 5.25V18.75C3.75 19.1642 4.08579 19.5 4.5 19.5H21C21.4142 19.5 21.75 19.1642 21.75 18.75V5.25C21.75 4.83579 21.4142 4.5 21 4.5Z"
       stroke={color}

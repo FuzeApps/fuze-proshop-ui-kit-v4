@@ -1,7 +1,15 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
 
-const RadioOffIcon = ({ color = "#A5A9B5", width = 24, height = 24 }: { color?: string, width?: number, height?: number }) => (
+const RadioOffIcon = ({
+  color = '#A5A9B5',
+  width = 24,
+  height = 24,
+}: {
+  color?: string;
+  width?: number;
+  height?: number;
+}) => (
   <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
     <Path
       fillRule="evenodd"

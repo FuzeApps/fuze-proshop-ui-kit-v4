@@ -1,5 +1,3 @@
-
-
 export const enum AmityStoryTabComponentEnum {
   globalFeed = 'globalFeed',
   communityFeed = 'communityFeed',
@@ -50,14 +48,11 @@ export interface AmityStoryTabComponentType {
   targetId?: string;
 }
 
-
-
 export interface IDisplayImage {
-    url: string;
-    fileId: string | undefined;
-    fileName: string;
-    isUploaded: boolean;
-    thumbNail?: string;
-    postId?: string;
-  }
-  
+  url: string;
+  fileId: string | undefined;
+  fileName: string;
+  isUploaded: boolean;
+  thumbNail?: string;
+  postId?: string;
+}

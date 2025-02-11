@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { MyMD3Theme } from './../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const styles = StyleSheet.create({
@@ -8,18 +9,18 @@ export const useStyles = (theme: MyMD3Theme) => {
       backgroundColor: theme.colors.background,
       paddingHorizontal: 16,
       borderTopWidth: 8,
-      borderColor: theme.colors.baseShade4,
+      borderColor: theme.colors.baseDivider,
     },
     communityItemContainer: {
       paddingVertical: 16,
       flexDirection: 'row',
       alignItems: 'center',
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.baseShade4,
+      borderBottomColor: theme.colors.baseDivider,
     },
     communityInfoContainer: {
       flex: 1,
-      paddingLeft: 24,
+      paddingStart: amityUIKitTokens.spacing.m1,
     },
     communityNameContainer: {
       flexDirection: 'row',
@@ -29,7 +30,6 @@ export const useStyles = (theme: MyMD3Theme) => {
       fontSize: 14,
       fontWeight: '600',
       color: theme.colors.base,
-      
     },
     privateBadge: {
       width: 24,

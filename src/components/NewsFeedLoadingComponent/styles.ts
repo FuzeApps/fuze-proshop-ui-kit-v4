@@ -8,11 +8,10 @@ export const useStyles = () => {
       paddingVertical: 16,
       flex: 1,
       gap: 8,
-
     },
-    postCard:{
+    postCard: {
       backgroundColor: theme.colors.background,
-      paddingHorizontal: 16
+      paddingHorizontal: 16,
     },
     storiesContainer: {
       flexDirection: 'row',

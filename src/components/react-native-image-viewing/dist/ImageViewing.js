@@ -160,8 +160,8 @@ function ImageViewing({
             keyExtractor
               ? keyExtractor(imageSrc, index)
               : typeof imageSrc === 'number'
-              ? `${imageSrc}`
-              : imageSrc.uri
+                ? `${imageSrc}`
+                : imageSrc.uri
           }
         />
         {typeof FooterComponent !== 'undefined' && (

@@ -11,7 +11,7 @@ export const useStyles = () => {
     container: {
       backgroundColor: theme.colors.background,
       paddingBottom: excludes.includes(ComponentID.StoryTab) ? 0 : 250,
-      height: '100%'
+      height: '100%',
     },
     headerWrap: {
       flexDirection: 'row',
@@ -49,7 +49,6 @@ export const useStyles = () => {
     btnWrap: {
       padding: 10,
       marginHorizontal: 8,
-
     },
   });
 

@@ -12,6 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import useAuth from '../../hooks/useAuth';
 import CommunityIcon from '../../svg/CommunityIcon';
+import { chevronRightIcon, officialIcon } from '../../svg/svg-xml-list';
+import { SvgXml } from 'react-native-svg';
+import { amityUIKitTokens } from '../../enum';
 
 export default function Explore() {
   const styles = useStyles();
@@ -86,29 +89,33 @@ export default function Explore() {
         {categoryList.map((category) => {
           return (
             <TouchableOpacity
-              style={styles.rowContainer}
+              style={styles.categoryItem}
               key={category.categoryId}
               onPress={() =>
                 handleCategoryClick(category.categoryId, category.name)
               }
             >
-              <Image
-                style={styles.avatar}
-                source={
-                  category.avatarFileId
-                    ? {
-                        uri: `https://api.${apiRegion}.amity.co/api/v3/files/${category.avatarFileId}/download`,
-                      }
-                    : require('../../assets/icon/Placeholder.png')
-                }
-              />
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={styles.columnText}
-              >
-                {category.name}
-              </Text>
+              <View>
+                <Image
+                  style={styles.categoryAvatar}
+                  source={
+                    category.avatarFileId
+                      ? {
+                          uri: `https://api.${apiRegion}.amity.co/api/v3/files/${category.avatarFileId}/download`,
+                        }
+                      : require('../../assets/icon/Placeholder.png')
+                  }
+                />
+              </View>
+              <View style={styles.categoryTextWrapper}>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.categoryName}
+                >
+                  {category.name}
+                </Text>
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -117,14 +124,21 @@ export default function Explore() {
   }, [apiRegion, categoryList, handleCategoryClick, styles]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Recommended Group Section */}
       <View style={styles.recommendContainer}>
-        <Text style={styles.title}>Recommended for you</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.recommendedTitleContainer}>
+          <Text style={styles.title}>Recommended for you</Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={styles.recommendContainerScrollView}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
           {recommendCommunityList.map((community) => (
             <TouchableOpacity
-              key={community.communityId}
               style={styles.card}
+              key={community.communityId}
               onPress={() =>
                 handleCommunityClick(
                   community.communityId,
@@ -134,29 +148,33 @@ export default function Explore() {
             >
               {community.avatarFileId ? (
                 <Image
-                  style={styles.avatar}
+                  style={styles.recommendedAvatar}
                   source={{
-                    uri: `https://api.${apiRegion}.amity.co/api/v3/files/${community.avatarFileId}/download`,
+                    uri: `https://api.${apiRegion}.amity.co/api/v3/files/${community.avatarFileId}/download?size=medium`,
                   }}
                 />
               ) : (
-  
-                <CommunityIcon width={40} height={40}  style={styles.avatar}/>
+                <CommunityIcon width={40} height={40} style={styles.avatar} />
               )}
-
-              <Text style={styles.name}>{community.displayName}</Text>
-              <Text style={styles.recommendSubDetail}>
-                {community.membersCount} members
-              </Text>
-              <Text style={styles.bio}>{community.description}</Text>
+              <View style={styles.cardBody}>
+                <Text style={styles.name}>{community.displayName}</Text>
+                {/* <Text style={styles.recommendSubDetail}>
+                  {community.membersCount} members
+                </Text> */}
+                <Text numberOfLines={3} style={styles.communityDescription}>
+                  {community.description}
+                </Text>
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
+
+      {/* Trending Now Section  */}
       <View style={styles.trendingContainer}>
-        <Text style={styles.title}>Today's trending</Text>
+        <Text style={styles.title}>Trending now</Text>
         <View>
-          {trendingCommunityList.map((community, index) => (
+          {trendingCommunityList.map((community) => (
             <TouchableOpacity
               key={community.communityId}
               style={styles.itemContainer}
@@ -173,25 +191,31 @@ export default function Explore() {
                   source={
                     community.avatarFileId
                       ? {
-                          uri: `https://api.${apiRegion}.amity.co/api/v3/files/${community.avatarFileId}/download`,
+                          uri: `https://api.${apiRegion}.amity.co/api/v3/files/${community.avatarFileId}/download?size=medium`,
                         }
                       : require('../../assets/icon/Placeholder.png')
                   }
                 />
               ) : (
-                <CommunityIcon width={40} height={40}  style={styles.avatar}/>
+                <CommunityIcon width={40} height={40} style={styles.avatar} />
               )}
 
               <View style={styles.trendingTextContainer}>
-                <Text style={styles.number}>{index + 1}</Text>
+                {/* <Text style={styles.number}>{index + 1}</Text> */}
                 <View style={styles.memberContainer}>
                   <View style={styles.memberTextContainer}>
-                    <Text style={styles.memberText}>
-                      {community.displayName}
-                    </Text>
-                    <Text style={styles.memberCount}>
-                      {community.membersCount} members
-                    </Text>
+                    <View style={styles.memberTextWrapper}>
+                      <Text numberOfLines={1} style={styles.memberText}>
+                        {community.displayName}
+                      </Text>
+                    </View>
+                    {community.isOfficial && (
+                      <SvgXml
+                        width={24}
+                        height={24}
+                        xml={officialIcon(amityUIKitTokens.colors.primary)}
+                      />
+                    )}
                   </View>
                 </View>
               </View>
@@ -199,13 +223,17 @@ export default function Explore() {
           ))}
         </View>
       </View>
+
+      {/* Categories Section */}
       <View style={styles.categoriesContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Categories</Text>
           <TouchableOpacity onPress={handleCategoryListClick}>
-            <Image
-              source={require('../../assets/icon/arrowRight.png')}
+            <SvgXml
               style={styles.arrowIcon}
+              xml={chevronRightIcon(amityUIKitTokens.colors.base)}
+              width={15}
+              height={15}
             />
           </TouchableOpacity>
         </View>

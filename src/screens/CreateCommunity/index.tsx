@@ -28,7 +28,7 @@ import {
 import useAuth from '../../hooks/useAuth';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
 import { uploadImageFile } from '../../providers/file-provider';
 import { PrivacyState } from '../../enum/privacyState';
 import CloseIcon from '../../svg/CloseIcon';
@@ -37,6 +37,7 @@ import PublicIcon from '../../svg/PublicIcon';
 import PrivateIcon from '../../svg/PrivateIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
+import { amityUIKitTokens } from '../../enum';
 
 export default function CreateCommunity() {
   const styles = useStyles();
@@ -253,7 +254,11 @@ export default function CreateCommunity() {
               >
                 {categoryName.length > 0 ? categoryName : 'Select Category'}
               </Text>
-              <ArrowOutlinedIcon width={15} height={15} color={theme.colors.base} />
+              <ArrowOutlinedIcon
+                width={15}
+                height={15}
+                color={theme.colors.base}
+              />
             </Pressable>
           </View>
           <View style={styles.radioGroup}>
@@ -305,7 +310,11 @@ export default function CreateCommunity() {
                 onPress={(value) => setSelectedId(value)}
                 value={PrivacyState.private}
                 selected={selectedId === PrivacyState.private}
-                color={selectedId === PrivacyState.private ? '#1054DE' : '#444'}
+                color={
+                  selectedId === PrivacyState.private
+                    ? amityUIKitTokens.colors.primary
+                    : '#444'
+                }
                 size={17}
               />
             </Pressable>
@@ -325,27 +334,32 @@ export default function CreateCommunity() {
                       <View style={styles.userItemWrap}>
                         <View style={styles.avatarRow}>
                           <View style={styles.avatarImageContainer}>
-                            {
-                              item?.avatarFileId ?
-                                <Image
-                                  style={styles.avatar}
-                                  source={
-                                    {
-                                      uri: item?.avatarFileId && avatarFileURL(item.avatarFileId),
-                                    }
-
-                                  }
-                                /> : <View style={styles.avatar}> <AvatarIcon /></View>
-                            }
-
+                            {item?.avatarFileId ? (
+                              <Image
+                                style={styles.avatar}
+                                source={{
+                                  uri:
+                                    item?.avatarFileId &&
+                                    avatarFileURL(item.avatarFileId),
+                                }}
+                              />
+                            ) : (
+                              <View style={styles.avatar}>
+                                {' '}
+                                <AvatarIcon />
+                              </View>
+                            )}
                           </View>
                           <Text>{displayName(item.displayName)}</Text>
                         </View>
                         <TouchableOpacity
                           onPress={() => onDeleteUserPressed(item)}
                         >
-
-                          <CloseIcon width={12} height={12} color={theme.colors.base} />
+                          <CloseIcon
+                            width={12}
+                            height={12}
+                            color={theme.colors.base}
+                          />
                         </TouchableOpacity>
                       </View>
                     )}
@@ -359,7 +373,12 @@ export default function CreateCommunity() {
                   style={styles.addIcon}
                 >
                   <View style={styles.avatar}>
-                    <PlusIcon style={styles.arrowIcon} width={24} height={24} color={theme.colors.base} />
+                    <PlusIcon
+                      style={styles.arrowIcon}
+                      width={24}
+                      height={24}
+                      color={theme.colors.base}
+                    />
                   </View>
                 </Pressable>
               </View>

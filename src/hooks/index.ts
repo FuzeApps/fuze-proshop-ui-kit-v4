@@ -1,4 +1,3 @@
-
 export * from './useConfig';
 export * from './useConfigImageUri';
 export * from './useFile';

@@ -81,31 +81,37 @@ const colors: CustomColors = {
   /**
    * Primary colors
    */
-  primary: '#118cf7',
-  primaryShade1: '#0559A3',
-  primaryShade2: '#033B6C',
-  primaryShade3: '#021E36',
-  primaryShade4: '#344054',
-
+  primary: '#118CF7',
+  primaryShade1: '#0777D9',
+  primaryShade2: '#0559A3',
+  primaryShade3: '#033B6C',
+  primaryShade4: '#021E36',
   /**
    * Secondary colors
    */
-  secondary: '#182230',
-  secondaryShade1: '#344054',
-  secondaryShade2: '#475467',
-  secondaryShade3: '#98A2B3',
-  secondaryShade4: '#667085',
-
+  secondary: '#FCFCFD',
+  secondaryShade1: '#D0D5DD',
+  secondaryShade2: '#98A2B3',
+  secondaryShade3: '#667085',
+  secondaryShade4: '#475467',
+  /**
+   * Base colors
+   */
   base: '#fcfcfd',
-  baseShade1: '#98a2b3',
-  baseShade2: '#7f889e',
-  baseShade3: '#182230',
-  baseShade4: '#0C111D',
+  baseShade1: '#D0D5DD',
+  baseShade2: '#98A2B3',
+  baseShade3: '#667085',
+  baseShade4: '#475467',
+  /**
+   * Alert colors
+   */
+  background: '#344054',
+  backgroundShade1: '#475467',
 
-  background: '#2c3748',
   border: '#182230',
   screenBackground: '#182230',
   alert: '#FA4D30',
+  baseDivider: '#182230',
 };
 
 export const amityUIKitTokens = {

@@ -50,9 +50,9 @@ export const useStyles = () => {
       color: theme.colors.base,
       fontSize: 16,
     },
-    plusIcon:{
-      marginRight: 8
-    }
+    plusIcon: {
+      marginRight: 8,
+    },
   });
 
   return styles;

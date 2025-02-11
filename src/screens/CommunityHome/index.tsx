@@ -187,13 +187,13 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
-  const handleMembersPress = () => {
-    navigation.navigate('CommunityMemberDetail', {
-      communityId: communityId,
-      communityName: communityName,
-      isModerator: isUserHasPermission,
-    });
-  };
+  // const handleMembersPress = () => {
+  //   navigation.navigate('CommunityMemberDetail', {
+  //     communityId: communityId,
+  //     communityName: communityName,
+  //     isModerator: isUserHasPermission,
+  //   });
+  // };
 
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
@@ -296,6 +296,15 @@ export default function CommunityHome({ route }: any) {
             tags={[PostTag.Activity]}
           />
         );
+      case TabName.Leaderboard:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Leaderboard]}
+          />
+        );
       case TabName.Gallery:
         return (
           <GalleryComponent
@@ -318,6 +327,7 @@ export default function CommunityHome({ route }: any) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Avatar */}
         <View style={styles.imageContainer}>
           <Image
             style={styles.image}
@@ -336,7 +346,8 @@ export default function CommunityHome({ route }: any) {
             </Text>
           </View>
         </View>
-        <View style={styles.row}>
+        {/* TODO: Wiil hide Post Count and Members Count for MVP */}
+        {/* <View style={styles.row}>
           <View style={styles.rowItem}>
             <Text style={styles.rowNumber}>
               {communityData?.data.postsCount}
@@ -356,7 +367,7 @@ export default function CommunityHome({ route }: any) {
               <Text style={styles.rowLabel}>members</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
         <Text style={styles.textComponent}>
           {communityData?.data.description}
         </Text>
@@ -366,13 +377,18 @@ export default function CommunityHome({ route }: any) {
             onPress={onEditProfileTap}
           >
             <EditIcon width={24} height={20} color={theme.colors.base} />
-            <Text style={styles.editProfileText}>Edit Profile</Text>
+            <Text style={styles.editProfileText}>Edit Group</Text>
           </TouchableOpacity>
         )}
         {!isJoin && joinCommunityButton()}
         {isJoin && isShowPendingArea && pendingPostArea()}
         <CustomTab
-          tabName={[TabName.Timeline, TabName.Activity, TabName.Gallery]}
+          tabName={[
+            TabName.Timeline,
+            TabName.Activity,
+            TabName.Leaderboard,
+            TabName.Gallery,
+          ]}
           onTabChange={handleTab}
         />
         <View style={styles.tabBackground}>{renderTabs()}</View>

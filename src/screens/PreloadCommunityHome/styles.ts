@@ -58,7 +58,7 @@ export const useStyles = () => {
     emptyImage: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#898E9E'
+      backgroundColor: '#898E9E',
     },
     darkOverlay: {
       ...StyleSheet.absoluteFillObject,
@@ -175,11 +175,10 @@ export const useStyles = () => {
       fontWeight: '600',
       color: theme.colors.base,
     },
-    tabBackground:{
+    tabBackground: {
       backgroundColor: theme.colors.baseShade4,
-      flex:1
-
-    }
+      flex: 1,
+    },
   });
 
   return styles;

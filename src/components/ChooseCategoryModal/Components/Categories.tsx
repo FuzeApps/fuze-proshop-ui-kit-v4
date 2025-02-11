@@ -26,7 +26,7 @@ const Categories = ({
           }}
         />
       ) : (
-        <CategoryIcon width={40} height={40}/>
+        <CategoryIcon width={40} height={40} />
       )}
 
       <Text style={styles.communityText}>{item.name}</Text>

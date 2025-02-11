@@ -69,7 +69,7 @@ export const useStyles = () => {
       borderRadius: 20,
       marginBottom: 10,
       backgroundColor: '#D9E5FC',
-      marginRight: 12
+      marginRight: 12,
     },
     LoadingIndicator: {
       paddingVertical: 20,

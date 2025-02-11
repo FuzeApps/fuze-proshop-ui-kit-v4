@@ -1,11 +1,6 @@
 import { ImageProps } from 'react-native';
 import React, { FC, memo } from 'react';
-import {
-  ComponentID,
-  ElementID,
-  PageID,
-} from '../../enum';
-
+import { ComponentID, ElementID, PageID } from '../../enum';
 
 import useConfig from '../../hooks/useConfig';
 import CommentIcon from '../../svg/CommentIcon';
@@ -33,7 +28,7 @@ const CommentButtonIconElement: FC<CommentButtonIconElementType> = ({
     //   source={props.source ?? imageSource}
     //   {...props}
     // />
-    <CommentIcon  {...props}/>
+    <CommentIcon {...props} />
   );
 };
 

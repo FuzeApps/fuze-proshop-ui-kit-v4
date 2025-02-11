@@ -47,25 +47,19 @@ const CommunityList = ({
       {item.avatarFileId && avatarUrl ? (
         <Image source={{ uri: avatarUrl }} style={styles.avatar} />
       ) : (
-
         <View style={styles.avatar}>
           <CommunityIcon />
         </View>
-
       )}
       <View style={styles.textRow}>
-        {!item.isPublic && (
-          <PrivateIcon color={theme.colors.base} />
-        )}
+        {!item.isPublic && <PrivateIcon color={theme.colors.base} />}
         <Text style={styles.itemText}>
           {getDisplayName({
             text: item.displayName,
             type: !item.isPublic ? PrivacyState.private : PrivacyState.public,
           })}
         </Text>
-        {item.isOfficial && (
-          <OfficialIcon color={theme.colors.base} />
-        )}
+        {item.isOfficial && <OfficialIcon color={theme.colors.base} />}
       </View>
     </TouchableOpacity>
   );

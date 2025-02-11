@@ -13,7 +13,7 @@ export const useStyles = (theme: MyMD3Theme) => {
       paddingVertical: 8,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     communityNameContainer: {
       flex: 1,
@@ -37,7 +37,7 @@ export const useStyles = (theme: MyMD3Theme) => {
     headerTextTime: {
       fontSize: 13,
       fontWeight: '400',
-      color: theme.colors.baseShade1,
+      color: theme.colors.baseShade2,
     },
     bodySection: {
       justifyContent: 'center',
@@ -207,6 +207,14 @@ export const useStyles = (theme: MyMD3Theme) => {
     },
     mediaWrap: {
       minHeight: 375,
+    },
+    threeDotsPressable: {
+      width: 24,
+      height: 24,
+      // backgroundColor: 'orange',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 24,
     },
     threeDots: {
       width: 18,
