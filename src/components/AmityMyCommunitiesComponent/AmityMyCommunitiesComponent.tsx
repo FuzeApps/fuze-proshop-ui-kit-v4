@@ -1,3 +1,4 @@
+import React, { FC, memo, useCallback } from 'react';
 import {
   FlatList,
   Text,
@@ -5,24 +6,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { FC, memo, useCallback } from 'react';
 import { useStyles } from './styles';
 
-import { PageID, ComponentID, ElementID, amityUIKitTokens } from '../../enum';
-import AvatarElement from '../../Elements/CommonElements/AvatarElement';
-import TextElement from '../../Elements/CommonElements/TextElement';
-import ImageElement from '../../Elements/CommonElements/ImageElement';
-import CategoryElement from '../../Elements/CommonElements/CategoryElement';
-import { useNavigation, useTheme } from '@react-navigation/native';
-import { useBehaviour } from '../../providers/BehaviourProvider';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../routes/RouteParamList';
-import { formatNumber } from '../../util/numberUtil';
 import ContentLoader, { Circle, Rect } from 'react-content-loader/native';
+import { SvgXml } from 'react-native-svg';
+import AvatarElement from '../../Elements/CommonElements/AvatarElement';
+import CategoryElement from '../../Elements/CommonElements/CategoryElement';
+import ImageElement from '../../Elements/CommonElements/ImageElement';
+import TextElement from '../../Elements/CommonElements/TextElement';
+import { ComponentID, ElementID, PageID, amityUIKitTokens } from '../../enum';
 import { useCommunities } from '../../hooks/useCommunities';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
-import { SvgXml } from 'react-native-svg';
+import { useBehaviour } from '../../providers/BehaviourProvider';
+import { RootStackParamList } from '../../routes/RouteParamList';
 import { officialIcon } from '../../svg/svg-xml-list';
+import { formatNumber } from '../../util/numberUtil';
 type AmityMyCommunitiesComponentType = {
   pageId?: PageID;
   componentId?: ComponentID;
@@ -41,7 +41,6 @@ const AmityMyCommunitiesComponent: FC<AmityMyCommunitiesComponentType> = ({
   const { AmityMyCommunitiesComponentBehaviour } = useBehaviour();
   const styles = useStyles(themeStyles);
   const { communities, onNextCommunityPage } = useCommunities();
-  const theme = useTheme();
   const myCommunitiesListItem = ({ item }: { item: Amity.Community }) => {
     const privateCommunityTextlength: TextStyle = !item.isPublic && {
       width: '90%',

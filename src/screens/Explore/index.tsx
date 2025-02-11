@@ -174,7 +174,7 @@ export default function Explore() {
       <View style={styles.trendingContainer}>
         <Text style={styles.title}>Trending now</Text>
         <View>
-          {trendingCommunityList.map((community, index) => (
+          {trendingCommunityList.map((community) => (
             <TouchableOpacity
               key={community.communityId}
               style={styles.itemContainer}

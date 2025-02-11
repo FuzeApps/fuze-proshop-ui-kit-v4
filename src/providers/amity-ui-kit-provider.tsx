@@ -1,6 +1,4 @@
-import { hslToColorString, lighten, parseToHsl } from 'polished';
 import * as React from 'react';
-import { useColorScheme } from 'react-native';
 import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

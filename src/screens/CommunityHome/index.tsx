@@ -187,13 +187,13 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
-  const handleMembersPress = () => {
-    navigation.navigate('CommunityMemberDetail', {
-      communityId: communityId,
-      communityName: communityName,
-      isModerator: isUserHasPermission,
-    });
-  };
+  // const handleMembersPress = () => {
+  //   navigation.navigate('CommunityMemberDetail', {
+  //     communityId: communityId,
+  //     communityName: communityName,
+  //     isModerator: isUserHasPermission,
+  //   });
+  // };
 
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
