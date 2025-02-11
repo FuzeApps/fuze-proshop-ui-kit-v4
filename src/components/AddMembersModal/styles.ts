@@ -1,6 +1,7 @@
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyle = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -100,7 +101,7 @@ export const useStyle = () => {
       marginTop: 10,
     },
     doneText: {
-      color: '#1054DE',
+      color: amityUIKitTokens.colors.primary,
     },
     disabledDone: {
       opacity: 0.5,

@@ -68,26 +68,8 @@ export default function AmityUiKitProvider({
   configs,
   behaviour,
 }: IAmityUIkitProvider) {
-  const colorScheme = useColorScheme();
-  const SHADE_PERCENTAGES = [0.25, 0.4, 0.45, 0.6];
-
-  const generateShades = (hexColor?: string): string[] => {
-    if (!hexColor) return Array(SHADE_PERCENTAGES.length).fill('');
-    const hslColor = parseToHsl(hexColor);
-    const shades = SHADE_PERCENTAGES.map((percentage) => {
-      return lighten(percentage, hslToColorString(hslColor));
-    });
-    return shades;
-  };
   const isValidConfig = useValidateConfig(configs);
   const configData = isValidConfig ? configs : (fallBackConfig as IConfigRaw);
-
-  // const isDarkTheme =
-  //   configData?.preferred_theme === 'dark' ||
-  //   (configData?.preferred_theme === 'default' && colorScheme === 'dark');
-  // const themeColor = isDarkTheme
-  //   ? configData.theme.dark
-  //   : configData.theme.light;
 
   const globalTheme: MyMD3Theme = {
     ...DefaultTheme,

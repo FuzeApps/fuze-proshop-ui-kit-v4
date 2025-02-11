@@ -1,8 +1,9 @@
 import React from 'react';
 import { Svg, Circle } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const PrimaryDot = ({
-  color = '#1054DE',
+  color = amityUIKitTokens.colors.primary,
   width = 6,
   height = 6,
   style,

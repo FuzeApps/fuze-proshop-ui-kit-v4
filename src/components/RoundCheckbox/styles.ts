@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { amityUIKitTokens } from '../../enum';
 
 export const styles = StyleSheet.create({
   roundCheckbox: {
@@ -12,7 +13,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checked: {
-    backgroundColor: '#1054DE',
+    backgroundColor: amityUIKitTokens.colors.primary,
     borderWidth: 0,
   },
   checkmark: {

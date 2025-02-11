@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -71,7 +72,7 @@ export const useStyles = () => {
       fontSize: 18,
       fontWeight: '600',
       marginHorizontal: 12,
-      color: '#1054DE',
+      color: amityUIKitTokens.colors.primary,
       paddingBottom: 10,
     },
     memberContainer: {

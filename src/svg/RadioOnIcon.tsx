@@ -1,8 +1,9 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const RadioOnIcon = ({
-  color = '#1054DE',
+  color = amityUIKitTokens.colors.primary,
   width = 18,
   height = 18,
 }: {

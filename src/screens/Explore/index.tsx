@@ -153,7 +153,7 @@ export default function Explore() {
         </ScrollView>
       </View>
       <View style={styles.trendingContainer}>
-        <Text style={styles.title}>Today's trending</Text>
+        <Text style={styles.title}>Trending now</Text>
         <View>
           {trendingCommunityList.map((community, index) => (
             <TouchableOpacity

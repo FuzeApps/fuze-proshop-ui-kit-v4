@@ -1,12 +1,13 @@
 import React from 'react';
 import { Svg, Path, SvgProps } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 interface OfficialIconProps extends SvgProps {
   color?: string;
 }
 
 const OfficialIcon: React.FC<OfficialIconProps> = ({
-  color = '#1054DE',
+  color = amityUIKitTokens.colors.primary,
   width = 24,
   height = 24,
   ...props

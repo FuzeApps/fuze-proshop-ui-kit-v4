@@ -31,6 +31,7 @@ import PublicIcon from '../../svg/PublicIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
+import { amityUIKitTokens } from '../../enum';
 
 const EditCommunity = ({ navigation, route }) => {
   const styles = useStyles();
@@ -330,7 +331,7 @@ const EditCommunity = ({ navigation, route }) => {
                 onPress={() => setisPublic(false)}
                 value={PrivacyState.private}
                 selected={!isPublic}
-                color={!isPublic ? '#1054DE' : '#444'}
+                color={!isPublic ? amityUIKitTokens.colors.primary : '#444'}
                 size={17}
               />
             </Pressable>

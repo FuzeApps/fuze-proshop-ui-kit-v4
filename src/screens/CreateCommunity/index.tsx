@@ -37,6 +37,7 @@ import PublicIcon from '../../svg/PublicIcon';
 import PrivateIcon from '../../svg/PrivateIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
+import { amityUIKitTokens } from '../../enum';
 
 export default function CreateCommunity() {
   const styles = useStyles();
@@ -309,7 +310,11 @@ export default function CreateCommunity() {
                 onPress={(value) => setSelectedId(value)}
                 value={PrivacyState.private}
                 selected={selectedId === PrivacyState.private}
-                color={selectedId === PrivacyState.private ? '#1054DE' : '#444'}
+                color={
+                  selectedId === PrivacyState.private
+                    ? amityUIKitTokens.colors.primary
+                    : '#444'
+                }
                 size={17}
               />
             </Pressable>
