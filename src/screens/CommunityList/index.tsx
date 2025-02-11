@@ -88,18 +88,18 @@ export default function CommunityList({ navigation, route }: any) {
           })
         }
       >
-        {
-          item.avatarFileId ?
-            <Image
-              style={styles.avatar}
-              source={
-                {
-                  uri: item.avatarFileId && avatarFileURL(item.avatarFileId!),
-                }
-
-              }
-            /> : <View style={styles.avatar}><SvgXml xml={communityIcon} /></View>
-        }
+        {item.avatarFileId ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: item.avatarFileId && avatarFileURL(item.avatarFileId!),
+            }}
+          />
+        ) : (
+          <View style={styles.avatar}>
+            <SvgXml xml={communityIcon} />
+          </View>
+        )}
 
         <Text style={styles.categoryText}>{item.displayName}</Text>
       </TouchableOpacity>

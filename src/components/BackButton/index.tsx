@@ -11,26 +11,28 @@ import ArrowBackIcon from '../../svg/ArrowBackIcon';
 interface IBackBtn {
   onPress?: () => any;
   goBack?: boolean;
-  backTwice?: boolean
+  backTwice?: boolean;
 }
-export default function BackButton({ onPress, goBack = true, backTwice = false }: IBackBtn) {
+export default function BackButton({
+  onPress,
+  goBack = true,
+  backTwice = false,
+}: IBackBtn) {
   const theme = useTheme() as MyMD3Theme;
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   return (
     <TouchableOpacity
       onPress={() => {
-        if(backTwice){
+        if (backTwice) {
           navigation.dispatch(StackActions.pop(2));
-        }else if(goBack){
+        } else if (goBack) {
           navigation.goBack();
         }
-    
 
         onPress && onPress();
       }}
     >
-      <ArrowBackIcon color={theme.colors.base} width={24} height={20}/>
-      
+      <ArrowBackIcon color={theme.colors.base} width={24} height={20} />
     </TouchableOpacity>
   );
 }

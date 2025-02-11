@@ -1,8 +1,24 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
 
-const CameraIcon = ({ color = '#292B32', width = 24, height = 24, style }: { color?: string, width?: number, height?: number, style?: any }) => (
-  <Svg width={width} height={height} viewBox="0 0 24 24" fill="none" style={style}>
+const CameraIcon = ({
+  color = '#292B32',
+  width = 24,
+  height = 24,
+  style,
+}: {
+  color?: string;
+  width?: number;
+  height?: number;
+  style?: any;
+}) => (
+  <Svg
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill="none"
+    style={style}
+  >
     <Path
       d="M19.5 19.5H4.5C4.10218 19.5 3.72064 19.342 3.43934 19.0607C3.15804 18.7794 3 18.3978 3 18V7.5C3 7.10218 3.15804 6.72064 3.43934 6.43934C3.72064 6.15804 4.10218 6 4.5 6H7.49945L8.99945 3.75H14.9995L16.4995 6H19.5C19.8978 6 20.2794 6.15804 20.5607 6.43934C20.842 6.72064 21 7.10218 21 7.5V18C21 18.3978 20.842 18.7794 20.5607 19.0607C20.2794 19.342 19.8978 19.5 19.5 19.5Z"
       stroke={color}

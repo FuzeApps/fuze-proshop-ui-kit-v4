@@ -48,8 +48,6 @@ import RenderTextWithMention from '../../RenderTextWithMention /RenderTextWithMe
 import { LinkPreview } from '../../PreviewLink/LinkPreview';
 import { IMentionPosition } from '../../../types/type';
 
-
-
 export interface IPost {
   postId: string;
   data: Record<string, any>;
@@ -85,10 +83,7 @@ export interface IVideoPost {
     original: string;
   };
 }
-export default function PostList({
-  postDetail,
-  onDelete,
-}: IPostList) {
+export default function PostList({ postDetail, onDelete }: IPostList) {
   const theme = useTheme() as MyMD3Theme;
   const { client, apiRegion } = useAuth();
   const styles = useStyles();
@@ -265,7 +260,6 @@ export default function PostList({
         commentsCount: commentsCount,
       })
     );
-
   }
   const handleDisplayNamePress = () => {
     if (user?.userId) {

@@ -13,7 +13,6 @@ import { getPreviewData } from './utils';
 import { IMentionPosition } from '../../types/type';
 import RenderTextWithMention from '../RenderTextWithMention /RenderTextWithMention';
 
-
 export interface LinkPreviewProps {
   text: string;
   mentionPositionArr: IMentionPosition[];

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { ViewToken } from 'react-native';
 import { IPost } from '../components/AmityPostContentComponent/AmityPostContentComponent';
 
-
 export const usePostImpression = (postList: IPost[]) => {
   const [postViews, setPostViews] = useState<ViewToken[]>([]);
 

@@ -197,7 +197,6 @@ const AddMembersModal = ({
         </View>
         <View style={styles.inputWrap}>
           <TouchableOpacity onPress={() => queryAccounts(searchTerm)}>
-
             <SearchIcon width={20} height={20} color={theme.colors.base} />
           </TouchableOpacity>
           <TextInput

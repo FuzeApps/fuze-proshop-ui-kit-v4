@@ -46,10 +46,8 @@ export async function uploadImageFile(
   isBase64: boolean = false
 ): Promise<Amity.File<any>[]> {
   return await new Promise(async (resolve, reject) => {
-
     const formData = new FormData();
     if (isBase64 && Platform.OS !== 'ios' && Platform.OS !== 'android') {
-
       const imageBlob = await base64ToBlob(filePath);
       formData.append('files', imageBlob);
     } else {
@@ -65,7 +63,6 @@ export async function uploadImageFile(
         uri: uri,
       });
     }
-
 
     const { data: file } = await FileRepository.uploadImage(
       formData,

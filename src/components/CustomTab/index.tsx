@@ -63,10 +63,10 @@ const CustomTab = ({ tabName, onTabChange }: ICustomTab): ReactElement => {
       activeTab === 1
         ? tabOneWidth - 20
         : activeTab === 2
-        ? tabTwoWidth - 20
-        : activeTab === 3
-        ? tabThreeWidth - 20
-        : undefined,
+          ? tabTwoWidth - 20
+          : activeTab === 3
+            ? tabThreeWidth - 20
+            : undefined,
   };
   return (
     <View style={styles.container}>
@@ -75,8 +75,8 @@ const CustomTab = ({ tabName, onTabChange }: ICustomTab): ReactElement => {
           index === 0
             ? getLayoutTabOneWidth
             : index === 1
-            ? getLayoutTabTwoWidth
-            : getLayoutTabThreeWidth;
+              ? getLayoutTabTwoWidth
+              : getLayoutTabThreeWidth;
         return (
           <TouchableOpacity
             key={tab}

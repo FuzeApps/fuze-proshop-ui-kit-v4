@@ -19,7 +19,7 @@ import type { UserInterface } from '../../types/user.interface';
 import useAuth from '../../hooks/useAuth';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
 import { uploadImageFile } from '../../providers/file-provider';
 import { getAvatarURL } from '../../util/apiUtil';
 import { updateCommunity } from '../../providers/Social/communities-sdk';
@@ -205,8 +205,9 @@ const EditCommunity = ({ navigation, route }) => {
               </Text>
               <Text style={styles.inputLengthMeasure}>
                 {watch('community_name')
-                  ? `${watch('community_name').length
-                  } / ${MAX_COMMUNITY_NAME_LENGTH}`
+                  ? `${
+                      watch('community_name').length
+                    } / ${MAX_COMMUNITY_NAME_LENGTH}`
                   : `0/ ${MAX_COMMUNITY_NAME_LENGTH}`}
               </Text>
             </View>
@@ -237,8 +238,9 @@ const EditCommunity = ({ navigation, route }) => {
               <Text style={styles.inputTitle}>About</Text>
               <Text style={styles.inputLengthMeasure}>
                 {watch('community_description')
-                  ? `${watch('community_description').length
-                  } / ${MAX_ABOUT_TEXT_LENGTH}`
+                  ? `${
+                      watch('community_description').length
+                    } / ${MAX_ABOUT_TEXT_LENGTH}`
                   : `0/ ${MAX_ABOUT_TEXT_LENGTH}`}
               </Text>
             </View>
@@ -276,7 +278,11 @@ const EditCommunity = ({ navigation, route }) => {
               >
                 {categoryName.length > 0 ? categoryName : 'Select Category'}
               </Text>
-              <ArrowOutlinedIcon width={15} height={15} color={theme.colors.base} />
+              <ArrowOutlinedIcon
+                width={15}
+                height={15}
+                color={theme.colors.base}
+              />
             </Pressable>
           </View>
           <View style={styles.radioGroup}>
@@ -310,7 +316,6 @@ const EditCommunity = ({ navigation, route }) => {
             >
               <View style={styles.avatar}>
                 <PrivateIcon width={24} height={24} />
-
               </View>
 
               <View style={styles.optionDescription}>
@@ -345,27 +350,32 @@ const EditCommunity = ({ navigation, route }) => {
                       <View style={styles.userItemWrap}>
                         <View style={styles.avatarRow}>
                           <View style={styles.avatarImageContainer}>
-
-                            {
-                              item?.avatarFileId ?
-                                <Image
-                                  style={styles.avatar}
-                                  source={
-                                    {
-                                      uri: item.avatarFileId && avatarFileURL(item.avatarFileId),
-                                    }
-
-                                  }
-                                /> : <View style={styles.avatar}> <AvatarIcon /></View>
-                            }
-
+                            {item?.avatarFileId ? (
+                              <Image
+                                style={styles.avatar}
+                                source={{
+                                  uri:
+                                    item.avatarFileId &&
+                                    avatarFileURL(item.avatarFileId),
+                                }}
+                              />
+                            ) : (
+                              <View style={styles.avatar}>
+                                {' '}
+                                <AvatarIcon />
+                              </View>
+                            )}
                           </View>
                           <Text>{displayName(item.displayName)}</Text>
                         </View>
                         <TouchableOpacity
                           onPress={() => onDeleteUserPressed(item)}
                         >
-                          <CloseIcon width={12} height={12} color={theme.colors.base} />
+                          <CloseIcon
+                            width={12}
+                            height={12}
+                            color={theme.colors.base}
+                          />
                         </TouchableOpacity>
                       </View>
                     )}
@@ -379,7 +389,12 @@ const EditCommunity = ({ navigation, route }) => {
                   style={styles.addIcon}
                 >
                   <View style={styles.avatar}>
-                    <PlusIcon style={styles.arrowIcon} width={24} height={24} color={theme.colors.base} />
+                    <PlusIcon
+                      style={styles.arrowIcon}
+                      width={24}
+                      height={24}
+                      color={theme.colors.base}
+                    />
                   </View>
                 </Pressable>
               </View>

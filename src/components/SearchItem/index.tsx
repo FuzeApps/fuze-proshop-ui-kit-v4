@@ -84,9 +84,10 @@ export default function SearchItem({
               uri: target.avatarFileId && avatarFileURL(target.avatarFileId!),
             }}
           />
+        ) : target.targetType === 'user' ? (
+          <UserIcon style={styles.avatar} width={40} height={40} />
         ) : (
-
-          target.targetType === 'user' ? <UserIcon style={styles.avatar} width={40} height={40} /> : <CommunityIcon style={styles.avatar} width={40} height={40} />
+          <CommunityIcon style={styles.avatar} width={40} height={40} />
         )}
         <View>
           <Text style={styles.itemText}>{displayName()}</Text>

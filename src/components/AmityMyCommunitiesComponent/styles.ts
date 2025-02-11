@@ -8,14 +8,14 @@ export const useStyles = (theme: MyMD3Theme) => {
       backgroundColor: theme.colors.background,
       paddingHorizontal: 16,
       borderTopWidth: 8,
-      borderColor: theme.colors.baseShade4,
+      borderColor: theme.colors.baseDivider,
     },
     communityItemContainer: {
       paddingVertical: 16,
       flexDirection: 'row',
       alignItems: 'center',
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.baseShade4,
+      borderBottomColor: theme.colors.baseDivider,
     },
     communityInfoContainer: {
       flex: 1,
@@ -29,7 +29,6 @@ export const useStyles = (theme: MyMD3Theme) => {
       fontSize: 14,
       fontWeight: '600',
       color: theme.colors.base,
-      
     },
     privateBadge: {
       width: 24,

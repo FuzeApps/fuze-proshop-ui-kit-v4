@@ -36,7 +36,7 @@ export declare const getImageTransform: (
         readonly x: number;
         readonly y: number;
       },
-      number
+      number,
     ];
 export declare const getImageStyles: (
   image: Dimensions | null,

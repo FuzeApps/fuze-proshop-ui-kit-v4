@@ -92,7 +92,7 @@ const ChooseCategoryModal = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.closeButton} onPress={handleOnClose}>
-          <CloseIcon color={theme.colors.base} />
+            <CloseIcon color={theme.colors.base} />
           </TouchableOpacity>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerText}>Select Category</Text>

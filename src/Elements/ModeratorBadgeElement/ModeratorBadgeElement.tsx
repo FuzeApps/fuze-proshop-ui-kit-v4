@@ -41,14 +41,12 @@ const ModeratorBadgeElement: FC<ModeratorBadgeElementType> = ({
 
   return (
     <View style={styles.moderatorRow}>
-      {/* <ImageElement
-        configKey="icon"
-        pageID={pageID}
-        componentID={componentID}
-        elementID={ElementID.moderator_badge}
+      <ShieldIcon
+        width={12}
+        height={9}
+        color={theme.colors.primary}
         style={styles.moderatorBadge}
-      /> */}
-      <ShieldIcon width={12} height={9} color={theme.colors.primary}  style={styles.moderatorBadge}/>
+      />
       <Text
         style={styles.moderatorTitle}
         testID={accessibilityId}

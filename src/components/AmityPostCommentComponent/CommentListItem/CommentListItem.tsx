@@ -23,7 +23,6 @@ import {
   threeDots,
 } from '../../../svg/svg-xml-list';
 
-
 import {
   addCommentReaction,
   removeCommentReaction,

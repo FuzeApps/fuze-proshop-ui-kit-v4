@@ -2,6 +2,7 @@ import React, { type ReactElement, useState } from 'react';
 import {
   Animated,
   type LayoutChangeEvent,
+  ScrollView,
   type StyleProp,
   Text,
   TouchableOpacity,
@@ -58,45 +59,45 @@ const CustomTab = ({ tabName, onTabChange }: ICustomTab): ReactElement => {
     var { width } = event.nativeEvent.layout;
     setTabThreeWidth(width);
   };
+
   const dynamicWidthStyle: StyleProp<any> = {
     width:
       activeTab === 1
         ? tabOneWidth - 20
         : activeTab === 2
-        ? tabTwoWidth - 20
-        : activeTab === 3
-        ? tabThreeWidth - 20
-        : undefined,
+          ? tabTwoWidth - 20
+          : activeTab === 3
+            ? tabThreeWidth - 20
+            : undefined,
   };
   return (
     <View style={styles.container}>
-      {tabName.map((tab, index) => {
-        const onLayout =
-          index === 0
-            ? getLayoutTabOneWidth
-            : index === 1
-            ? getLayoutTabTwoWidth
-            : getLayoutTabThreeWidth;
-        return (
-          <TouchableOpacity
-            key={tab}
-            onLayout={onLayout}
-            onPress={() => handleTabPress({ name: tab, tabIndex: index + 1 })}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === index + 1 && styles.activeTabText,
-              ]}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {tabName.map((tab, index) => {
+          const onLayout =
+            index === 0
+              ? getLayoutTabOneWidth
+              : index === 1
+                ? getLayoutTabTwoWidth
+                : getLayoutTabThreeWidth;
+          return (
+            <TouchableOpacity
+              key={tab}
+              onLayout={onLayout}
+              onPress={() => handleTabPress({ name: tab, tabIndex: index + 1 })}
             >
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-      <Animated.View
-        style={[styles.indicator, getIndicatorPosition(), dynamicWidthStyle]}
-      />
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === index + 1 && styles.activeTabText,
+                ]}
+              >
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };

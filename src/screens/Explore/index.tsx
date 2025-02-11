@@ -140,8 +140,7 @@ export default function Explore() {
                   }}
                 />
               ) : (
-  
-                <CommunityIcon width={40} height={40}  style={styles.avatar}/>
+                <CommunityIcon width={40} height={40} style={styles.avatar} />
               )}
 
               <Text style={styles.name}>{community.displayName}</Text>
@@ -179,7 +178,7 @@ export default function Explore() {
                   }
                 />
               ) : (
-                <CommunityIcon width={40} height={40}  style={styles.avatar}/>
+                <CommunityIcon width={40} height={40} style={styles.avatar} />
               )}
 
               <View style={styles.trendingTextContainer}>

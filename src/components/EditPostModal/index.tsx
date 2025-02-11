@@ -194,15 +194,15 @@ const EditPostModal = ({
       displayImages.length > 0
         ? displayImages
         : displayVideos?.length > 0
-        ? displayVideos
-        : [];
+          ? displayVideos
+          : [];
     const fileIds = files ? files.map((item) => item.fileId) : [];
     const type =
       displayImages.length > 0
         ? 'image'
         : displayVideos.length > 0
-        ? 'video'
-        : 'text';
+          ? 'video'
+          : 'text';
     if (type === 'text' && postDetail?.childrenPosts.length > 0) {
       await Promise.allSettled(
         postDetail?.childrenPosts.map((postId) => {

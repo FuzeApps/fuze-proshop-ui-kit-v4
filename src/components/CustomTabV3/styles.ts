@@ -22,7 +22,7 @@ export const useStyles = () => {
       fontSize: 17,
       fontWeight: 'bold',
       color: theme.colors.base,
-      marginHorizontal: 15,
+      marginHorizontal: 8,
       textAlign: 'center',
     },
     activeTabText: {

@@ -6,15 +6,15 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import fallBackConfig from '../../uikit.config.json';
+import { amityUIKitTokens } from '../enum';
 import useValidateConfig from '../hooks/useValidateConfig';
 import { BehaviourProvider } from '../providers/BehaviourProvider';
 import { store } from '../redux/store';
 import { IBehaviour } from '../types/behaviour.interface';
 import { IConfigRaw } from '../types/config.interface';
-import { validateConfigColor } from '../util/colorUtil';
 import AuthContextProvider from './auth-provider';
-import { ConfigProvider } from './config-provider';
 import AuthStaticProvider from './auth-static-provider';
+import { ConfigProvider } from './config-provider';
 
 export type CusTomTheme = typeof DefaultTheme;
 export interface IAmityUIkitProvider {
@@ -40,15 +40,19 @@ export interface CustomColors {
   secondaryShade2?: string;
   secondaryShade3?: string;
   secondaryShade4?: string;
-  background?: string;
   base?: string;
   baseShade1?: string;
   baseShade2?: string;
   baseShade3?: string;
   baseShade4?: string;
+
+  background?: string;
+  backgroundShade1?: string;
+
   alert?: string;
   border?: string;
   screenBackground?: string;
+  baseDivider?: string;
 }
 export interface MyMD3Theme extends MD3Theme {
   colors: MD3Theme['colors'] & CustomColors;
@@ -77,39 +81,19 @@ export default function AmityUiKitProvider({
   };
   const isValidConfig = useValidateConfig(configs);
   const configData = isValidConfig ? configs : (fallBackConfig as IConfigRaw);
-  const isDarkTheme =
-    configData?.preferred_theme === 'dark' ||
-    (configData?.preferred_theme === 'default' && colorScheme === 'dark');
-  const themeColor = isDarkTheme
-    ? configData.theme.dark
-    : configData.theme.light;
-  const primaryShades = generateShades(themeColor.primary_color);
-  const secondaryShades = generateShades(themeColor.secondary_color);
+
+  // const isDarkTheme =
+  //   configData?.preferred_theme === 'dark' ||
+  //   (configData?.preferred_theme === 'default' && colorScheme === 'dark');
+  // const themeColor = isDarkTheme
+  //   ? configData.theme.dark
+  //   : configData.theme.light;
+
   const globalTheme: MyMD3Theme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      primary: validateConfigColor(themeColor?.primary_color),
-      primaryShade1: validateConfigColor(primaryShades[0]),
-      primaryShade2: validateConfigColor(primaryShades[1]),
-      primaryShade3: validateConfigColor(primaryShades[2]),
-      primaryShade4: validateConfigColor(primaryShades[3]),
-      secondary: validateConfigColor(themeColor?.secondary_color),
-      secondaryShade1: validateConfigColor(secondaryShades[0]),
-      secondaryShade2: validateConfigColor(secondaryShades[1]),
-      secondaryShade3: validateConfigColor(secondaryShades[2]),
-      secondaryShade4: validateConfigColor(secondaryShades[3]),
-      background: validateConfigColor(themeColor?.background_color),
-      base: validateConfigColor(themeColor?.base_color),
-      baseShade1: validateConfigColor(themeColor?.base_shade1_color),
-      baseShade2: validateConfigColor(themeColor?.base_shade2_color),
-      baseShade3: validateConfigColor(themeColor?.base_shade3_color),
-      baseShade4: validateConfigColor(themeColor?.base_shade4_color),
-      alert: validateConfigColor(themeColor?.alert_color),
-      border: validateConfigColor(themeColor?.border_color),
-      screenBackground: validateConfigColor(
-        themeColor?.screen_background_color
-      ),
+      ...amityUIKitTokens.colors,
     },
   };
 

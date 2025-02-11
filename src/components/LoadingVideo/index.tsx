@@ -54,8 +54,6 @@ const LoadingVideo = ({
 
   const videoRef = React.useRef(null);
 
-
-
   const handleLoadEnd = () => {
     setLoading(false);
   };
@@ -120,7 +118,6 @@ const LoadingVideo = ({
     //   await videoRef.current.loadAsync({
     //     uri: `https://api.${apiRegion}.amity.co/api/v3/files/${videoPosts[currentImageIndex]?.videoFileId?.original}/download`,
     //   });
-
     //   await videoRef.current.presentFullscreenPlayer();
     //   await videoRef.current.playAsync();
     // }
@@ -134,15 +131,21 @@ const LoadingVideo = ({
         </TouchableOpacity>
       )}
       {playingUri ? (
-        <Video ref={videoRef} resizeMode={ResizeMode.CONTAIN} style={styles.image} />
+        <Video
+          ref={videoRef}
+          resizeMode={ResizeMode.CONTAIN}
+          style={styles.image}
+        />
       ) : thumbNailImage ? (
         <Image
           resizeMode="cover"
           source={{ uri: thumbNailImage }}
-          style={[
-            styles.image,
-            loading ? styles.loadingImage : styles.loadedImage,
-          ] as any}
+          style={
+            [
+              styles.image,
+              loading ? styles.loadingImage : styles.loadedImage,
+            ] as any
+          }
         />
       ) : (
         <View style={styles.image} />

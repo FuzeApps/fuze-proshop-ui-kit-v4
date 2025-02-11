@@ -12,6 +12,6 @@ declare const useImageIndexChange: (
   screen: Dimensions
 ) => readonly [
   number,
-  (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+  (event: NativeSyntheticEvent<NativeScrollEvent>) => void,
 ];
 export default useImageIndexChange;

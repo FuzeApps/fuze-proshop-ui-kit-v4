@@ -44,9 +44,8 @@ export function createCommunity(
           : undefined,
     };
 
-    const { data: community } = await CommunityRepository.createCommunity(
-      newCommunity
-    );
+    const { data: community } =
+      await CommunityRepository.createCommunity(newCommunity);
     resolve(community);
   });
   return communityObject;

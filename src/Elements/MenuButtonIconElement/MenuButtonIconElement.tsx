@@ -1,14 +1,8 @@
 import { ImageProps, Image } from 'react-native';
 import React, { FC, memo } from 'react';
-import {
-  ComponentID,
-  ElementID,
-  PageID,
-  UiKitConfigKeys,
-} from '../../enum';
+import { ComponentID, ElementID, PageID, UiKitConfigKeys } from '../../enum';
 import useConfig from '../../hooks/useConfig';
 import { useConfigImageUri } from '../../hooks/useConfigImageUri';
-
 
 type MenuButtonIconElementType = Partial<ImageProps> & {
   pageID?: PageID;

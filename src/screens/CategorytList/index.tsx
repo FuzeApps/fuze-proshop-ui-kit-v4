@@ -72,17 +72,19 @@ export default function CategoryList({ navigation }: any) {
         style={styles.rowContainer}
         onPress={() => handleCategoryClick(item.categoryId, item.name)}
       >
-        {item?.avatarFileId ?
+        {item?.avatarFileId ? (
           <Image
             style={styles.avatar}
-            source={
-              {
-                uri: item.avatarFileId && avatarFileURL(item.avatarFileId!),
-              }
-
-            }
-          /> : <View style={styles.avatar}> <AvatarIcon /></View>
-        }
+            source={{
+              uri: item.avatarFileId && avatarFileURL(item.avatarFileId!),
+            }}
+          />
+        ) : (
+          <View style={styles.avatar}>
+            {' '}
+            <AvatarIcon />
+          </View>
+        )}
 
         <Text style={styles.categoryText}>{item.name}</Text>
       </TouchableOpacity>

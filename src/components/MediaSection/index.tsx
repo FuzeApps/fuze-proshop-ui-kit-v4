@@ -1,10 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Image,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useStyles } from './styles';
 import useAuth from '../../hooks/useAuth';
 import { IVideoPost, MediaUri } from '../Social/PostList';
@@ -19,7 +14,6 @@ interface IMediaSection {
   childrenPosts: string[];
 }
 const MediaSection: React.FC<IMediaSection> = ({ childrenPosts }) => {
-
   const { apiRegion } = useAuth();
   const [imagePosts, setImagePosts] = useState<string[]>([]);
   const [videoPosts, setVideoPosts] = useState<IVideoPost[]>([]);
@@ -29,11 +23,9 @@ const MediaSection: React.FC<IMediaSection> = ({ childrenPosts }) => {
   const [videoPostsFullSize, setVideoPostsFullSize] = useState<MediaUri[]>([]);
   const [visibleFullImage, setIsVisibleFullImage] = useState<boolean>(false);
   const [imageIndex, setImageIndex] = useState<number>(0);
-  
 
   const styles = useStyles();
-  let imageStyle: any =
-    styles.imageLargePost;
+  let imageStyle: any = styles.imageLargePost;
   let colStyle: any = styles.col2;
   const { currentPostdetail } = useSelector(
     (state: RootState) => state.postDetail
@@ -102,17 +94,16 @@ const MediaSection: React.FC<IMediaSection> = ({ childrenPosts }) => {
   }, [childrenPosts, currentPostdetail, postList, postListGlobal, getPostInfo]);
 
   function onClickImage(index: number): void {
-      setIsVisibleFullImage(true);
-      setImageIndex(index);
-
+    setIsVisibleFullImage(true);
+    setImageIndex(index);
   }
 
   function renderMediaPosts() {
     const thumbnailFileIds: string[] =
       videoPosts.length > 0
         ? videoPosts.map((item) => {
-          return `https://api.${apiRegion}.amity.co/api/v3/files/${item?.thumbnailFileId}/download?size=medium`;
-        })
+            return `https://api.${apiRegion}.amity.co/api/v3/files/${item?.thumbnailFileId}/download?size=medium`;
+          })
         : [];
     const mediaPosts =
       [...imagePosts].length > 0 ? [...imagePosts] : [...thumbnailFileIds];
@@ -205,8 +196,9 @@ const MediaSection: React.FC<IMediaSection> = ({ childrenPosts }) => {
               />
               {index === 3 && imagePosts.length > 4 && (
                 <View style={styles.overlay}>
-                  <Text style={styles.overlayText}>{`+ ${imagePosts.length - 3
-                    }`}</Text>
+                  <Text style={styles.overlayText}>{`+ ${
+                    imagePosts.length - 3
+                  }`}</Text>
                 </View>
               )}
             </View>

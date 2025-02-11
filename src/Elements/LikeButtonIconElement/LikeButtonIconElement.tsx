@@ -1,11 +1,6 @@
 import { ImageProps } from 'react-native';
 import React, { FC, memo } from 'react';
-import {
-  ComponentID,
-  ElementID,
-  PageID,
-} from '../../enum';
-
+import { ComponentID, ElementID, PageID } from '../../enum';
 
 import useConfig from '../../hooks/useConfig';
 import { LikeIcon } from '../../svg/LikeIcon';
@@ -18,7 +13,6 @@ type LikeButtonIconElementType = Partial<ImageProps> & {
 const LikeButtonIconElement: FC<LikeButtonIconElementType> = ({
   pageID = '*',
   componentID = '*',
-
 }) => {
   const { excludes } = useConfig();
   const elementID = ElementID.reaction_button;
@@ -32,7 +26,7 @@ const LikeButtonIconElement: FC<LikeButtonIconElementType> = ({
     //   source={props.source ?? imageSource}
     //   {...props}
     // />
-    <LikeIcon/>
+    <LikeIcon />
   );
 };
 
