@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { MyMD3Theme } from './../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const styles = StyleSheet.create({
@@ -19,7 +20,7 @@ export const useStyles = (theme: MyMD3Theme) => {
     },
     communityInfoContainer: {
       flex: 1,
-      paddingLeft: 24,
+      paddingStart: amityUIKitTokens.spacing.m1,
     },
     communityNameContainer: {
       flexDirection: 'row',

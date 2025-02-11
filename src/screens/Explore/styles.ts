@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { amityUIKitTokens } from '../../enum';
-import { officialIcon } from '../../svg/svg-xml-list';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -13,13 +12,12 @@ export const useStyles = () => {
     },
     recommendContainer: {
       backgroundColor: theme.colors.baseShade4,
-      paddingLeft: 15,
       paddingVertical: 10,
     },
     trendingContainer: {
-      paddingLeft: 15,
-      paddingVertical: 10,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
       backgroundColor: theme.colors.background,
+      paddingVertical: amityUIKitTokens.spacing.m1,
     },
     title: {
       fontWeight: 'bold',
@@ -40,7 +38,7 @@ export const useStyles = () => {
       width: 268,
       backgroundColor: theme.colors.background,
       borderRadius: amityUIKitTokens.borderRadius.medium,
-      marginRight: 10,
+      marginHorizontal: amityUIKitTokens.spacing.s1,
       marginBottom: 10,
       overflow: 'hidden',
       height: 250,
@@ -192,6 +190,12 @@ export const useStyles = () => {
       position: 'absolute',
       marginLeft: 55,
       bottom: 0,
+    },
+    recommendContainerScrollView: {
+      paddingHorizontal: amityUIKitTokens.spacing.s1,
+    },
+    recommendedTitleContainer: {
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
     },
   });
   return styles;

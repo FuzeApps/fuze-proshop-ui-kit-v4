@@ -124,16 +124,21 @@ export default function Explore() {
   }, [apiRegion, categoryList, handleCategoryClick, styles]);
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Recommended Group UI Block */}
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Recommended Group Section */}
       <View style={styles.recommendContainer}>
-        <Text style={styles.title}>Recommended for you</Text>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.recommendedTitleContainer}>
+          <Text style={styles.title}>Recommended for you</Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={styles.recommendContainerScrollView}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        >
           {recommendCommunityList.map((community) => (
             <TouchableOpacity
-              key={community.communityId}
               style={styles.card}
+              key={community.communityId}
               onPress={() =>
                 handleCommunityClick(
                   community.communityId,
@@ -164,7 +169,8 @@ export default function Explore() {
           ))}
         </ScrollView>
       </View>
-      {/* Trending now  */}
+
+      {/* Trending Now Section  */}
       <View style={styles.trendingContainer}>
         <Text style={styles.title}>Trending now</Text>
         <View>
@@ -218,7 +224,7 @@ export default function Explore() {
         </View>
       </View>
 
-      {/* Categories */}
+      {/* Categories Section */}
       <View style={styles.categoriesContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Categories</Text>
