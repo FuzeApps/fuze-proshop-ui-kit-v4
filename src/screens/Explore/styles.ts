@@ -31,16 +31,21 @@ export const useStyles = () => {
       flex: 1,
     },
     trendingTextContainer: {
+      paddingStart: amityUIKitTokens.spacing.m1,
       flexDirection: 'row',
       alignItems: 'center',
     },
     card: {
-      width: 175,
+      width: 268,
       backgroundColor: theme.colors.background,
-      borderRadius: 10,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
       marginRight: 10,
       marginBottom: 10,
-      padding: 15,
+      overflow: 'hidden',
+      height: 250,
+    },
+    cardBody: {
+      padding: amityUIKitTokens.spacing.m1,
     },
     recommendSubDetail: {
       fontSize: 13,
@@ -48,10 +53,22 @@ export const useStyles = () => {
       color: theme.colors.baseShade1,
     },
     avatar: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      width: 80,
+      height: 80,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
+    },
+    recommendedAvatar: {
+      width: '100%',
+      minHeight: 140,
+    },
+    recommendedCard: {
+      width: 175,
+      backgroundColor: theme.colors.background,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
+      marginRight: 10,
       marginBottom: 10,
+      overflow: 'hidden',
+      height: 250,
     },
     name: {
       fontWeight: '600',
@@ -61,6 +78,10 @@ export const useStyles = () => {
     },
     bio: {
       color: theme.colors.base,
+      fontSize: 13,
+    },
+    communityDescription: {
+      color: theme.colors.baseShade2,
       fontSize: 13,
     },
     itemContainer: {
@@ -96,7 +117,7 @@ export const useStyles = () => {
     },
     categoriesContainer: {
       paddingTop: 20,
-      paddingHorizontal: 10,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
       paddingBottom: 120,
       backgroundColor: theme.colors.background,
     },
@@ -137,6 +158,32 @@ export const useStyles = () => {
     wrapContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
+    },
+    categoryAvatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 40,
+    },
+    categoryItem: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      width: '50%',
+      overflow: 'hidden',
+      marginBottom: amityUIKitTokens.spacing.s1,
+    },
+    categoryTextWrapper: {
+      paddingHorizontal: amityUIKitTokens.spacing.s1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center',
+      flexDirection: 'row',
+    },
+    categoryName: {
+      fontSize: 12,
+      lineHeight: 24,
+      fontWeight: '600',
+      color: theme.colors.base,
     },
   });
   return styles;
