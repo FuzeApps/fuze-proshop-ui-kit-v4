@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, {
   memo,
@@ -19,12 +19,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import { SvgXml } from 'react-native-svg';
 import MediaSection from '../../components/MediaSection';
 import AvatarElement from '../../Elements/CommonElements/AvatarElement';
-import { ComponentID, ElementID, PageID } from '../../enum';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { AmityUiKitRoutes, ComponentID, ElementID, PageID } from '../../enum';
 import { getCommunityById } from '../../providers/Social/communities-sdk';
 import { RootStackParamList } from '../../routes/RouteParamList';
 import {
@@ -44,7 +42,7 @@ import AmityPostEngagementActionsComponent from '../AmityPostEngagementActionsCo
 
 import { useDispatch } from 'react-redux';
 import { PostTag } from '../../enum/enumPostTag';
-import useAuth from '../../hooks/useAuth';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 import { useIsCommunityModerator } from '../../hooks/useIsCommunityModerator';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import { useBehaviour } from '../../providers/BehaviourProvider';
@@ -93,23 +91,26 @@ export interface IVideoPost {
     original: string;
   };
 }
+
 const AmityPostContentComponent = ({
   pageId,
   post,
   AmityPostContentComponentStyle = AmityPostContentComponentStyleEnum.detail,
 }: IPostList) => {
-  const theme = useTheme() as MyMD3Theme;
   const {
     AmityPostContentComponentBehavior,
     AmityGlobalFeedComponentBehavior,
   } = useBehaviour();
+
+  const { name } = useRoute();
+
   const componentId = ComponentID.post_content;
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId: pageId,
     componentId: componentId,
   });
   const styles = useStyles(themeStyles);
-  const { client } = useAuth();
+  const { userId } = useAuthStatic();
   const { showToastMessage } = uiSlice.actions;
   const [textPost, setTextPost] = useState<string>('');
   const [communityData, setCommunityData] = useState<Amity.Community>(null);
@@ -138,11 +139,13 @@ const AmityPostContentComponent = ({
     editedAt,
     mentionPosition,
   } = post ?? {};
-  const { isCommunityModerator } = useIsCommunityModerator({
+
+  const { isCommunityModerator, ...rest } = useIsCommunityModerator({
     communityId: targetType === 'community' && targetId,
     userId: user?.userId,
   });
-  const myId = (client as Amity.Client).userId;
+
+  const myId = userId;
   const { isCommunityModerator: isIAmModerator } = useIsCommunityModerator({
     communityId: targetType === 'community' && targetId,
     userId: myId,
@@ -307,7 +310,7 @@ const AmityPostContentComponent = ({
             ]}
           >
             <View style={styles.handleBar} />
-            {post?.user?.userId === (client as Amity.Client).userId ? (
+            {post?.user?.userId === userId ? (
               <TouchableOpacity
                 onPress={openEditPostModal}
                 style={styles.modalRow}
@@ -413,18 +416,24 @@ const AmityPostContentComponent = ({
                 >
                   {user?.displayName}
                 </Text>
-                {communityData?.displayName && (
-                  <>
-                    <Text style={styles.headerText}>{'  ›  '}</Text>
 
-                    <Text
-                      onPress={handleCommunityNamePress}
-                      style={styles.headerText}
-                    >
-                      {communityData?.displayName}
-                    </Text>
-                  </>
-                )}
+                {/*
+                  - Hide the community name if the page is community name
+                  - Hide the community name if the post is not in a community
+                 */}
+                {name !== AmityUiKitRoutes.CommunityHome &&
+                  communityData?.displayName && (
+                    <>
+                      <Text style={styles.headerText}>{'  ›  '}</Text>
+
+                      <Text
+                        onPress={handleCommunityNamePress}
+                        style={styles.headerText}
+                      >
+                        {communityData?.displayName}
+                      </Text>
+                    </>
+                  )}
               </Text>
             </View>
 
