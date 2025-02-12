@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const styles = StyleSheet.create({
@@ -27,6 +28,11 @@ export const useStyles = (theme: MyMD3Theme) => {
       fontWeight: '600',
       fontSize: 15,
       color: theme.colors.base,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
+    },
+    headerTextChevron: {
+      color: theme.colors.baseShade2,
+      fontSize: 20,
     },
     user: {
       paddingVertical: 8,

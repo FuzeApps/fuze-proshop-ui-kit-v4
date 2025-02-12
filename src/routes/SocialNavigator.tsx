@@ -119,6 +119,7 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
                 },
               },
             }: any) => ({
+              headerShown: false,
               headerLeft: () => isBackEnabled && <BackButton backTwice />,
               title: communityName,
               headerRight: () => (

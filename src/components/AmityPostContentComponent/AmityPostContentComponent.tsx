@@ -424,7 +424,7 @@ const AmityPostContentComponent = ({
                 {name !== AmityUiKitRoutes.CommunityHome &&
                   communityData?.displayName && (
                     <>
-                      <Text style={styles.headerText}>{'  ›  '}</Text>
+                      <Text style={styles.headerTextChevron}>{'  ›  '}</Text>
 
                       <Text
                         onPress={handleCommunityNamePress}

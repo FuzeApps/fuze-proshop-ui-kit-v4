@@ -47,6 +47,12 @@ import EditIcon from '../../svg/EditIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
 import metadataHandlers from '../../util/metadataHandlers';
+import { proShopLogo, verifiedIcon } from '../../svg/svg-xml-list';
+import { SvgXml } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { amityUIKitTokens } from '../../enum';
+
+const COMMUNITY_IMAGE_HEIGHT = 200;
 
 export type FeedRefType = {
   handleLoadMore: () => void;
@@ -55,6 +61,7 @@ export type FeedRefType = {
 export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
+  const insets = useSafeAreaInsets();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -214,19 +221,14 @@ export default function CommunityHome({ route }: any) {
     return null;
   };
 
-  const joinCommunityButton = () => {
+  const joinCommunityButton = useMemo(() => {
     return (
-      <View style={styles.joinContainer}>
-        <TouchableOpacity
-          style={styles.joinCommunityButton}
-          onPress={onJoinCommunityTap}
-        >
-          <PlusIcon color="#FFF" width={24} />
-          <Text style={styles.joinCommunityText}>Join</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
+        <PlusIcon color="#FFF" width={24} />
+        <Text style={styles.joinCommunityText}>Join</Text>
+      </TouchableOpacity>
     );
-  };
+  }, []);
 
   const handleTab = (tabName: TabName) => {
     setCurrentTab(tabName);
@@ -238,28 +240,28 @@ export default function CommunityHome({ route }: any) {
       isModerator: isUserHasPermission,
     });
   };
-  const pendingPostArea = () => {
+
+  const pendingPostUiBlock = useMemo(() => {
     return (
       <Pressable onPress={handleClickPendingArea}>
-        <View style={styles.pendingPostWrap}>
-          <View style={styles.pendingPostArea}>
-            <View style={styles.pendingRow}>
-              <PrimaryDot color={theme.colors.primary} />
-              <Text style={styles.pendingText}>Pending posts</Text>
-            </View>
-
-            <Text style={styles.pendingDescriptionText}>
-              {isUserHasPermission
-                ? (pendingPosts.length > 30 && 'More than ') +
-                  pendingPosts.length +
-                  ' posts need approval'
-                : 'Your posts are pending for review'}
-            </Text>
+        <View style={styles.pendingPostArea}>
+          <View style={styles.pendingRow}>
+            <PrimaryDot color={theme.colors.primary} />
+            <Text style={styles.pendingText}>Pending posts</Text>
           </View>
+
+          <Text style={styles.pendingDescriptionText}>
+            {isUserHasPermission
+              ? (pendingPosts.length > 30 && 'More than ') +
+                pendingPosts.length +
+                ' posts need approval'
+              : 'Your posts are pending for review'}
+          </Text>
         </View>
       </Pressable>
     );
-  };
+  }, [pendingPosts]);
+
   const handleOnPressPostBtn = () => {
     return dispatch(
       openPostTypeChoiceModal({
@@ -318,6 +320,21 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
+  const topInset = insets.top + 16;
+  // const communityImageHeight = COMMUNITY_IMAGE_HEIGHT + topInset;
+
+  const imageContainerStyles = useMemo(() => {
+    return {
+      height: topInset + 190,
+    };
+  }, []);
+
+  const topHeaderControlsExtraStyles = useMemo(() => {
+    return {
+      paddingTop: topInset,
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -326,27 +343,68 @@ export default function CommunityHome({ route }: any) {
         scrollEventThrottle={20}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        stickyHeaderIndices={[1]}
       >
-        {/* Avatar */}
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={
-              avatarUrl
-                ? {
-                    uri: avatarUrl,
-                  }
-                : require('../../assets/icon/Placeholder.png')
-            }
-          />
-          <View style={styles.darkOverlay} />
-          <View style={styles.overlay}>
-            <Text style={styles.overlayCommunityText}>
-              {communityData?.data.displayName}
-            </Text>
+        {/* Community Avatar */}
+        <View style={[styles.imageContainer, imageContainerStyles]}>
+          {/* Avatar images */}
+          {avatarUrl ? (
+            <Image
+              style={styles.image}
+              source={{
+                uri: avatarUrl,
+              }}
+            />
+          ) : (
+            <View style={styles.imagePlaceholder}>
+              <SvgXml xml={proShopLogo()} />
+            </View>
+          )}
+          <View
+            style={[styles.topHeaderControls, topHeaderControlsExtraStyles]}
+          >
+            <Text>Top Header controls</Text>
           </View>
         </View>
-        {/* TODO: Wiil hide Post Count and Members Count for MVP */}
+
+        {/* Community Name Section */}
+        <View style={styles.sectionWrapper}>
+          <View style={styles.communityNameWrapper}>
+            <Text style={styles.communityName}>
+              {communityData?.data.displayName}
+            </Text>
+            {communityData?.data.isOfficial && (
+              <View style={styles.verifiedIconWrapper}>
+                <SvgXml width={24} height={24} xml={verifiedIcon()} />
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* Description Block Section */}
+        <View style={styles.sectionWrapper}>
+          <Text style={styles.description}>
+            {communityData?.data.description}
+          </Text>
+        </View>
+
+        {/* CTA Section */}
+        <View style={styles.ctaWrapper}>
+          {/* Edit Group CTA */}
+          {isUserHasPermission ? (
+            <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
+              <EditIcon width={24} height={20} color={theme.colors.base} />
+              <Text style={styles.editProfileText}>Edit Group</Text>
+            </TouchableOpacity>
+          ) : null}
+          {/* Join Community CTA */}
+          {!isJoin ? joinCommunityButton : null}
+          {/* Pending Post area */}
+          {isJoin && isShowPendingArea ? pendingPostUiBlock : null}
+        </View>
+
+        {/* TODO:   */}
+        {/* Counters: Members and Posts */}
         {/* <View style={styles.row}>
           <View style={styles.rowItem}>
             <Text style={styles.rowNumber}>
@@ -368,20 +426,8 @@ export default function CommunityHome({ route }: any) {
             </TouchableOpacity>
           </View>
         </View> */}
-        <Text style={styles.textComponent}>
-          {communityData?.data.description}
-        </Text>
-        {isUserHasPermission && (
-          <TouchableOpacity
-            style={styles.editProfileButton}
-            onPress={onEditProfileTap}
-          >
-            <EditIcon width={24} height={20} color={theme.colors.base} />
-            <Text style={styles.editProfileText}>Edit Group</Text>
-          </TouchableOpacity>
-        )}
-        {!isJoin && joinCommunityButton()}
-        {isJoin && isShowPendingArea && pendingPostArea()}
+
+        {/* Tabs Section: Timeline, Activity, Leaderboard, Gallery */}
         <CustomTab
           tabName={[
             TabName.Timeline,
