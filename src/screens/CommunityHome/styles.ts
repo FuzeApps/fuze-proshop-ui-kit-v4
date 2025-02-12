@@ -7,10 +7,7 @@ export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       backgroundColor: theme.colors.background,
-      // alignItems: 'center',
-      // justifyContent: 'center',
     },
     avatar: {
       width: 40,
@@ -74,10 +71,24 @@ export const useStyles = () => {
       right: 0,
       paddingHorizontal: amityUIKitTokens.spacing.m1,
       zIndex: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     sectionWrapper: {
       paddingHorizontal: amityUIKitTokens.spacing.m1,
       paddingTop: amityUIKitTokens.spacing.m1,
+      backgroundColor: theme.colors.background,
+    },
+    communityNameSection: {
+      flexDirection: 'row',
+      paddingTop: amityUIKitTokens.spacing.m1,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      flexWrap: 'nowrap',
+      backgroundColor: theme.colors.background,
+    },
+    spacer: {
+      width: amityUIKitTokens.spacing.m1,
+      height: amityUIKitTokens.spacing.m1,
     },
     overlayCommunityText: {
       color: theme.colors.base,
@@ -86,15 +97,33 @@ export const useStyles = () => {
     },
     communityNameWrapper: {
       flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    communityNameWrapperLeft: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      flexWrap: 'nowrap',
+    },
+
+    communityActions: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     communityName: {
       color: theme.colors.base,
       fontWeight: 'bold',
       fontSize: 20,
+      paddingTop: amityUIKitTokens.spacing.xxs2,
     },
     verifiedIconWrapper: {
+      paddingTop: amityUIKitTokens.spacing.xxs2,
       paddingStart: amityUIKitTokens.spacing.xxs2,
     },
+    shortCommunityName: {
+      maxWidth: '70%',
+    },
+
     descriptionWrapper: {
       paddingHorizontal: amityUIKitTokens.spacing.m1,
       paddingTop: amityUIKitTokens.spacing.m1,
@@ -206,6 +235,21 @@ export const useStyles = () => {
       flex: 1,
       minHeight: 40,
       marginBottom: amityUIKitTokens.spacing.m1,
+    },
+    semiTransparentButton: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black with 50% transparency
+      height: amityUIKitTokens.spacing.l1,
+      width: amityUIKitTokens.spacing.l1,
+      borderRadius: amityUIKitTokens.spacing.l1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    transparentButton: {
+      height: amityUIKitTokens.spacing.l1,
+      width: amityUIKitTokens.spacing.l1,
+      borderRadius: amityUIKitTokens.spacing.l1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 
