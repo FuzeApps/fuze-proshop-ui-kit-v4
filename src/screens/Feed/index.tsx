@@ -132,6 +132,16 @@ function Feed(
     return postData ?? [];
   }, [postData, tags?.length]);
 
+  const renderItem = useCallback(
+    ({ item }) => (
+      <AmityPostContentComponent
+        post={item}
+        AmityPostContentComponentStyle={AmityPostContentComponentStyleEnum.feed}
+      />
+    ),
+    []
+  );
+
   return (
     <View style={styles.feedWrap}>
       {filteredPostData ? (
@@ -139,16 +149,7 @@ function Feed(
           scrollEnabled={false}
           data={filteredPostData ?? []}
           extraData={filteredPostData}
-          style={{ backgroundColor: 'white' }}
-          initialNumToRender={10}
-          renderItem={({ item }) => (
-            <AmityPostContentComponent
-              post={item}
-              AmityPostContentComponentStyle={
-                AmityPostContentComponentStyleEnum.feed
-              }
-            />
-          )}
+          renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
         />
       ) : (
