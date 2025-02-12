@@ -8,9 +8,6 @@
 import React, { useEffect } from 'react';
 import { BackHandler, View, StyleSheet, StatusBar } from 'react-native';
 const Modal = ({ visible, children, presentationStyle, onRequestClose }) => {
-  if (!visible) {
-    return null;
-  }
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -25,6 +22,7 @@ const Modal = ({ visible, children, presentationStyle, onRequestClose }) => {
       backHandler.remove();
     };
   }, []);
+
   const statusBarHidden = presentationStyle === 'overFullScreen';
   const statusBarStateStyle =
     presentationStyle === 'overFullScreen'

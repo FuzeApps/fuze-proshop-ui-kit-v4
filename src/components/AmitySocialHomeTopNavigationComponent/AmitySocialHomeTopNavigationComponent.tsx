@@ -179,9 +179,9 @@ const AmitySocialHomeTopNavigationComponent = ({
 
   const plusIconMenu = useMemo(() => {
     //Hides the plus icon if the user is not a pro user
-    if (user?.metadata?.[AmityUserMetadataKeys.ProShopRole] === 'user') {
-      return null;
-    }
+    // if (user?.metadata?.[AmityUserMetadataKeys.ProShopRole] === 'user') {
+    //   return null;
+    // }
 
     if (currentTab !== TabName.Explore) {
       return (

@@ -7,8 +7,6 @@ import React, {
   useState,
 } from 'react';
 
-import { FlatList, View } from 'react-native';
-import { useStyles } from './styles';
 import {
   CommunityRepository,
   PostRepository,
@@ -18,12 +16,14 @@ import {
   getUserTopic,
   subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
-import type { FeedRefType } from '../CommunityHome';
-import { amityPostsFormatter } from '../../util/postDataFormatter';
 import { useFocusEffect } from '@react-navigation/native';
+import { FlatList, View } from 'react-native';
 import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
-import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
 import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
+import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
+import { amityPostsFormatter } from '../../util/postDataFormatter';
+import type { FeedRefType } from '../CommunityHome';
+import { useStyles } from './styles';
 
 interface IFeed {
   targetId: string;
@@ -96,7 +96,7 @@ function Feed(
             const filterData: any[] = data.map((item) => {
               if (item.dataType === 'text') return item;
             });
-            console.log(data.length);
+
             setOnNextPage(hasNextPage ? () => nextPage : null);
             const formattedPostList = await amityPostsFormatter(filterData);
             setPostData(formattedPostList);
@@ -114,12 +114,33 @@ function Feed(
     handleLoadMore,
   }));
 
+  const filteredPostData = useMemo(() => {
+    /**
+     * If there are no tags provided, it only means that the user wants to see posts without tags.
+     * This is a workaround to filter posts without tags.
+     * */
+    if (!tags?.length) {
+      return (
+        postData?.filter((item) => !item?.tags || !item?.tags?.length) ?? []
+      );
+    }
+
+    /**
+     * If there are tags provided, filter the posts based on the tags.
+     * The feed is pre-filtered by the backend, so no need for the workaround.
+     * */
+    return postData ?? [];
+  }, [postData, tags?.length]);
+
   return (
     <View style={styles.feedWrap}>
-      {postData ? (
+      {filteredPostData ? (
         <FlatList
           scrollEnabled={false}
-          data={postData ?? []}
+          data={filteredPostData ?? []}
+          extraData={filteredPostData}
+          style={{ backgroundColor: 'white' }}
+          initialNumToRender={10}
           renderItem={({ item }) => (
             <AmityPostContentComponent
               post={item}
@@ -129,7 +150,6 @@ function Feed(
             />
           )}
           keyExtractor={(_, index) => index.toString()}
-          extraData={postData}
         />
       ) : (
         <NewsFeedLoadingComponent />

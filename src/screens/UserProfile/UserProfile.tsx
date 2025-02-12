@@ -52,6 +52,7 @@ import GalleryComponent from '../../components/Gallery/GalleryComponent';
 import {} from '../../hooks';
 import { TabName } from '../../enum/enumTabName';
 import { useFileV4 } from '../../hooks/useFilev4';
+import { PostTag } from '../../enum/enumPostTag';
 
 export default function UserProfile({ route }: any) {
   const theme = useTheme() as MyMD3Theme;
@@ -272,6 +273,7 @@ export default function UserProfile({ route }: any) {
       triggerLoadMoreFunction();
     }
   };
+
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
       feedRef.current.handleLoadMore(); // Call the function inside the child component
@@ -280,6 +282,7 @@ export default function UserProfile({ route }: any) {
       galleryRef.current.handleLoadMore();
     }
   }
+
   const handleOnPressPostBtn = () => {
     dispatch(
       openPostTypeChoiceModal({
@@ -315,6 +318,15 @@ export default function UserProfile({ route }: any) {
     if (shouldShowPrivateProfile) return renderPrivateProfile();
     if (currentTab === TabName.Timeline)
       return <Feed targetType="user" targetId={userId} ref={feedRef} />;
+    if (currentTab === TabName.Activities)
+      return (
+        <Feed
+          targetType="user"
+          targetId={userId}
+          ref={feedRef}
+          tags={[PostTag.Activity]}
+        />
+      );
     if (currentTab === TabName.Gallery)
       return (
         <GalleryComponent
@@ -329,6 +341,7 @@ export default function UserProfile({ route }: any) {
   const onPressFollowers = useCallback(() => {
     if (isMyProfile || isAccepted) navigation.navigate('FollowerList', user);
   }, [isAccepted, isMyProfile, navigation, user]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -368,7 +381,13 @@ export default function UserProfile({ route }: any) {
         {!isBlocked && (
           <>
             <CustomTab
-              tabName={[TabName.Timeline, TabName.Gallery] as TabName[]}
+              tabName={
+                [
+                  TabName.Timeline,
+                  TabName.Activities,
+                  TabName.Gallery,
+                ] as TabName[]
+              }
               onTabChange={setCurrentTab}
             />
             {renderTabs()}

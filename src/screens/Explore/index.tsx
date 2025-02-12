@@ -1,20 +1,20 @@
-import * as React from 'react';
 import {
   CategoryRepository,
   CommunityRepository,
 } from '@amityco/ts-sdk-react-native';
-import { useState, useEffect, useCallback } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { useStyles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import useAuth from '../../hooks/useAuth';
-import CommunityIcon from '../../svg/CommunityIcon';
-import { chevronRightIcon, officialIcon } from '../../svg/svg-xml-list';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { amityUIKitTokens } from '../../enum';
+import useAuth from '../../hooks/useAuth';
+import CommunityIcon from '../../svg/CommunityIcon';
+import { chevronRightIcon, verifiedIcon } from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 
 export default function Explore() {
   const styles = useStyles();
@@ -210,11 +210,7 @@ export default function Explore() {
                       </Text>
                     </View>
                     {community.isOfficial && (
-                      <SvgXml
-                        width={24}
-                        height={24}
-                        xml={officialIcon(amityUIKitTokens.colors.primary)}
-                      />
+                      <SvgXml width={24} height={24} xml={verifiedIcon()} />
                     )}
                   </View>
                 </View>
