@@ -161,7 +161,8 @@ const AmitySocialHomeTopNavigationComponent = ({
   }, [navigation]);
 
   const onClickPlusIcon = useCallback(() => {
-    if (currentTab === TabName.MyCommunities) {
+    console.log('JPN: currentTab', currentTab);
+    if (currentTab === TabName.FindGroups) {
       //JPN: TODO: Add a check here if the user is eligible to create a community.
       // If pro and haven't created a community yet, then navigate to create community.
       // If a normal user, dont show this button.
@@ -261,7 +262,7 @@ const AmitySocialHomeTopNavigationComponent = ({
           <SearchIconV4 color={theme.colors.base} />
         </TouchableOpacity>
 
-        {/* <Image source={searchIcon} style={styles.icon} /> */}
+        {/* Plus Icon menu */}
         {plusIconMenu}
         <CreatePostChooseTargetModal
           visible={createPostModalVisible}
