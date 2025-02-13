@@ -317,7 +317,14 @@ export default function UserProfile({ route }: any) {
   const renderTabs = () => {
     if (shouldShowPrivateProfile) return renderPrivateProfile();
     if (currentTab === TabName.Timeline)
-      return <Feed targetType="user" targetId={userId} ref={feedRef} />;
+      return (
+        <Feed
+          targetType="user"
+          targetId={userId}
+          ref={feedRef}
+          tags={[PostTag.Feed]}
+        />
+      );
     if (currentTab === TabName.Activities)
       return (
         <Feed
