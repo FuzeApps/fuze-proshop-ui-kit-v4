@@ -1,10 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { amityUIKitTokens } from '../../enum';
 
 export const styles = StyleSheet.create({
   icon: {
-    backgroundColor: '#fff',
-    color: '#000',
-
+    color: amityUIKitTokens.colors.primary,
     height: 20,
     display: 'flex',
     justifyContent: 'center',
@@ -12,6 +11,6 @@ export const styles = StyleSheet.create({
   },
   cancelText: {
     fontSize: 18,
-    color: 'black',
+    color: amityUIKitTokens.colors.primary,
   },
 });

@@ -11,6 +11,7 @@ import {
 import { Alert } from 'react-native';
 import { text_contain_blocked_word } from '../../util/constants';
 import { IMentionPosition } from '../../types/type';
+import { PostTag } from '../../enum/enumPostTag';
 
 export interface IGlobalFeedRes {
   data: Amity.Post<any>[];
@@ -113,6 +114,7 @@ export async function createPostToFeed(
           ] as Amity.MentionType['user'][])
         : [],
     metadata: { mentioned: mentionPosition },
+    tags: [PostTag.Feed],
   };
   if (postType === 'text') {
     const newPostParam = {

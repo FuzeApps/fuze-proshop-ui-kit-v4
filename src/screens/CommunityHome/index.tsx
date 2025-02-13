@@ -333,7 +333,12 @@ export default function CommunityHome({ route }: any) {
     switch (currentTab) {
       case TabName.Timeline:
         return (
-          <Feed targetType="community" targetId={communityId} ref={feedRef} />
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Feed]}
+          />
         );
       case TabName.Activity:
         return (

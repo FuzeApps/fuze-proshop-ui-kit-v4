@@ -114,24 +114,6 @@ function Feed(
     handleLoadMore,
   }));
 
-  const filteredPostData = useMemo(() => {
-    /**
-     * If there are no tags provided, it only means that the user wants to see posts without tags.
-     * This is a workaround to filter posts without tags.
-     * */
-    if (!tags?.length) {
-      return (
-        postData?.filter((item) => !item?.tags || !item?.tags?.length) ?? []
-      );
-    }
-
-    /**
-     * If there are tags provided, filter the posts based on the tags.
-     * The feed is pre-filtered by the backend, so no need for the workaround.
-     * */
-    return postData ?? [];
-  }, [postData, tags?.length]);
-
   const renderItem = useCallback(
     ({ item }) => (
       <AmityPostContentComponent
@@ -144,11 +126,11 @@ function Feed(
 
   return (
     <View style={styles.feedWrap}>
-      {filteredPostData ? (
+      {postData ? (
         <FlatList
           scrollEnabled={false}
-          data={filteredPostData ?? []}
-          extraData={filteredPostData}
+          data={postData ?? []}
+          extraData={postData}
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
         />

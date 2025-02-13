@@ -24,6 +24,7 @@ import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
 import { TSearchItem } from '../../hooks/useSearch';
 import { text_contain_blocked_word } from '../../util/constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PostTag } from '../../enum/enumPostTag';
 
 const CreatePoll = ({ navigation, route }) => {
   const theme = useTheme() as MyMD3Theme;
@@ -99,6 +100,7 @@ const CreatePoll = ({ navigation, route }) => {
         data: { pollId, text: optionQuestion },
         mentionees,
         metadata: { mentioned: mentionPosition },
+        tags: [PostTag.Feed],
       });
       setLoading(false);
       if (targetType !== 'community') return goBack();
