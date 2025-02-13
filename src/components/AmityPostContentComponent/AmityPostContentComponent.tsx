@@ -1,57 +1,62 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
-  View,
+  Alert,
+  Animated,
+  ImageStyle,
+  Modal,
+  Pressable,
+  StyleProp,
   Text,
   TouchableOpacity,
-  Pressable,
-  Modal,
-  Animated,
-  Alert,
-  StyleProp,
-  ImageStyle,
+  View,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import MediaSection from '../../components/MediaSection';
+import AvatarElement from '../../Elements/CommonElements/AvatarElement';
+import { AmityUiKitRoutes, ComponentID, ElementID, PageID } from '../../enum';
+import { getCommunityById } from '../../providers/Social/communities-sdk';
+import { RootStackParamList } from '../../routes/RouteParamList';
 import {
-  arrowForward,
   editIcon,
   reportOutLine,
   storyDraftDeletHyperLink,
 } from '../../svg/svg-xml-list';
-import { useStyles } from './styles';
-import type { UserInterface } from '../../types/user.interface';
-import { getCommunityById } from '../../providers/Social/communities-sdk';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import MediaSection from '../../components/MediaSection';
 import { IMentionPosition } from '../../types/type';
-import { RootStackParamList } from '../../routes/RouteParamList';
-import { ComponentID, ElementID, PageID } from '../../enum';
-import AvatarElement from '../../Elements/CommonElements/AvatarElement';
+import type { UserInterface } from '../../types/user.interface';
+import { useStyles } from './styles';
 
 import ModeratorBadgeElement from '../../Elements/ModeratorBadgeElement/ModeratorBadgeElement';
-import AmityPostEngagementActionsComponent from '../AmityPostEngagementActionsComponent/AmityPostEngagementActionsComponent';
+import TimestampElement from '../../Elements/TimestampElement/TimestampElement';
 import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
 import { PostTargetType } from '../../enum/postTargetType';
-import TimestampElement from '../../Elements/TimestampElement/TimestampElement';
+import AmityPostEngagementActionsComponent from '../AmityPostEngagementActionsComponent/AmityPostEngagementActionsComponent';
 
+import { useDispatch } from 'react-redux';
+import { PostTag } from '../../enum/enumPostTag';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
+import { useIsCommunityModerator } from '../../hooks/useIsCommunityModerator';
+import { useAmityComponent } from '../../hooks/useUiKitReference';
+import { useBehaviour } from '../../providers/BehaviourProvider';
 import {
   deletePostById,
   isReportTarget,
   reportTargetById,
   unReportTargetById,
 } from '../../providers/Social/feed-sdk';
-import useAuth from '../../hooks/useAuth';
 import globalFeedSlice from '../../redux/slices/globalfeedSlice';
-import { useDispatch } from 'react-redux';
-import { useBehaviour } from '../../providers/BehaviourProvider';
 import uiSlice from '../../redux/slices/uiSlice';
-import { useAmityComponent } from '../../hooks/useUiKitReference';
-import { useIsCommunityModerator } from '../../hooks/useIsCommunityModerator';
-import RenderTextWithMention from '../RenderTextWithMention /RenderTextWithMention';
-import { LinkPreview } from '../PreviewLink/LinkPreview';
 import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
+import { LinkPreview } from '../PreviewLink/LinkPreview';
+import RenderTextWithMention from '../RenderTextWithMention /RenderTextWithMention';
 
 export interface IPost {
   postId: string;
@@ -70,6 +75,7 @@ export interface IPost {
   mentionees: string[];
   mentionPosition?: IMentionPosition[];
   analytics: Amity.Post<'analytics'>;
+  tags: string[];
 }
 export interface IPostList {
   post: IPost;
@@ -85,23 +91,26 @@ export interface IVideoPost {
     original: string;
   };
 }
+
 const AmityPostContentComponent = ({
   pageId,
   post,
   AmityPostContentComponentStyle = AmityPostContentComponentStyleEnum.detail,
 }: IPostList) => {
-  const theme = useTheme() as MyMD3Theme;
   const {
     AmityPostContentComponentBehavior,
     AmityGlobalFeedComponentBehavior,
   } = useBehaviour();
+
+  const { name } = useRoute();
+
   const componentId = ComponentID.post_content;
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId: pageId,
     componentId: componentId,
   });
   const styles = useStyles(themeStyles);
-  const { client } = useAuth();
+  const { userId } = useAuthStatic();
   const { showToastMessage } = uiSlice.actions;
   const [textPost, setTextPost] = useState<string>('');
   const [communityData, setCommunityData] = useState<Amity.Community>(null);
@@ -130,11 +139,13 @@ const AmityPostContentComponent = ({
     editedAt,
     mentionPosition,
   } = post ?? {};
+
   const { isCommunityModerator } = useIsCommunityModerator({
     communityId: targetType === 'community' && targetId,
     userId: user?.userId,
   });
-  const myId = (client as Amity.Client).userId;
+
+  const myId = userId;
   const { isCommunityModerator: isIAmModerator } = useIsCommunityModerator({
     communityId: targetType === 'community' && targetId,
     userId: myId,
@@ -299,7 +310,7 @@ const AmityPostContentComponent = ({
             ]}
           >
             <View style={styles.handleBar} />
-            {post?.user?.userId === (client as Amity.Client).userId ? (
+            {post?.user?.userId === userId ? (
               <TouchableOpacity
                 onPress={openEditPostModal}
                 style={styles.modalRow}
@@ -354,6 +365,27 @@ const AmityPostContentComponent = ({
     });
   }, [AmityGlobalFeedComponentBehavior, navigation, postId]);
 
+  const kebabMenUiBlock = useMemo(() => {
+    if (post?.tags?.includes(PostTag.Activity)) {
+      return null;
+    }
+    if (
+      AmityPostContentComponentStyle === AmityPostContentComponentStyleEnum.feed
+    ) {
+      return (
+        <TouchableOpacity
+          style={styles.threeDotsPressable}
+          onPress={openModal}
+          activeOpacity={0.5}
+        >
+          <ThreeDotsIcon />
+        </TouchableOpacity>
+      );
+    }
+
+    return null;
+  }, []);
+
   return (
     <View
       key={postId}
@@ -363,41 +395,48 @@ const AmityPostContentComponent = ({
     >
       <Pressable style={styles.headerSection} onPress={onPressPost}>
         <View style={styles.user}>
-          <AvatarElement
-            style={styles.avatar as StyleProp<ImageStyle>}
-            avatarId={user?.avatarFileId}
-            pageID={pageId}
-            elementID={ElementID.WildCardElement}
-            componentID={componentId}
-          />
+          <Pressable onPress={handleDisplayNamePress}>
+            <AvatarElement
+              style={styles.avatar as StyleProp<ImageStyle>}
+              avatarId={user?.avatarFileId}
+              pageID={pageId}
+              elementID={ElementID.WildCardElement}
+              componentID={componentId}
+            />
+          </Pressable>
 
           <View style={styles.fillSpace}>
+            {/* Name and community Row */}
+
             <View style={styles.headerRow}>
-              <TouchableOpacity onPress={handleDisplayNamePress}>
-                <Text style={styles.headerText}>{user?.displayName}</Text>
-              </TouchableOpacity>
+              <Text numberOfLines={2} style={{ width: '100%' }}>
+                <Text
+                  onPress={handleDisplayNamePress}
+                  style={styles.headerText}
+                >
+                  {user?.displayName}
+                </Text>
 
-              {communityData?.displayName && (
-                <View style={styles.communityNameContainer}>
-                  <SvgXml
-                    style={styles.arrow}
-                    xml={arrowForward(theme.colors.baseShade1)}
-                    width="8"
-                    height="8"
-                  />
+                {/*
+                  - Hide the community name if the page is community name
+                  - Hide the community name if the post is not in a community
+                 */}
+                {name !== AmityUiKitRoutes.CommunityHome &&
+                  communityData?.displayName && (
+                    <>
+                      <Text style={styles.headerTextChevron}>{'  ›  '}</Text>
 
-                  <TouchableOpacity onPress={handleCommunityNamePress}>
-                    <Text
-                      ellipsizeMode="tail"
-                      numberOfLines={3}
-                      style={styles.headerText}
-                    >
-                      {communityData?.displayName}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+                      <Text
+                        onPress={handleCommunityNamePress}
+                        style={styles.headerText}
+                      >
+                        {communityData?.displayName}
+                      </Text>
+                    </>
+                  )}
+              </Text>
             </View>
+
             <View style={styles.timeRow}>
               {isCommunityModerator && (
                 <View style={styles.row}>
@@ -425,18 +464,9 @@ const AmityPostContentComponent = ({
             </View>
           </View>
         </View>
-        {AmityPostContentComponentStyle ===
-        AmityPostContentComponentStyleEnum.feed ? (
-          <TouchableOpacity
-            style={styles.threeDotsPressable}
-            onPress={openModal}
-            activeOpacity={0.5}
-          >
-            <ThreeDotsIcon />
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.threeDots} />
-        )}
+
+        {/* Kebab menu */}
+        {kebabMenUiBlock}
       </Pressable>
       <View>
         <View style={styles.bodySection}>

@@ -66,6 +66,7 @@ export interface IPost {
   mentionPosition?: IMentionPosition[];
   path: string;
   analytics: Amity.Post<'analytics'>;
+  tags: string[];
 }
 export interface IPostList {
   onDelete?: (postId: string) => void;

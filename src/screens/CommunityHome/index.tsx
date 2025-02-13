@@ -18,6 +18,7 @@ import {
   type NativeSyntheticEvent,
   Pressable,
   ScrollView,
+  StyleProp,
   Text,
   TouchableOpacity,
   View,
@@ -27,7 +28,11 @@ import useAuth from '../../hooks/useAuth';
 import Feed from '../Feed';
 import { useStyles } from './styles';
 
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
@@ -37,7 +42,10 @@ import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { checkCommunityPermission } from '../../providers/Social/communities-sdk';
 import { amityPostsFormatter } from '../../util/postDataFormatter';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
+import { amityUIKitTokens } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
 import { PostTargetType } from '../../enum/postTargetType';
 import { TabName } from '../../enum/tabNameState';
@@ -46,7 +54,15 @@ import uiSlice from '../../redux/slices/uiSlice';
 import EditIcon from '../../svg/EditIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
+import {
+  kebabMenu,
+  proShopLogo,
+  screenBackIcon,
+  verifiedIcon,
+} from '../../svg/svg-xml-list';
 import metadataHandlers from '../../util/metadataHandlers';
+
+const COMMUNITY_IMAGE_HEIGHT = 180;
 
 export type FeedRefType = {
   handleLoadMore: () => void;
@@ -55,15 +71,19 @@ export type FeedRefType = {
 export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
+  const insets = useSafeAreaInsets();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
   const { openPostTypeChoiceModal } = uiSlice.actions;
   const { apiRegion, client } = useAuth();
-  const { communityId, communityName } = route.params as {
-    communityId: string;
-    communityName: string;
-  };
+  const { communityId, communityName, isBackEnabled, isModerator } =
+    route.params as {
+      communityId: string;
+      communityName: string;
+      isBackEnabled: string;
+      isModerator: boolean;
+    };
   const [isJoin, setIsJoin] = useState(false);
   const [currentTab, setCurrentTab] = useState<TabName>(TabName.Timeline);
   const [communityData, setCommunityData] =
@@ -74,6 +94,7 @@ export default function CommunityHome({ route }: any) {
   const scrollViewRef = useRef(null);
   const [pendingPosts, setPendingPosts] = useState<IPost[]>([]);
   const [isShowPendingArea, setIsShowPendingArea] = useState<boolean>(false);
+  const [isStickyHeaderVisible, setIsStickyHeaderVisible] = useState(false);
   const [isUserHasPermission, setIsUserHasPermission] =
     useState<boolean>(false);
   const [postSetting, setPostSetting] = useState<
@@ -87,6 +108,29 @@ export default function CommunityHome({ route }: any) {
   >(null);
   const disposers: Amity.Unsubscriber[] = useMemo(() => [], []);
   const isSubscribed = useRef(false);
+
+  const topInset = insets.top + 16;
+  const communityImageHeight = COMMUNITY_IMAGE_HEIGHT + topInset;
+
+  const stickyHeaderStyle: StyleProp<any> = useMemo(() => {
+    return {
+      paddingTop: topInset,
+      paddingBottom: amityUIKitTokens.spacing.m1,
+    };
+  }, []);
+
+  const imageContainerStyles = useMemo(() => {
+    return {
+      height: communityImageHeight,
+    };
+  }, []);
+
+  const topHeaderControlsExtraStyles = useMemo(() => {
+    return {
+      paddingTop: topInset,
+    };
+  }, []);
+
   const subscribePostTopic = useCallback(
     (targetType: string) => {
       if (isSubscribed.current) return;
@@ -102,6 +146,7 @@ export default function CommunityHome({ route }: any) {
     },
     [communityData?.data, disposers]
   );
+
   const getPendingPosts = useCallback(async () => {
     const unsubscribe = PostRepository.getPosts(
       {
@@ -182,6 +227,14 @@ export default function CommunityHome({ route }: any) {
     const isScrollEndReached =
       layoutMeasurement.height + contentOffset.y + 200 >= contentSize.height;
 
+    if (!isStickyHeaderVisible && contentOffset.y >= communityImageHeight) {
+      setIsStickyHeaderVisible(true);
+    }
+
+    if (isStickyHeaderVisible && contentOffset.y < communityImageHeight) {
+      setIsStickyHeaderVisible(false);
+    }
+
     if (isScrollEndReached) {
       triggerLoadMoreFunction();
     }
@@ -214,19 +267,14 @@ export default function CommunityHome({ route }: any) {
     return null;
   };
 
-  const joinCommunityButton = () => {
+  const joinCommunityButton = useMemo(() => {
     return (
-      <View style={styles.joinContainer}>
-        <TouchableOpacity
-          style={styles.joinCommunityButton}
-          onPress={onJoinCommunityTap}
-        >
-          <PlusIcon color="#FFF" width={24} />
-          <Text style={styles.joinCommunityText}>Join</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
+        <PlusIcon color="#FFF" width={24} />
+        <Text style={styles.joinCommunityText}>Join</Text>
+      </TouchableOpacity>
     );
-  };
+  }, []);
 
   const handleTab = (tabName: TabName) => {
     setCurrentTab(tabName);
@@ -238,28 +286,28 @@ export default function CommunityHome({ route }: any) {
       isModerator: isUserHasPermission,
     });
   };
-  const pendingPostArea = () => {
+
+  const pendingPostUiBlock = useMemo(() => {
     return (
       <Pressable onPress={handleClickPendingArea}>
-        <View style={styles.pendingPostWrap}>
-          <View style={styles.pendingPostArea}>
-            <View style={styles.pendingRow}>
-              <PrimaryDot color={theme.colors.primary} />
-              <Text style={styles.pendingText}>Pending posts</Text>
-            </View>
-
-            <Text style={styles.pendingDescriptionText}>
-              {isUserHasPermission
-                ? (pendingPosts.length > 30 && 'More than ') +
-                  pendingPosts.length +
-                  ' posts need approval'
-                : 'Your posts are pending for review'}
-            </Text>
+        <View style={styles.pendingPostArea}>
+          <View style={styles.pendingRow}>
+            <PrimaryDot color={theme.colors.primary} />
+            <Text style={styles.pendingText}>Pending posts</Text>
           </View>
+
+          <Text style={styles.pendingDescriptionText}>
+            {isUserHasPermission
+              ? (pendingPosts.length > 30 && 'More than ') +
+                pendingPosts.length +
+                ' posts need approval'
+              : 'Your posts are pending for review'}
+          </Text>
         </View>
       </Pressable>
     );
-  };
+  }, [pendingPosts]);
+
   const handleOnPressPostBtn = () => {
     return dispatch(
       openPostTypeChoiceModal({
@@ -285,7 +333,12 @@ export default function CommunityHome({ route }: any) {
     switch (currentTab) {
       case TabName.Timeline:
         return (
-          <Feed targetType="community" targetId={communityId} ref={feedRef} />
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Feed]}
+          />
         );
       case TabName.Activity:
         return (
@@ -318,6 +371,40 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
+  const backNavigationUi = useMemo(() => {
+    if (!isBackEnabled) {
+      return (
+        <RoundButton
+          isTransparent={isStickyHeaderVisible}
+          onPress={() => {
+            navigation.dispatch(StackActions.pop(2));
+          }}
+        >
+          <SvgXml xml={screenBackIcon()} />
+        </RoundButton>
+      );
+    }
+
+    return null;
+  }, [isStickyHeaderVisible]);
+
+  const communityActionsUi = useMemo(() => {
+    return (
+      <RoundButton
+        isTransparent={isStickyHeaderVisible}
+        onPress={() => {
+          navigation.navigate('CommunitySetting', {
+            communityId: communityId,
+            communityName: communityName,
+            isModerator: isModerator,
+          });
+        }}
+      >
+        <SvgXml xml={kebabMenu()} />
+      </RoundButton>
+    );
+  }, [isStickyHeaderVisible]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -326,27 +413,102 @@ export default function CommunityHome({ route }: any) {
         scrollEventThrottle={20}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        stickyHeaderIndices={[1]}
       >
-        {/* Avatar */}
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={
-              avatarUrl
-                ? {
-                    uri: avatarUrl,
-                  }
-                : require('../../assets/icon/Placeholder.png')
-            }
-          />
-          <View style={styles.darkOverlay} />
-          <View style={styles.overlay}>
-            <Text style={styles.overlayCommunityText}>
-              {communityData?.data.displayName}
-            </Text>
+        {/* Community Avatar */}
+        <View style={[styles.imageContainer, imageContainerStyles]}>
+          {/* Avatar images */}
+          {avatarUrl ? (
+            <Image
+              style={styles.image}
+              source={{
+                uri: avatarUrl,
+              }}
+            />
+          ) : (
+            <View style={styles.imagePlaceholder}>
+              <SvgXml xml={proShopLogo()} />
+            </View>
+          )}
+          <View
+            style={[styles.topHeaderControls, topHeaderControlsExtraStyles]}
+          >
+            {backNavigationUi}
+            {communityActionsUi}
           </View>
         </View>
-        {/* TODO: Wiil hide Post Count and Members Count for MVP */}
+
+        {/* Community Name Section */}
+        <View
+          style={[
+            styles.communityNameSection,
+            isStickyHeaderVisible ? stickyHeaderStyle : null,
+          ]}
+        >
+          {/* Name */}
+          <View style={styles.communityNameWrapper}>
+            <View style={styles.communityNameWrapperLeft}>
+              {/* Back button */}
+              {isStickyHeaderVisible ? backNavigationUi : null}
+              {/* Spacer */}
+              {isStickyHeaderVisible ? <View style={styles.spacer} /> : null}
+              {/* Community Name */}
+              <Text
+                style={[
+                  styles.communityName,
+                  isStickyHeaderVisible && styles.shortCommunityName,
+                ]}
+                numberOfLines={isStickyHeaderVisible ? 1 : 3}
+              >
+                {communityData?.data.displayName}
+                {`${communityData?.data.isOfficial && !isStickyHeaderVisible ? ' ' : ''}`}
+
+                {communityData?.data.isOfficial && !isStickyHeaderVisible && (
+                  <SvgXml
+                    style={{ marginTop: -6 }}
+                    width={24}
+                    height={24}
+                    xml={verifiedIcon()}
+                  />
+                )}
+              </Text>
+              {/* Verified icon: shown if sticky header is visible. */}
+              {communityData?.data.isOfficial && isStickyHeaderVisible && (
+                <View style={styles.verifiedIconWrapper}>
+                  <SvgXml width={24} height={24} xml={verifiedIcon()} />
+                </View>
+              )}
+            </View>
+
+            {/* Community actions */}
+            {isStickyHeaderVisible ? communityActionsUi : null}
+          </View>
+        </View>
+
+        {/* Description Block Section */}
+        <View style={styles.sectionWrapper}>
+          <Text style={styles.description}>
+            {communityData?.data.description}
+          </Text>
+        </View>
+
+        {/* CTA Section */}
+        <View style={styles.ctaWrapper}>
+          {/* Edit Group CTA */}
+          {isUserHasPermission ? (
+            <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
+              <EditIcon width={24} height={20} color={theme.colors.base} />
+              <Text style={styles.editProfileText}>Edit Group</Text>
+            </TouchableOpacity>
+          ) : null}
+          {/* Join Community CTA */}
+          {!isJoin ? joinCommunityButton : null}
+          {/* Pending Post area */}
+          {isJoin && isShowPendingArea ? pendingPostUiBlock : null}
+        </View>
+
+        {/* TODO:   */}
+        {/* Counters: Members and Posts */}
         {/* <View style={styles.row}>
           <View style={styles.rowItem}>
             <Text style={styles.rowNumber}>
@@ -368,20 +530,8 @@ export default function CommunityHome({ route }: any) {
             </TouchableOpacity>
           </View>
         </View> */}
-        <Text style={styles.textComponent}>
-          {communityData?.data.description}
-        </Text>
-        {isUserHasPermission && (
-          <TouchableOpacity
-            style={styles.editProfileButton}
-            onPress={onEditProfileTap}
-          >
-            <EditIcon width={24} height={20} color={theme.colors.base} />
-            <Text style={styles.editProfileText}>Edit Group</Text>
-          </TouchableOpacity>
-        )}
-        {!isJoin && joinCommunityButton()}
-        {isJoin && isShowPendingArea && pendingPostArea()}
+
+        {/* Tabs Section: Timeline, Activity, Leaderboard, Gallery */}
         <CustomTab
           tabName={[
             TabName.Timeline,
@@ -399,3 +549,17 @@ export default function CommunityHome({ route }: any) {
     </View>
   );
 }
+
+const RoundButton = ({ onPress, children, isTransparent }) => {
+  const styles = useStyles();
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={
+        isTransparent ? styles.transparentButton : styles.semiTransparentButton
+      }
+    >
+      {children}
+    </TouchableOpacity>
+  );
+};

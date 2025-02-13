@@ -25,10 +25,6 @@ export const useStyles = () => {
       marginVertical: 16,
     },
     joinCommunityButton: {
-      // flex: 1,
-      // backgroundColor: 'white',
-      // borderWidth: 1,
-      // borderColor: '#A5A9B5',
       backgroundColor: theme.colors.primary,
       width: '90%',
       padding: 8,

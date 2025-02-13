@@ -1,15 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       backgroundColor: theme.colors.background,
-      // alignItems: 'center',
-      // justifyContent: 'center',
     },
     avatar: {
       width: 40,
@@ -25,12 +23,7 @@ export const useStyles = () => {
       marginVertical: 16,
     },
     joinCommunityButton: {
-      // flex: 1,
-      // backgroundColor: 'white',
-      // borderWidth: 1,
-      // borderColor: '#A5A9B5',
       backgroundColor: theme.colors.primary,
-      width: '90%',
       padding: 8,
       borderRadius: 4,
       flexDirection: 'row',
@@ -49,11 +42,17 @@ export const useStyles = () => {
     },
     imageContainer: {
       width: '100%',
-      height: 160,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
     },
+
     image: {
       width: '100%',
       height: '100%',
+    },
+    imagePlaceholder: {
+      // paddingTop: amityUIKitTokens.spacing.l3,
     },
     emptyImage: {
       width: '100%',
@@ -64,22 +63,73 @@ export const useStyles = () => {
       ...StyleSheet.absoluteFillObject,
       backgroundColor: 'rgba(0, 0, 0, 0.0)', // Adjust the alpha value for darkness
     },
-    overlay: {
+    topHeaderControls: {
       position: 'absolute',
+      top: 0,
       bottom: 0,
       left: 0,
       right: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.0)',
-      padding: 20,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      zIndex: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    sectionWrapper: {
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      paddingTop: amityUIKitTokens.spacing.m1,
+      backgroundColor: theme.colors.background,
+    },
+    communityNameSection: {
+      flexDirection: 'row',
+      paddingTop: amityUIKitTokens.spacing.m1,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      flexWrap: 'nowrap',
+      backgroundColor: theme.colors.background,
+    },
+    spacer: {
+      width: amityUIKitTokens.spacing.m1,
+      height: amityUIKitTokens.spacing.m1,
     },
     overlayCommunityText: {
-      color: theme.colors.background,
+      color: theme.colors.base,
       fontWeight: 'bold',
       fontSize: 20,
-      marginBottom: 5,
-      textShadowColor: 'black',
-      textShadowOffset: { width: 1, height: 1 },
-      textShadowRadius: 1,
+    },
+    communityNameWrapper: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    communityNameWrapperLeft: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      flexWrap: 'nowrap',
+    },
+
+    communityActions: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    communityName: {
+      color: theme.colors.base,
+      fontWeight: 'bold',
+      fontSize: 20,
+      paddingTop: amityUIKitTokens.spacing.xxs2,
+    },
+    verifiedIconWrapper: {
+      paddingTop: amityUIKitTokens.spacing.xxs2,
+      paddingStart: amityUIKitTokens.spacing.xxs2,
+    },
+    shortCommunityName: {
+      maxWidth: '70%',
+    },
+
+    descriptionWrapper: {
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      paddingTop: amityUIKitTokens.spacing.m1,
+    },
+    description: {
+      color: amityUIKitTokens.colors.baseShade1,
     },
     joinIcon: {
       width: 18,
@@ -127,18 +177,10 @@ export const useStyles = () => {
       paddingHorizontal: 20,
       color: theme.colors.base,
     },
-    pendingPostWrap: {
-      paddingVertical: 16,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginHorizontal: 16,
-    },
     pendingPostArea: {
-      width: '100%',
-      height: 62,
-      backgroundColor: theme.colors.secondary,
-      paddingVertical: 12,
+      flex: 1,
+      backgroundColor: amityUIKitTokens.colors.baseShade4,
+      paddingVertical: amityUIKitTokens.spacing.s1,
       alignItems: 'center',
       borderRadius: 4,
     },
@@ -178,6 +220,36 @@ export const useStyles = () => {
     tabBackground: {
       backgroundColor: theme.colors.baseShade4,
       flex: 1,
+    },
+    ctaWrapper: {
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      paddingTop: amityUIKitTokens.spacing.m1,
+    },
+    button: {
+      backgroundColor: theme.colors.primary,
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      minHeight: 40,
+      marginBottom: amityUIKitTokens.spacing.m1,
+    },
+    semiTransparentButton: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black with 50% transparency
+      height: amityUIKitTokens.spacing.l1,
+      width: amityUIKitTokens.spacing.l1,
+      borderRadius: amityUIKitTokens.spacing.l1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    transparentButton: {
+      height: amityUIKitTokens.spacing.l1,
+      width: amityUIKitTokens.spacing.l1,
+      borderRadius: amityUIKitTokens.spacing.l1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 

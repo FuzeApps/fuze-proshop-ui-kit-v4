@@ -84,6 +84,7 @@ export default function Home() {
         />
       );
     if (activeTab === newsFeedTab) {
+      // Global newsfeed
       return <AmityNewsFeedComponent pageId={PageID.social_home_page} />;
     }
     if (activeTab === myCommunitiesTab)

@@ -7,8 +7,6 @@ import React, {
   useState,
 } from 'react';
 
-import { FlatList, View } from 'react-native';
-import { useStyles } from './styles';
 import {
   CommunityRepository,
   PostRepository,
@@ -18,12 +16,14 @@ import {
   getUserTopic,
   subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
-import type { FeedRefType } from '../CommunityHome';
-import { amityPostsFormatter } from '../../util/postDataFormatter';
 import { useFocusEffect } from '@react-navigation/native';
+import { FlatList, View } from 'react-native';
 import AmityPostContentComponent from '../../components/AmityPostContentComponent/AmityPostContentComponent';
-import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
 import NewsFeedLoadingComponent from '../../components/NewsFeedLoadingComponent/NewsFeedLoadingComponent';
+import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentComponentStyle';
+import { amityPostsFormatter } from '../../util/postDataFormatter';
+import type { FeedRefType } from '../CommunityHome';
+import { useStyles } from './styles';
 
 interface IFeed {
   targetId: string;
@@ -96,7 +96,7 @@ function Feed(
             const filterData: any[] = data.map((item) => {
               if (item.dataType === 'text') return item;
             });
-            console.log(data.length);
+
             setOnNextPage(hasNextPage ? () => nextPage : null);
             const formattedPostList = await amityPostsFormatter(filterData);
             setPostData(formattedPostList);
@@ -114,22 +114,25 @@ function Feed(
     handleLoadMore,
   }));
 
+  const renderItem = useCallback(
+    ({ item }) => (
+      <AmityPostContentComponent
+        post={item}
+        AmityPostContentComponentStyle={AmityPostContentComponentStyleEnum.feed}
+      />
+    ),
+    []
+  );
+
   return (
     <View style={styles.feedWrap}>
       {postData ? (
         <FlatList
           scrollEnabled={false}
           data={postData ?? []}
-          renderItem={({ item }) => (
-            <AmityPostContentComponent
-              post={item}
-              AmityPostContentComponentStyle={
-                AmityPostContentComponentStyleEnum.feed
-              }
-            />
-          )}
-          keyExtractor={(_, index) => index.toString()}
           extraData={postData}
+          renderItem={renderItem}
+          keyExtractor={(_, index) => index.toString()}
         />
       ) : (
         <NewsFeedLoadingComponent />

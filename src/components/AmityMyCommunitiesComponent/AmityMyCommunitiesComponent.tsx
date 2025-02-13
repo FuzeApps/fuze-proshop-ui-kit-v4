@@ -16,12 +16,12 @@ import AvatarElement from '../../Elements/CommonElements/AvatarElement';
 import CategoryElement from '../../Elements/CommonElements/CategoryElement';
 import ImageElement from '../../Elements/CommonElements/ImageElement';
 import TextElement from '../../Elements/CommonElements/TextElement';
-import { ComponentID, ElementID, PageID, amityUIKitTokens } from '../../enum';
+import { ComponentID, ElementID, PageID } from '../../enum';
 import { useCommunities } from '../../hooks/useCommunities';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import { useBehaviour } from '../../providers/BehaviourProvider';
 import { RootStackParamList } from '../../routes/RouteParamList';
-import { officialIcon } from '../../svg/svg-xml-list';
+import { verifiedIcon } from '../../svg/svg-xml-list';
 import { formatNumber } from '../../util/numberUtil';
 type AmityMyCommunitiesComponentType = {
   pageId?: PageID;
@@ -88,11 +88,7 @@ const AmityMyCommunitiesComponent: FC<AmityMyCommunitiesComponentType> = ({
               text={item.displayName}
             />
             {item.isOfficial && (
-              <SvgXml
-                width={24}
-                height={24}
-                xml={officialIcon(amityUIKitTokens.colors.primary)}
-              />
+              <SvgXml width={24} height={24} xml={verifiedIcon()} />
             )}
           </View>
           <View style={styles.communityCategoryContainer}>

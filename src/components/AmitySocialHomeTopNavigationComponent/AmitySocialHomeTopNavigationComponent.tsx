@@ -6,13 +6,7 @@ import { useTheme } from 'react-native-paper';
 import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { RootStackParamList } from '../../routes/RouteParamList';
 
-import {
-  AmityUserMetadataKeys,
-  ComponentID,
-  ElementID,
-  PageID,
-  TabName,
-} from '../../enum';
+import { ComponentID, ElementID, PageID, TabName } from '../../enum';
 import { useBehaviour } from '../../providers/BehaviourProvider';
 // import { useConfigImageUri } from '../../hooks/useConfigImageUri';
 import { useUiKitConfig } from '../../hooks/useUiKitConfig';
@@ -161,7 +155,8 @@ const AmitySocialHomeTopNavigationComponent = ({
   }, [navigation]);
 
   const onClickPlusIcon = useCallback(() => {
-    if (currentTab === TabName.MyCommunities) {
+    console.log('JPN: currentTab', currentTab);
+    if (currentTab === TabName.FindGroups) {
       //JPN: TODO: Add a check here if the user is eligible to create a community.
       // If pro and haven't created a community yet, then navigate to create community.
       // If a normal user, dont show this button.
@@ -179,9 +174,9 @@ const AmitySocialHomeTopNavigationComponent = ({
 
   const plusIconMenu = useMemo(() => {
     //Hides the plus icon if the user is not a pro user
-    if (user?.metadata?.[AmityUserMetadataKeys.ProShopRole] === 'user') {
-      return null;
-    }
+    // if (user?.metadata?.[AmityUserMetadataKeys.ProShopRole] === 'user') {
+    //   return null;
+    // }
 
     if (currentTab !== TabName.Explore) {
       return (
@@ -261,7 +256,7 @@ const AmitySocialHomeTopNavigationComponent = ({
           <SearchIconV4 color={theme.colors.base} />
         </TouchableOpacity>
 
-        {/* <Image source={searchIcon} style={styles.icon} /> */}
+        {/* Plus Icon menu */}
         {plusIconMenu}
         <CreatePostChooseTargetModal
           visible={createPostModalVisible}

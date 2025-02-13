@@ -186,6 +186,7 @@ export const useStyles = () => {
       marginLeft: 6,
     },
     saveText: {
+      fontSize: 18,
       color: theme.colors.primary,
     },
     errorText: {
