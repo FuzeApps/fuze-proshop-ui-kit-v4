@@ -140,7 +140,7 @@ const AmityPostContentComponent = ({
     mentionPosition,
   } = post ?? {};
 
-  const { isCommunityModerator, ...rest } = useIsCommunityModerator({
+  const { isCommunityModerator } = useIsCommunityModerator({
     communityId: targetType === 'community' && targetId,
     userId: user?.userId,
   });

@@ -6,13 +6,7 @@ import { useTheme } from 'react-native-paper';
 import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { RootStackParamList } from '../../routes/RouteParamList';
 
-import {
-  AmityUserMetadataKeys,
-  ComponentID,
-  ElementID,
-  PageID,
-  TabName,
-} from '../../enum';
+import { ComponentID, ElementID, PageID, TabName } from '../../enum';
 import { useBehaviour } from '../../providers/BehaviourProvider';
 // import { useConfigImageUri } from '../../hooks/useConfigImageUri';
 import { useUiKitConfig } from '../../hooks/useUiKitConfig';
