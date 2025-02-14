@@ -62,7 +62,7 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
           screenOptions={{
             headerShadowVisible: false,
             contentStyle: {
-              backgroundColor: 'white',
+              backgroundColor: theme.colors.background,
             },
             headerStyle: {
               backgroundColor: theme.colors.background,
