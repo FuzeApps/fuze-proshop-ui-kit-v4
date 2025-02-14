@@ -23,8 +23,8 @@ export default function App() {
       configs={config} //put your config json object
       apiKey="b0ebe15b6fdef4664b3e8b1d530c438b840d8bb3ba66667d"
       apiRegion="eu"
-      userId={'6ce2ecb8-6ade-4f0e-9672-14788526e65a'}
-      displayName={'Johneric Pangan'}
+      userId={'0aacbd28-2fe8-4ef2-a5a5-b4bb45764b0e'}
+      displayName={'Zane Scotland'}
       apiEndpoint="https://api.eu.amity.co"
     >
       <AmityUiKitSocial />
