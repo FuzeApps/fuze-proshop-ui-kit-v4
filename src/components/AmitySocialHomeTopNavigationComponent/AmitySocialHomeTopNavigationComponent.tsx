@@ -155,7 +155,6 @@ const AmitySocialHomeTopNavigationComponent = ({
   }, [navigation]);
 
   const onClickPlusIcon = useCallback(() => {
-    console.log('JPN: currentTab', currentTab);
     if (currentTab === TabName.FindGroups) {
       //JPN: TODO: Add a check here if the user is eligible to create a community.
       // If pro and haven't created a community yet, then navigate to create community.
