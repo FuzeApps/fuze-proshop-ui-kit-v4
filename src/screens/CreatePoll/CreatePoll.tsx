@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   ViewStyle,
+  SafeAreaView,
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { circleCloseIcon, plusIcon } from '../../svg/svg-xml-list';
@@ -23,7 +24,6 @@ import useAuth from '../../hooks/useAuth';
 import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
 import { TSearchItem } from '../../hooks/useSearch';
 import { text_contain_blocked_word } from '../../util/constants';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { PostTag } from '../../enum/enumPostTag';
 
 const CreatePoll = ({ navigation, route }) => {

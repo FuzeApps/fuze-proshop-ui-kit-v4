@@ -1,12 +1,12 @@
 import React, { memo, useState } from 'react';
-import { useStyles } from './styles';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { useAmityPage } from '../../hooks/useUiKitReference';
-import { PageID, TabName } from '../../enum';
-import CustomTab from '../../components/CustomTab';
-import { useAmityGlobalSearchViewModel } from '../../hooks/useAmityGlobalSearchViewModel';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import AmityCommunitySearchResultComponent from '../../components/AmityCommunitySearchResultComponent/AmityCommunitySearchResultComponent';
 import AmityTopSearchBarComponent from '../../components/AmityTopSearchBarComponent/AmityTopSearchBarComponent';
+import CustomTab from '../../components/CustomTab';
+import { PageID, TabName } from '../../enum';
+import { useAmityGlobalSearchViewModel } from '../../hooks/useAmityGlobalSearchViewModel';
+import { useAmityPage } from '../../hooks/useUiKitReference';
+import { useStyles } from './styles';
 
 const AmitySocialGlobalSearchPage = () => {
   const pageId = PageID.social_global_search_page;
@@ -20,21 +20,19 @@ const AmitySocialGlobalSearchPage = () => {
     searchType === TabName.Communities ? onNextCommunityPage : onNextUserPage;
   if (isExcluded) return null;
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <AmityTopSearchBarComponent setSearchValue={setSearchValue} />
-        <CustomTab
-          onTabChange={setSearchType}
-          tabName={[TabName.Communities, TabName.Users]}
-        />
-        <AmityCommunitySearchResultComponent
-          pageId={pageId}
-          searchType={searchType}
-          searchResult={searchResult}
-          onNextPage={onNextPage}
-        />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SafeAreaView style={styles.container}>
+      <AmityTopSearchBarComponent setSearchValue={setSearchValue} />
+      <CustomTab
+        onTabChange={setSearchType}
+        tabName={[TabName.Communities, TabName.Users]}
+      />
+      <AmityCommunitySearchResultComponent
+        pageId={pageId}
+        searchType={searchType}
+        searchResult={searchResult}
+        onNextPage={onNextPage}
+      />
+    </SafeAreaView>
   );
 };
 

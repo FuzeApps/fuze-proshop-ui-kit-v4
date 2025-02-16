@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
 import { MenuProvider } from 'react-native-popup-menu';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import fallBackConfig from '../../uikit.config.json';
 import { amityUIKitTokens } from '../enum';
@@ -98,9 +97,7 @@ export default function AmityUiKitProvider({
           >
             <ConfigProvider configs={configData}>
               <BehaviourProvider behaviour={behaviour}>
-                <PaperProvider theme={globalTheme}>
-                  <SafeAreaProvider>{children}</SafeAreaProvider>
-                </PaperProvider>
+                <PaperProvider theme={globalTheme}>{children}</PaperProvider>
               </BehaviourProvider>
             </ConfigProvider>
           </AuthStaticProvider>
