@@ -174,6 +174,7 @@ const AmityPostContentComponent = ({
 
   const handleDisplayNamePress = () => {
     if (!user?.userId) return null;
+
     if (AmityPostContentComponentBehavior?.goToUserProfilePage) {
       return AmityPostContentComponentBehavior.goToUserProfilePage({
         userId: user.userId,
