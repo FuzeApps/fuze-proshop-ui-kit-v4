@@ -12,6 +12,7 @@ import {
 } from '@amityco/react-native-social-ui-kit';
 
 import config from '../uikit.config.json';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 if (__DEV__) {
   require('../ReactotronConfig');
