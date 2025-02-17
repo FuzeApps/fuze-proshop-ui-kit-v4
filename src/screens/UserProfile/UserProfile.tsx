@@ -137,7 +137,7 @@ export default function UserProfile({ route }: any) {
 
   useEffect(() => {
     if (!user?.avatarFileId) {
-      return setAvatar(defaultAvatarUri);
+      return setAvatar(defaultAvatarUri?.uri);
     }
     (async () => {
       const avatarUrl = await getImage({
@@ -194,6 +194,7 @@ export default function UserProfile({ route }: any) {
       </TouchableOpacity>
     );
   };
+
   const followButton = () => {
     return (
       <TouchableOpacity style={styles.followButton} onPress={onFollowTap}>
@@ -205,6 +206,7 @@ export default function UserProfile({ route }: any) {
       </TouchableOpacity>
     );
   };
+
   const unBlockButton = () => {
     return (
       <TouchableOpacity
@@ -359,7 +361,10 @@ export default function UserProfile({ route }: any) {
       >
         <View style={styles.profileContainer}>
           <View style={styles.userDetail}>
-            <Image style={styles.avatar} source={{ uri: avatar }} />
+            <Image
+              style={styles.avatar}
+              source={{ uri: avatar ? avatar : defaultAvatarUri?.uri }}
+            />
             <View style={styles.userInfo}>
               <Text style={styles.title}>{user?.displayName}</Text>
               <Pressable

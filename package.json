@@ -1,6 +1,6 @@
 {
   "name": "@amityco/react-native-social-ui-kit",
-  "version": "4.0.17",
+  "version": "4.0.18",
   "description": "Social UIKit",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -166,7 +166,7 @@
     "@react-navigation/stack": "6.3.16",
     "@reduxjs/toolkit": "^1.9.7",
     "@rntext/more-or-less": "^2.0.2",
-    "expo-asset": "~10.0.10",
+    "expo-asset": "^8.9.1",
     "expo-av": "^14.0.0",
     "expo-constants": "~16.0.2",
     "expo-image-picker": "~15.1.0",
