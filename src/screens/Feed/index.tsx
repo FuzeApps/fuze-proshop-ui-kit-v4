@@ -94,7 +94,7 @@ function Feed(
         async ({ data, error, loading, hasNextPage, onNextPage: nextPage }) => {
           if (!error && !loading) {
             const filterData: any[] = data.map((item) => {
-              if (item.dataType === 'text') return item;
+              if (item?.dataType === 'text') return item;
             });
 
             setOnNextPage(hasNextPage ? () => nextPage : null);

@@ -214,7 +214,7 @@ const CommentList = ({
           return {
             commentId: item.commentId,
             data: item.data as Record<string, any>,
-            dataType: item.dataType,
+            dataType: item?.dataType,
             myReactions: item.myReactions as string[],
             reactions: item.reactions as Record<string, number>,
             user: formattedUserObject as UserInterface,
