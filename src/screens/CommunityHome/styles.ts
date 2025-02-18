@@ -9,6 +9,7 @@ export const useStyles = () => {
     container: {
       backgroundColor: theme.colors.background,
     },
+
     avatar: {
       width: 40,
       height: 40,

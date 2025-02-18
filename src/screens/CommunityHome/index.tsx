@@ -72,7 +72,7 @@ export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
   const insets = useSafeAreaInsets();
-  const { onCommunityJoin, onViewMyProShop } = useAuthStatic();
+  const { onCommunityJoin, onPostStart, userId, displayName } = useAuthStatic();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -241,13 +241,13 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
-  const handleMembersPress = () => {
+  const handleMembersPress = useCallback(() => {
     navigation.navigate('CommunityMemberDetail', {
       communityId: communityId,
       communityName: communityName,
       isModerator: isUserHasPermission,
     });
-  };
+  }, [communityId, communityName, isUserHasPermission, navigation]);
 
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
@@ -259,7 +259,10 @@ export default function CommunityHome({ route }: any) {
     const isJoined = await CommunityRepository.joinCommunity(communityId);
     if (isJoined) {
       //Event callback for joining community.
-      onCommunityJoin?.(communityId);
+      onCommunityJoin?.({
+        communityId: communityId,
+        communityName: communityName,
+      });
 
       // Add community to joined communities metadata
       await metadataHandlers.addToJoinedCommunities(
@@ -270,7 +273,7 @@ export default function CommunityHome({ route }: any) {
       return isJoined;
     }
     return null;
-  }, [client, communityId, onCommunityJoin]);
+  }, [client, communityId, communityName, onCommunityJoin]);
 
   const handleTab = (tabName: TabName) => {
     setCurrentTab(tabName);
@@ -284,6 +287,14 @@ export default function CommunityHome({ route }: any) {
   }, [communityId, isUserHasPermission, navigation]);
 
   const handleOnPressPostBtn = () => {
+    onPostStart?.({
+      communityId: communityId,
+      communityName: communityName,
+      targetType: PostTargetType.community,
+      userId: userId,
+      userName: displayName,
+    });
+
     return dispatch(
       openPostTypeChoiceModal({
         userId: (client as Amity.Client).userId as string,
@@ -358,24 +369,6 @@ export default function CommunityHome({ route }: any) {
       </TouchableOpacity>
     );
   }, [isJoin, onJoinCommunityTap, styles.button, styles.joinCommunityText]);
-
-  // View My Proshop Button
-  const viewMyProshopButton = useMemo(() => {
-    if (typeof onViewMyProShop !== 'function') {
-      return null;
-    }
-
-    return (
-      <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
-        <Text style={styles.editProfileText}>View my ProShop</Text>
-      </TouchableOpacity>
-    );
-  }, [
-    onEditProfileTap,
-    onViewMyProShop,
-    styles.button,
-    styles.editProfileText,
-  ]);
 
   // Edit Community Button
   const editCommunityButton = useMemo(() => {
@@ -613,9 +606,6 @@ export default function CommunityHome({ route }: any) {
 
           {/* Join Community CTA */}
           {joinCommunityButton}
-
-          {/* View my Proshop CTA */}
-          {viewMyProshopButton}
 
           {/* Pending Post area */}
           {pendingPostUiBlock}

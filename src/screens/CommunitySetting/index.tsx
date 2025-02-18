@@ -29,7 +29,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   const styles = useStyles();
   const { client } = useAuth();
   const { onCommunityLeave } = useAuthStatic();
-  const { communityId, isModerator } = route.params;
+  const { communityId, isModerator, communityName } = route.params;
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
       communityId: communityId,
@@ -41,7 +41,10 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     const hasLeft = await CommunityRepository.leaveCommunity(communityId);
 
     //Event handler for leaving community.
-    onCommunityLeave?.(communityId);
+    onCommunityLeave?.({
+      communityId: communityId,
+      communityName: communityName,
+    });
 
     // Remove community from joined communities metadata
     await metadataHandlers.removeFromJoinedCommunities(

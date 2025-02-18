@@ -51,6 +51,7 @@ import {
   IDisplayImage,
 } from '../../types/global.interface';
 import { IMentionPosition } from '../../types/type';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
   mode,
@@ -59,6 +60,7 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
   community,
   post,
 }) => {
+  const { onPostComplete, userId, displayName: fullName } = useAuthStatic();
   const pageId = PageID.post_composer_page;
   const { isExcluded, themeStyles, accessibilityId } = useAmityPage({ pageId });
   const styles = useStyles(themeStyles);
@@ -332,6 +334,18 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
           mentionsPosition
         );
       }
+
+      if (response) {
+        onPostComplete?.({
+          communityId: targetType === 'community' ? targetId : '',
+          communityName: community?.displayName ?? 'My Timeline',
+          postId: response.postId,
+          text: response.data.text,
+          userId: userId,
+          userName: fullName,
+        });
+      }
+
       if (!response) {
         const toastMessage = isEditMode
           ? 'Failed to edit post'
@@ -386,6 +400,7 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
     dispatch,
     displayImages,
     displayVideos,
+    fullName,
     hideToastMessage,
     inputMessage,
     isEditMode,
@@ -393,12 +408,14 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
     isModerator,
     mentionUsers,
     mentionsPosition,
+    onPostComplete,
     onPressClose,
     post,
     showToastMessage,
     targetId,
     targetType,
     updateByPostId,
+    userId,
   ]);
 
   let tEvents = [];

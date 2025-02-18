@@ -28,15 +28,37 @@ export interface IAmityUIkitProvider {
   userRole?: UserRole;
   minMembersToShowCounter?: number;
   //Callbacks. This is on Top of Social+
-  onUserFollow?: (userId: string) => void;
-  onUserUnFollow?: (userId: string) => void;
-  onCommunityJoin?: (communityId: string) => void;
-  onCommunityLeave?: (communityId: string) => void;
-  onPostLike?: (postId: string) => void;
-  onPostUnLike?: (postId: string) => void;
-  onPostStart?: (postId?: string) => void;
-  onPostComplete?: (postId?: string) => void;
-  onViewMyProShop?: (communityId: string) => void;
+  onUserFollow?: (data: { userId?: string; userName?: string }) => void;
+  onUserUnFollow?: (data: { userId?: string; userName?: string }) => void;
+  onViewMyProShop?: (data: { userId?: string; userName?: string }) => void;
+  onCommunityJoin?: (data: {
+    communityName?: string;
+    communityId?: string;
+  }) => void;
+  onCommunityLeave?: (data: {
+    communityName?: string;
+    communityId?: string;
+  }) => void;
+  onPostLike?: (data: { text?: string; postId?: string }) => void;
+  onPostUnLike?: (data: { text?: string; postId?: string }) => void;
+  onPostStart?: (data: {
+    text?: string;
+    postId?: string;
+    userId?: string;
+    userName?: string;
+    communityId?: string;
+    communityName?: string;
+    targetType?: string;
+  }) => void;
+  onPostComplete?: (data: {
+    text?: string;
+    postId?: string;
+    userId?: string;
+    userName?: string;
+    communityId?: string;
+    communityName?: string;
+    targetType?: string;
+  }) => void;
   //Extra Components
   CommunityLeaderboard?: (props: { communityId: string }) => JSX.Element;
 }

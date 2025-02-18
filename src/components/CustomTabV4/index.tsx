@@ -15,6 +15,7 @@ import {
 } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
 import { amityUIKitTokens } from '../../enum';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 interface ICustomTab {
   onTabChange?: (tabName: TabName) => void;
@@ -24,6 +25,8 @@ interface ICustomTab {
 const CustomTabV4 = ({ tabName, onTabChange }: ICustomTab): ReactElement => {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState(1);
+  const { onUserFollow, onViewMyProShop } = useAuthStatic();
+
   const { width } = useWindowDimensions();
   const handleTabPress = ({
     name,

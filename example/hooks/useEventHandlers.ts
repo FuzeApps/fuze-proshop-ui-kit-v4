@@ -1,50 +1,84 @@
 import { useCallback } from 'react';
+import { IAmityUIkitProvider } from '../../src/providers/amity-ui-kit-provider';
 
 const useEventHandlers = () => {
-  const onUserFollow = useCallback((userId: string) => {
-    console.log(`JPN: User followed: ${userId}`);
-    // Implement your follow logic here
-  }, []);
+  const onViewMyProShop: IAmityUIkitProvider['onViewMyProShop'] = useCallback(
+    (data) => {
+      console.log(
+        `JPN: Viewing pro shop for community: ${data.userName} | ${data.userId}`
+      );
 
-  const onUserUnFollow = useCallback((userId: string) => {
-    console.log(`JPN: User unfollowed: ${userId}`);
-    // Implement your unfollow logic here
-  }, []);
+      // Implement pro shop view logic here
+    },
+    []
+  );
 
-  const onCommunityJoin = useCallback((communityId: string) => {
-    console.log(`JPN: Joined community: ${communityId}`);
-    // Implement join logic here
-  }, []);
+  const onUserFollow: IAmityUIkitProvider['onUserFollow'] = useCallback(
+    (data) => {
+      console.log(`JPN: User followed: ${data.userName} ${data.userId}`);
+      // Implement your follow logic here
+    },
+    []
+  );
 
-  const onCommunityLeave = useCallback((communityId: string) => {
-    console.log(`JPN: Left community: ${communityId}`);
-    // Implement leave logic here
-  }, []);
+  const onUserUnFollow: IAmityUIkitProvider['onUserUnFollow'] = useCallback(
+    (data) => {
+      console.log(`JPN: User unfollowed: ${data.userName} ${data.userId}`);
+      // Implement your unfollow logic here
+    },
+    []
+  );
 
-  const onPostLike = useCallback((postId: string) => {
-    console.log(`JPN: Liked post: ${postId}`);
+  const onCommunityJoin: IAmityUIkitProvider['onCommunityJoin'] = useCallback(
+    (data) => {
+      console.log(
+        `JPN: Joined community: ${data.communityName} ${data?.communityId}`
+      );
+      // Implement join logic here
+    },
+    []
+  );
+
+  const onCommunityLeave: IAmityUIkitProvider['onCommunityLeave'] = useCallback(
+    (data) => {
+      console.log(
+        `JPN: Left community:${data?.communityName} ${data?.communityId}`
+      );
+      // Implement leave logic here
+    },
+    []
+  );
+
+  const onPostLike: IAmityUIkitProvider['onPostLike'] = useCallback((data) => {
+    console.log(`JPN: Liked post: ${data.postId} ${data.text}`);
     // Implement like logic here
   }, []);
 
-  const onPostUnLike = useCallback((postId: string) => {
-    console.log(`JPN: Unliked post: ${postId}`);
-    // Implement unlike logic here
-  }, []);
+  const onPostUnLike: IAmityUIkitProvider['onPostUnLike'] = useCallback(
+    (data) => {
+      console.log(`JPN: Unliked post: ${data.postId} ${data.text}`);
+      // Implement unlike logic here
+    },
+    []
+  );
 
-  const onPostStart = useCallback((postId?: string) => {
-    console.log(`JPN: Post started: ${postId ?? 'No ID provided'}`);
-    // Implement post start logic here
-  }, []);
+  const onPostStart: IAmityUIkitProvider['onPostStart'] = useCallback(
+    (data) => {
+      console.log(
+        `JPN: onPostStart : ${data.communityId} ${data.communityName} | ${data?.userName} ${data?.userId}`
+      );
+      // Implement post start logic here
+    },
+    []
+  );
 
-  const onPostComplete = useCallback((postId?: string) => {
-    console.log(`JPN: Post completed: ${postId ?? 'No ID provided'}`);
-    // Implement post complete logic here
-  }, []);
-
-  const onViewMyProShop = useCallback((communityId: string) => {
-    console.log(`JPN: Viewing pro shop for community: ${communityId}`);
-    // Implement pro shop view logic here
-  }, []);
+  const onPostComplete: IAmityUIkitProvider['onPostComplete'] = useCallback(
+    (data) => {
+      `JPN: onPostComplete: ${data.communityId} ${data.communityName} | ${data?.userName} ${data?.userId}`;
+      // Implement post complete logic here
+    },
+    []
+  );
 
   return {
     onUserFollow,

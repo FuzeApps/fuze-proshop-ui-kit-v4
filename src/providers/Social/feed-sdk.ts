@@ -58,6 +58,7 @@ export async function addPostReaction(
   );
   return reactionObject;
 }
+
 export async function removePostReaction(
   postId: string,
   reactionName: string
@@ -78,6 +79,7 @@ export async function removePostReaction(
   );
   return reactionObject;
 }
+
 export function getPostById(postId: string): Promise<any> {
   const communityObject = new Promise((resolve, reject) => {
     let object;
@@ -96,6 +98,7 @@ export function getPostById(postId: string): Promise<any> {
   });
   return communityObject;
 }
+
 export async function createPostToFeed(
   targetType: string,
   targetId: string,
@@ -155,6 +158,7 @@ export async function createPostToFeed(
     async (resolve, reject) => {
       try {
         const { data: post } = await PostRepository.createPost(postParam);
+
         resolve(post);
       } catch (error) {
         if (error.message.includes(text_contain_blocked_word)) {
@@ -234,6 +238,7 @@ export async function editPost(
   );
   return editPostObject;
 }
+
 export async function deletePostById(postId: string): Promise<boolean> {
   const isDeletedObject: Promise<boolean> = new Promise(
     async (resolve, reject) => {
@@ -249,6 +254,7 @@ export async function deletePostById(postId: string): Promise<boolean> {
   );
   return isDeletedObject;
 }
+
 export async function reportTargetById(
   targetType: 'post' | 'comment',
   postId: string
@@ -265,6 +271,7 @@ export async function reportTargetById(
   });
   return isReport;
 }
+
 export async function isReportTarget(
   targetType: 'post' | 'comment',
   targetId: string

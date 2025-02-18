@@ -12,6 +12,7 @@ import BlockOrUnblockIcon from '../../svg/BlockOrUnBlockIcon';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import EditIcon from '../../svg/EditIcon';
 import UnfollowIcon from '../../svg/UnfollowIcon';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 export default function UserProfileSetting({
   navigation,
@@ -22,6 +23,7 @@ export default function UserProfileSetting({
 }) {
   const { user, follow } = route.params;
   const { userId, displayName } = user;
+  const { onUserUnFollow } = useAuthStatic();
   const styles = useStyles();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const [followStatus, setFollowStatus] = useState(follow);
@@ -45,9 +47,10 @@ export default function UserProfileSetting({
   const handleUnfollowPress = useCallback(async () => {
     setShowLoadingIndicator(true);
     await UserRepository.Relationship.unfollow(userId);
+    onUserUnFollow?.(userId);
     setShowLoadingIndicator(false);
     setFollowStatus('none');
-  }, [userId]);
+  }, [onUserUnFollow, userId]);
 
   const handleBlockUser = useCallback(async () => {
     setShowLoadingIndicator(true);

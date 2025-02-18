@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import { CategoryRepository } from '@amityco/ts-sdk-react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { amityUIKitTokens } from '../../enum';
 
-const CategoryPills = ({ categoryIds = [] }: { categoryIds: string[] }) => {
+const CategoryPills = ({ categoryIds }: { categoryIds: string[] }) => {
   const [categories, setCategories] = useState<Amity.Category[]>([]);
 
   useEffect(() => {
@@ -11,28 +11,22 @@ const CategoryPills = ({ categoryIds = [] }: { categoryIds: string[] }) => {
       { limit: 100000 },
       ({ data: categoriesData, loading }) => {
         if (!loading) {
-          console.log('categories', categoriesData);
-
-          setCategories(
-            categoriesData?.filter((category) =>
-              categoryIds.includes(category.categoryId)
-            )
-          );
+          setCategories(categoriesData);
         }
       }
     );
     unsubscribeCategory();
   }, [categoryIds]);
 
-  if (!categoryIds.length) return null;
-
   return (
     <View style={styles.wrapper}>
-      {categories?.map((item) => (
-        <View key={item?.categoryId} style={styles.pill}>
-          <Text style={styles.pillText}>{item?.name}</Text>
-        </View>
-      ))}
+      {categories
+        ?.filter((category) => categoryIds.includes(category.categoryId))
+        ?.map((item) => (
+          <View key={item?.categoryId} style={styles.pill}>
+            <Text style={styles.pillText}>{item?.name}</Text>
+          </View>
+        ))}
     </View>
   );
 };
