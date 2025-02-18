@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import { newPostIcon } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
-import PostIcon from '../../svg/PostIcon';
 
 interface IBackBtn {
   onPress: () => any;
@@ -20,7 +21,7 @@ export default function FloatingButton({
         }}
         style={styles.button}
       >
-        <PostIcon color="#fff" />
+        <SvgXml xml={newPostIcon()} />
       </Pressable>
     </View>
   );
