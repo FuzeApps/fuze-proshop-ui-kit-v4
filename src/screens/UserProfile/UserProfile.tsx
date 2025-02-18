@@ -36,7 +36,6 @@ import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import {
   blockOrUnblock,
   cancelFollowRequest,
-  personXml,
   primaryDot,
   privateUserProfile,
   userIcon,
@@ -235,7 +234,7 @@ export default function UserProfile({ route }: any) {
     const onCancelRequest = async () => {
       await UserRepository.Relationship.unfollow(userId);
       onUserUnFollow?.({
-        userId: userId,
+        userId: user?.userId,
         userName: user?.displayName,
       });
       setFollowStatus('none');
@@ -256,6 +255,7 @@ export default function UserProfile({ route }: any) {
     styles.editProfileText,
     theme.colors.base,
     user?.displayName,
+    user?.userId,
     userId,
   ]);
 

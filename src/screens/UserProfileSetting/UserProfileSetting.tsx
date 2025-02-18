@@ -47,10 +47,13 @@ export default function UserProfileSetting({
   const handleUnfollowPress = useCallback(async () => {
     setShowLoadingIndicator(true);
     await UserRepository.Relationship.unfollow(userId);
-    onUserUnFollow?.(userId);
+    onUserUnFollow?.({
+      userId: user?.userId,
+      userName: user?.displayName,
+    });
     setShowLoadingIndicator(false);
     setFollowStatus('none');
-  }, [onUserUnFollow, userId]);
+  }, [onUserUnFollow, user?.displayName, user?.userId, userId]);
 
   const handleBlockUser = useCallback(async () => {
     setShowLoadingIndicator(true);
