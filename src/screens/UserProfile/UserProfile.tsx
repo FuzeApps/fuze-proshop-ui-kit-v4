@@ -420,6 +420,10 @@ export default function UserProfile({ route }: any) {
       paddingHorizontal: amityUIKitTokens.spacing.s1,
     };
 
+    if (!buttons?.length) {
+      return null;
+    }
+
     return (
       <View style={wrapperStyle}>
         {buttons?.map((item, index) => {
