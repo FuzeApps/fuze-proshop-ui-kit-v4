@@ -25,8 +25,10 @@ import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
 import { TSearchItem } from '../../hooks/useSearch';
 import { text_contain_blocked_word } from '../../util/constants';
 import { PostTag } from '../../enum/enumPostTag';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 const CreatePoll = ({ navigation, route }) => {
+  const { onPostComplete, displayName, userId } = useAuthStatic();
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
   const { apiRegion, client } = useAuth();
@@ -102,7 +104,20 @@ const CreatePoll = ({ navigation, route }) => {
         metadata: { mentioned: mentionPosition },
         tags: [PostTag.Feed],
       });
+
+      if (response) {
+        onPostComplete?.({
+          communityId: privateCommunityId,
+          communityName: privateCommunityId ? targetName : '',
+          postId: response.postId,
+          text: response.data.text,
+          userId: userId,
+          userName: displayName,
+        });
+      }
+
       setLoading(false);
+
       if (targetType !== 'community') return goBack();
       if (
         !response ||

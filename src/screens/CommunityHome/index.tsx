@@ -23,7 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CustomTab from '../../components/CustomTabV3';
+import CustomTabV4 from '../../components/CustomTabV4';
 import useAuth from '../../hooks/useAuth';
 import Feed from '../Feed';
 import { useStyles } from './styles';
@@ -44,15 +44,15 @@ import { amityPostsFormatter } from '../../util/postDataFormatter';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
+import CategoryPills from '../../components/CategoryPills';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
 import { amityUIKitTokens } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
 import { PostTargetType } from '../../enum/postTargetType';
 import { TabName } from '../../enum/tabNameState';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 import useFile from '../../hooks/useFile';
 import uiSlice from '../../redux/slices/uiSlice';
-import EditIcon from '../../svg/EditIcon';
-import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
 import {
   kebabMenu,
@@ -72,6 +72,13 @@ export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
   const insets = useSafeAreaInsets();
+  const {
+    onCommunityJoin,
+    onPostStart,
+    userId,
+    displayName,
+    CommunityLeaderboardComponent,
+  } = useAuthStatic();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -117,19 +124,19 @@ export default function CommunityHome({ route }: any) {
       paddingTop: topInset,
       paddingBottom: amityUIKitTokens.spacing.m1,
     };
-  }, []);
+  }, [topInset]);
 
   const imageContainerStyles = useMemo(() => {
     return {
       height: communityImageHeight,
     };
-  }, []);
+  }, [communityImageHeight]);
 
   const topHeaderControlsExtraStyles = useMemo(() => {
     return {
       paddingTop: topInset,
     };
-  }, []);
+  }, [topInset]);
 
   const subscribePostTopic = useCallback(
     (targetType: string) => {
@@ -240,13 +247,13 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
-  // const handleMembersPress = () => {
-  //   navigation.navigate('CommunityMemberDetail', {
-  //     communityId: communityId,
-  //     communityName: communityName,
-  //     isModerator: isUserHasPermission,
-  //   });
-  // };
+  const handleMembersPress = useCallback(() => {
+    navigation.navigate('CommunityMemberDetail', {
+      communityId: communityId,
+      communityName: communityName,
+      isModerator: isUserHasPermission,
+    });
+  }, [communityId, communityName, isUserHasPermission, navigation]);
 
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
@@ -254,9 +261,16 @@ export default function CommunityHome({ route }: any) {
     }
   }
 
-  const onJoinCommunityTap = async () => {
+  const onJoinCommunityTap = useCallback(async () => {
     const isJoined = await CommunityRepository.joinCommunity(communityId);
     if (isJoined) {
+      //Event callback for joining community.
+      onCommunityJoin?.({
+        communityId: communityId,
+        communityName: communityName,
+      });
+
+      // Add community to joined communities metadata
       await metadataHandlers.addToJoinedCommunities(
         (client as Amity.Client).userId,
         communityId
@@ -265,50 +279,28 @@ export default function CommunityHome({ route }: any) {
       return isJoined;
     }
     return null;
-  };
-
-  const joinCommunityButton = useMemo(() => {
-    return (
-      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
-        <PlusIcon color="#FFF" width={24} />
-        <Text style={styles.joinCommunityText}>Join</Text>
-      </TouchableOpacity>
-    );
-  }, []);
+  }, [client, communityId, communityName, onCommunityJoin]);
 
   const handleTab = (tabName: TabName) => {
     setCurrentTab(tabName);
   };
 
-  const handleClickPendingArea = () => {
+  const handleClickPendingArea = useCallback(() => {
     navigation.navigate('PendingPosts', {
       communityId: communityId,
       isModerator: isUserHasPermission,
     });
-  };
-
-  const pendingPostUiBlock = useMemo(() => {
-    return (
-      <Pressable onPress={handleClickPendingArea}>
-        <View style={styles.pendingPostArea}>
-          <View style={styles.pendingRow}>
-            <PrimaryDot color={theme.colors.primary} />
-            <Text style={styles.pendingText}>Pending posts</Text>
-          </View>
-
-          <Text style={styles.pendingDescriptionText}>
-            {isUserHasPermission
-              ? (pendingPosts.length > 30 && 'More than ') +
-                pendingPosts.length +
-                ' posts need approval'
-              : 'Your posts are pending for review'}
-          </Text>
-        </View>
-      </Pressable>
-    );
-  }, [pendingPosts]);
+  }, [communityId, isUserHasPermission, navigation]);
 
   const handleOnPressPostBtn = () => {
+    onPostStart?.({
+      communityId: communityId,
+      communityName: communityName,
+      targetType: PostTargetType.community,
+      userId: userId,
+      userName: displayName,
+    });
+
     return dispatch(
       openPostTypeChoiceModal({
         userId: (client as Amity.Client).userId as string,
@@ -323,53 +315,11 @@ export default function CommunityHome({ route }: any) {
     );
   };
 
-  const onEditProfileTap = () => {
+  const onEditProfileTap = useCallback(() => {
     navigation.navigate('EditCommunity', {
       communityData,
     });
-  };
-
-  const renderTabs = () => {
-    switch (currentTab) {
-      case TabName.Timeline:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Feed]}
-          />
-        );
-      case TabName.Activity:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Activity]}
-          />
-        );
-      case TabName.Leaderboard:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Leaderboard]}
-          />
-        );
-      case TabName.Gallery:
-        return (
-          <GalleryComponent
-            targetId={communityId}
-            ref={feedRef}
-            targetType="community"
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  }, [communityData, navigation]);
 
   const backNavigationUi = useMemo(() => {
     if (!isBackEnabled) {
@@ -386,7 +336,7 @@ export default function CommunityHome({ route }: any) {
     }
 
     return null;
-  }, [isStickyHeaderVisible]);
+  }, [isBackEnabled, isStickyHeaderVisible, navigation]);
 
   const communityActionsUi = useMemo(() => {
     return (
@@ -403,7 +353,163 @@ export default function CommunityHome({ route }: any) {
         <SvgXml xml={kebabMenu()} />
       </RoundButton>
     );
-  }, [isStickyHeaderVisible]);
+  }, [
+    communityId,
+    communityName,
+    isModerator,
+    isStickyHeaderVisible,
+    navigation,
+  ]);
+
+  /**
+   * Communinity CTAs section
+   * */
+
+  // Join Community Button
+  const joinCommunityButton = useMemo(() => {
+    if (isJoin) return null;
+
+    return (
+      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
+        <Text style={styles.joinCommunityText}>Join</Text>
+      </TouchableOpacity>
+    );
+  }, [isJoin, onJoinCommunityTap, styles.button, styles.joinCommunityText]);
+
+  // Edit Community Button
+  const editCommunityButton = useMemo(() => {
+    return isUserHasPermission ? (
+      <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
+        <Text style={styles.editProfileText}>Edit</Text>
+      </TouchableOpacity>
+    ) : null;
+  }, [
+    isUserHasPermission,
+    onEditProfileTap,
+    styles.button,
+    styles.editProfileText,
+  ]);
+
+  // Pending Post Area
+  const pendingPostUiBlock = useMemo(() => {
+    if (isJoin && isShowPendingArea) {
+      return (
+        <Pressable onPress={handleClickPendingArea}>
+          <View style={styles.pendingPostArea}>
+            <View style={styles.pendingRow}>
+              <PrimaryDot color={theme.colors.primary} />
+              <Text style={styles.pendingText}>Pending posts</Text>
+            </View>
+
+            <Text style={styles.pendingDescriptionText}>
+              {isUserHasPermission
+                ? (pendingPosts.length > 30 && 'More than ') +
+                  pendingPosts.length +
+                  ' posts need approval'
+                : 'Your posts are pending for review'}
+            </Text>
+          </View>
+        </Pressable>
+      );
+    }
+
+    return null;
+  }, [
+    handleClickPendingArea,
+    isJoin,
+    isShowPendingArea,
+    isUserHasPermission,
+    pendingPosts.length,
+    styles.pendingDescriptionText,
+    styles.pendingPostArea,
+    styles.pendingRow,
+    styles.pendingText,
+    theme.colors.primary,
+  ]);
+
+  // Community Post and member counter
+
+  const communityPostAndMemberCounter = useMemo(() => {
+    if (communityData?.data.membersCount < 1000) {
+      return null;
+    }
+
+    return (
+      <View style={styles.row}>
+        <View style={styles.rowItem}>
+          <Text style={styles.rowNumber}>{communityData?.data.postsCount}</Text>
+          <Text style={styles.rowLabel}>post</Text>
+        </View>
+
+        <View style={styles.rowItemContent}>
+          <View style={styles.verticalLine} />
+          <TouchableOpacity
+            onPress={() => handleMembersPress()}
+            style={[styles.rowItem, { paddingLeft: 10 }]}
+          >
+            <Text style={styles.rowNumber}>
+              {communityData?.data.membersCount}
+            </Text>
+            <Text style={styles.rowLabel}>members</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }, [
+    communityData?.data.membersCount,
+    communityData?.data.postsCount,
+    handleMembersPress,
+    styles.row,
+    styles.rowItem,
+    styles.rowItemContent,
+    styles.rowLabel,
+    styles.rowNumber,
+    styles.verticalLine,
+  ]);
+
+  /**
+   * Tabs Section
+   * */
+
+  const renderTabs = useCallback(() => {
+    switch (currentTab) {
+      case TabName.Timeline:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Feed]}
+          />
+        );
+      case TabName.Activities:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Activity]}
+          />
+        );
+      case TabName.Leaderboard:
+        // Return null if the leaderboard is not there
+        if (CommunityLeaderboardComponent) {
+          return <CommunityLeaderboardComponent communityId={communityId} />;
+        }
+        return null;
+
+      case TabName.Gallery:
+        return (
+          <GalleryComponent
+            targetId={communityId}
+            ref={feedRef}
+            targetType="community"
+          />
+        );
+      default:
+        return null;
+    }
+  }, [CommunityLeaderboardComponent, communityId, currentTab]);
 
   return (
     <View style={styles.container}>
@@ -437,7 +543,7 @@ export default function CommunityHome({ route }: any) {
             {communityActionsUi}
           </View>
         </View>
-
+        {/* CategoryPills Section */}
         {/* Community Name Section */}
         <View
           style={[
@@ -485,6 +591,11 @@ export default function CommunityHome({ route }: any) {
           </View>
         </View>
 
+        {/* CategoryPills Section */}
+        <View style={styles.sectionWrapper}>
+          <CategoryPills categoryIds={communityData?.data?.categoryIds} />
+        </View>
+
         {/* Description Block Section */}
         <View style={styles.sectionWrapper}>
           <Text style={styles.description}>
@@ -495,52 +606,28 @@ export default function CommunityHome({ route }: any) {
         {/* CTA Section */}
         <View style={styles.ctaWrapper}>
           {/* Edit Group CTA */}
-          {isUserHasPermission ? (
-            <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
-              <EditIcon width={24} height={20} color={theme.colors.base} />
-              <Text style={styles.editProfileText}>Edit Group</Text>
-            </TouchableOpacity>
-          ) : null}
+          {editCommunityButton}
+
           {/* Join Community CTA */}
-          {!isJoin ? joinCommunityButton : null}
+          {joinCommunityButton}
+
           {/* Pending Post area */}
-          {isJoin && isShowPendingArea ? pendingPostUiBlock : null}
+          {pendingPostUiBlock}
         </View>
 
-        {/* TODO:   */}
-        {/* Counters: Members and Posts */}
-        {/* <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.rowNumber}>
-              {communityData?.data.postsCount}
-            </Text>
-            <Text style={styles.rowLabel}>post</Text>
-          </View>
-
-          <View style={styles.rowItemContent}>
-            <View style={styles.verticalLine} />
-            <TouchableOpacity
-              onPress={() => handleMembersPress()}
-              style={[styles.rowItem, { paddingLeft: 10 }]}
-            >
-              <Text style={styles.rowNumber}>
-                {communityData?.data.membersCount}
-              </Text>
-              <Text style={styles.rowLabel}>members</Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
+        {communityPostAndMemberCounter}
 
         {/* Tabs Section: Timeline, Activity, Leaderboard, Gallery */}
-        <CustomTab
+        <CustomTabV4
           tabName={[
             TabName.Timeline,
-            TabName.Activity,
-            TabName.Leaderboard,
+            TabName.Activities,
+            CommunityLeaderboardComponent ? TabName.Leaderboard : null,
             TabName.Gallery,
-          ]}
+          ].filter(Boolean)}
           onTabChange={handleTab}
         />
+        {/* The tabs with complex ui */}
         <View style={styles.tabBackground}>{renderTabs()}</View>
       </ScrollView>
       {isJoin && (

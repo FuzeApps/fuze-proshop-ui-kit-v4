@@ -1,67 +1,73 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  type MutableRefObject,
-  useLayoutEffect,
-  useCallback,
-} from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  type NativeSyntheticEvent,
-  type NativeScrollEvent,
-  ScrollView,
-  Pressable,
-} from 'react-native';
-import { useStyles } from './styles';
-import {
-  UserRepository,
   getMyFollowersTopic,
   getMyFollowingsTopic,
   subscribeTopic,
+  UserRepository,
 } from '@amityco/ts-sdk-react-native';
-import Feed from '../Feed';
-import CustomTab from '../../components/CustomTab';
-import type { FeedRefType } from '../CommunityHome';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import useAuth from '../../hooks/useAuth';
+import React, {
+  type MutableRefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Image,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Pressable,
+  ScrollView,
+  StyleProp,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { SvgXml } from 'react-native-svg';
+import CustomTabV4 from '../../components/CustomTabV4';
+import FloatingButton from '../../components/FloatingButton';
+import useAuth from '../../hooks/useAuth';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import {
   blockOrUnblock,
   cancelFollowRequest,
-  editIcon,
   primaryDot,
   privateUserProfile,
+  userIcon,
 } from '../../svg/svg-xml-list';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { useTheme } from 'react-native-paper';
-import FloatingButton from '../../components/FloatingButton';
+import type { FeedRefType } from '../CommunityHome';
+import Feed from '../Feed';
+import { useStyles } from './styles';
 
 import { useDispatch } from 'react-redux';
-import uiSlice from '../../redux/slices/uiSlice';
 import { PostTargetType } from '../../enum/postTargetType';
+import uiSlice from '../../redux/slices/uiSlice';
 
-import { defaultAvatarUri } from '../../assets';
-import { ImageSizeState } from '../../enum';
-
+import { amityUIKitTokens, ImageSizeState } from '../../enum';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
-import {} from '../../hooks';
-import { TabName } from '../../enum/enumTabName';
-import { useFileV4 } from '../../hooks/useFilev4';
+import { TabName } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
+import {} from '../../hooks';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
+import { useFileV4 } from '../../hooks/useFilev4';
+
+const defaultAvatar = require('../../assets/icon/Placeholder.png');
 
 export default function UserProfile({ route }: any) {
   const theme = useTheme() as MyMD3Theme;
+  const { onViewMyProShop, onUserFollow, onPostStart } = useAuthStatic();
   const styles = useStyles();
   const { client } = useAuth();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { userId } = route.params;
   const { openPostTypeChoiceModal } = uiSlice.actions;
   const dispatch = useDispatch();
+  const { onUserUnFollow } = useAuthStatic();
   const [user, setUser] = useState<Amity.User>();
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [followingCount, setFollowingCount] = useState<number>(0);
@@ -89,22 +95,25 @@ export default function UserProfile({ route }: any) {
     useRef<FeedRefType | null>(null);
   const scrollViewRef = useRef(null);
 
-  const onEditProfileTap = () => {
-    navigation.navigate('EditProfile', {
-      user: user,
-    });
-  };
-  const onFollowTap = async () => {
+  const onFollowTap = useCallback(async () => {
     const { data: followStatus } =
       await UserRepository.Relationship.follow(userId);
+
+    onUserFollow?.({
+      userId: userId,
+      userName: user?.displayName,
+    });
+
     if (followStatus) {
       setFollowStatus(followStatus.status);
     }
-  };
-  const onUnblockUser = async () => {
+  }, [onUserFollow, user?.displayName, userId]);
+
+  const onUnblockUser = useCallback(async () => {
     await UserRepository.Relationship.unBlockUser(userId);
     setFollowStatus('none');
-  };
+  }, [userId]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -137,14 +146,21 @@ export default function UserProfile({ route }: any) {
 
   useEffect(() => {
     if (!user?.avatarFileId) {
-      return setAvatar(defaultAvatarUri?.uri);
+      console.log(
+        'JPN: avatarFileId not found.. using the default url',
+        defaultAvatar?.uri
+      );
+      return setAvatar(null);
     }
+
+    //IIFE
     (async () => {
       const avatarUrl = await getImage({
         fileId: user.avatarFileId,
         imageSize: ImageSizeState.small,
       });
-      setAvatar(avatarUrl ?? defaultAvatarUri);
+      console.log('JPN: avatarUrl', avatarUrl);
+      setAvatar(avatarUrl);
     })();
   }, [getImage, user?.avatarFileId]);
 
@@ -183,21 +199,10 @@ export default function UserProfile({ route }: any) {
       unsubFollower();
     };
   }, [navigation, userId]);
-  const editProfileButton = () => {
-    return (
-      <TouchableOpacity
-        style={styles.editProfileButton}
-        onPress={onEditProfileTap}
-      >
-        <SvgXml width={24} height={20} xml={editIcon(theme.colors.base)} />
-        <Text style={styles.editProfileText}>Edit Profile</Text>
-      </TouchableOpacity>
-    );
-  };
 
-  const followButton = () => {
+  const followButton = useMemo(() => {
     return (
-      <TouchableOpacity style={styles.followButton} onPress={onFollowTap}>
+      <TouchableOpacity style={styles.button} onPress={onFollowTap}>
         <Image
           source={require('../../assets/icon/followPlus.png')}
           style={styles.followIcon}
@@ -205,34 +210,37 @@ export default function UserProfile({ route }: any) {
         <Text style={styles.followText}>Follow</Text>
       </TouchableOpacity>
     );
-  };
+  }, [onFollowTap, styles.button, styles.followIcon, styles.followText]);
 
-  const unBlockButton = () => {
+  const unBlockButton = useMemo(() => {
     return (
-      <TouchableOpacity
-        style={styles.editProfileButton}
-        onPress={onUnblockUser}
-      >
+      <TouchableOpacity style={styles.button} onPress={onUnblockUser}>
         <SvgXml
           width={24}
           height={20}
-          xml={blockOrUnblock(theme.colors.base)}
+          xml={blockOrUnblock(theme.colors.baseShade4)}
         />
         <Text style={styles.editProfileText}>Unblock user</Text>
       </TouchableOpacity>
     );
-  };
+  }, [
+    onUnblockUser,
+    styles.button,
+    styles.editProfileText,
+    theme.colors.baseShade4,
+  ]);
 
-  const cancelRequestButton = () => {
+  const cancelRequestButton = useMemo(() => {
     const onCancelRequest = async () => {
       await UserRepository.Relationship.unfollow(userId);
+      onUserUnFollow?.({
+        userId: user?.userId,
+        userName: user?.displayName,
+      });
       setFollowStatus('none');
     };
     return (
-      <TouchableOpacity
-        style={styles.editProfileButton}
-        onPress={onCancelRequest}
-      >
+      <TouchableOpacity style={styles.button} onPress={onCancelRequest}>
         <SvgXml
           width={24}
           height={20}
@@ -241,7 +249,15 @@ export default function UserProfile({ route }: any) {
         <Text style={styles.editProfileText}>Cancel request</Text>
       </TouchableOpacity>
     );
-  };
+  }, [
+    onUserUnFollow,
+    styles.button,
+    styles.editProfileText,
+    theme.colors.base,
+    user?.displayName,
+    user?.userId,
+    userId,
+  ]);
 
   const pendingCountButton = () => {
     const onPressPending = () => {
@@ -286,6 +302,12 @@ export default function UserProfile({ route }: any) {
   }
 
   const handleOnPressPostBtn = () => {
+    onPostStart?.({
+      userId: userId,
+      userName: user?.displayName,
+      communityName: 'My Timeline',
+    });
+
     dispatch(
       openPostTypeChoiceModal({
         userId: userId,
@@ -294,14 +316,6 @@ export default function UserProfile({ route }: any) {
         targetType: PostTargetType.user,
       })
     );
-  };
-
-  const renderButtons = () => {
-    if (isMyProfile) return editProfileButton();
-    if (isUnfollowed) return followButton();
-    if (isPending) return cancelRequestButton();
-    if (isBlocked) return unBlockButton();
-    return null;
   };
 
   const renderPrivateProfile = () => {
@@ -347,24 +361,109 @@ export default function UserProfile({ route }: any) {
     return null;
   };
 
+  // View My Proshop Button
+  const viewMyProshopButton = useMemo(() => {
+    if (typeof onViewMyProShop !== 'function') {
+      return null;
+    }
+
+    return (
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          onViewMyProShop?.({
+            userId: userId,
+            userName: user?.displayName,
+          })
+        }
+      >
+        <Text style={styles.editProfileText}>View my ProShop</Text>
+      </TouchableOpacity>
+    );
+  }, [
+    onViewMyProShop,
+    styles.button,
+    styles.editProfileText,
+    user?.displayName,
+    userId,
+  ]);
+
   const onPressFollowers = useCallback(() => {
     if (isMyProfile || isAccepted) navigation.navigate('FollowerList', user);
   }, [isAccepted, isMyProfile, navigation, user]);
 
+  const renderButtons = useMemo(() => {
+    if (isUnfollowed) return followButton;
+    if (isPending) return cancelRequestButton;
+    if (isBlocked) return unBlockButton;
+    return null;
+  }, [
+    cancelRequestButton,
+    followButton,
+    isBlocked,
+    isPending,
+    isUnfollowed,
+    unBlockButton,
+  ]);
+
+  const ctaSection = useMemo(() => {
+    const buttons = [renderButtons, viewMyProshopButton].filter(Boolean);
+
+    const wrapperStyle: StyleProp<ViewStyle> = {
+      paddingHorizontal: amityUIKitTokens.spacing.s1,
+      paddingTop: amityUIKitTokens.spacing.m1,
+      flexDirection: 'row',
+    };
+
+    const buttonWrapperStyle: StyleProp<ViewStyle> = {
+      flex: 1,
+      paddingHorizontal: amityUIKitTokens.spacing.s1,
+    };
+
+    if (!buttons?.length) {
+      return null;
+    }
+
+    return (
+      <View style={wrapperStyle}>
+        {buttons?.map((item, index) => {
+          return (
+            <View key={index} style={buttonWrapperStyle}>
+              {item}
+            </View>
+          );
+        })}
+      </View>
+    );
+  }, [renderButtons, viewMyProshopButton]);
+
+  const finalAvatarUri = useMemo(() => {
+    return avatar ? avatar : defaultAvatar?.uri;
+  }, [avatar]);
+
+  console.log('JPN: finalAvatarUri', finalAvatarUri, defaultAvatar?.uri);
+
   return (
     <View style={styles.container}>
       <ScrollView
-        style={{ flex: 1 }}
+        style={styles.scrollView}
         ref={scrollViewRef}
         onScroll={handleScroll}
         scrollEventThrottle={20}
       >
         <View style={styles.profileContainer}>
           <View style={styles.userDetail}>
-            <Image
-              style={styles.avatar}
-              source={{ uri: avatar ? avatar : defaultAvatarUri?.uri }}
-            />
+            <View style={styles.avatarWrapper}>
+              {avatar ? (
+                <Image
+                  style={styles.avatar}
+                  source={{ uri: avatar ? avatar : defaultAvatar?.uri }}
+                />
+              ) : (
+                <SvgXml xml={userIcon()} width={60} height={60} />
+              )}
+            </View>
+
             <View style={styles.userInfo}>
               <Text style={styles.title}>{user?.displayName}</Text>
               <Pressable
@@ -387,12 +486,16 @@ export default function UserProfile({ route }: any) {
               <View />
             )}
           </View>
-          {renderButtons()}
+
           {shouldShowPending && pendingCountButton()}
         </View>
+
+        {/* CTA Section */}
+        {ctaSection}
+
         {!isBlocked && (
           <>
-            <CustomTab
+            <CustomTabV4
               tabName={
                 [
                   TabName.Timeline,
@@ -402,10 +505,12 @@ export default function UserProfile({ route }: any) {
               }
               onTabChange={setCurrentTab}
             />
+
             {renderTabs()}
           </>
         )}
       </ScrollView>
+
       {(client as Amity.Client).userId === userId && (
         <FloatingButton onPress={handleOnPressPostBtn} isGlobalFeed={false} />
       )}

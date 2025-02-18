@@ -48,7 +48,7 @@ const UserProfileGallery = forwardRef(
       return (
         <TouchableOpacity onPress={() => onPressThumbnail(index)}>
           <Image source={{ uri: item.uri }} style={styles.thumbnail} />
-          {item.dataType === 'video' && (
+          {item?.dataType === 'video' && (
             <View style={styles.playButton}>
               <SvgXml xml={playBtn} width="50" height="50" />
             </View>

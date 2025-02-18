@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 const { width } = Dimensions.get('screen');
 
@@ -10,6 +11,9 @@ export const useStyles = () => {
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
+    },
+    scrollView: {
+      flex: 1,
     },
     loadingIndicator: {
       flex: 1,
@@ -53,8 +57,8 @@ export const useStyles = () => {
       width: 64,
       height: 64,
       borderRadius: 72,
-      marginRight: 10,
     },
+    avatarWrapper: {},
     userInfo: {
       marginLeft: 16,
       backgroundColor: theme.colors.background,
@@ -188,6 +192,21 @@ export const useStyles = () => {
     privateAccountSubTitle: {
       fontSize: 15,
       color: theme.colors.baseShade3,
+    },
+    ctaWrapper: {
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      paddingTop: amityUIKitTokens.spacing.m1,
+    },
+    button: {
+      backgroundColor: theme.colors.primary,
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      minHeight: 40,
+      marginBottom: amityUIKitTokens.spacing.m1,
     },
   });
 

@@ -3,21 +3,30 @@ import * as React from 'react';
 import {
   AmityUiKitProvider,
   AmityUiKitSocial,
-  ExplorePage,
-  MyCommunityPage,
-  Newsfeed,
-  UserProfile,
-  CommunityHome,
-  MyUserProfile,
 } from '@amityco/react-native-social-ui-kit';
 
+import { UserRole } from '../../src/enum';
+import useEventHandlers from '../hooks/useEventHandlers';
 import config from '../uikit.config.json';
+import CommunityLeaderboard from './CommunityLeaderboard';
 
 if (__DEV__) {
   require('../ReactotronConfig');
 }
 
 export default function App() {
+  const {
+    onCommunityJoin,
+    onCommunityLeave,
+    onPostComplete,
+    onPostLike,
+    onPostStart,
+    onPostUnLike,
+    onUserFollow,
+    onUserUnFollow,
+    onViewMyProShop,
+  } = useEventHandlers();
+
   return (
     <AmityUiKitProvider
       configs={config} //put your config json object
@@ -26,6 +35,18 @@ export default function App() {
       userId={'0aacbd28-2fe8-4ef2-a5a5-b4bb45764b0e'}
       displayName={'Zane Scotland'}
       apiEndpoint="https://api.eu.amity.co"
+      userRole={UserRole.PRO}
+      minMembersToShowCounter={1000}
+      onCommunityJoin={onCommunityJoin}
+      onCommunityLeave={onCommunityLeave}
+      onPostComplete={onPostComplete}
+      onPostLike={onPostLike}
+      onPostStart={onPostStart}
+      onPostUnLike={onPostUnLike}
+      onUserFollow={onUserFollow}
+      onUserUnFollow={onUserUnFollow}
+      onViewMyProShop={onViewMyProShop}
+      CommunityLeaderboardComponent={CommunityLeaderboard} //Sample leaderboard component...
     >
       <AmityUiKitSocial />
     </AmityUiKitProvider>

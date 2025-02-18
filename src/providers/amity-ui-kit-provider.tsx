@@ -3,7 +3,7 @@ import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
 import { MenuProvider } from 'react-native-popup-menu';
 import { Provider } from 'react-redux';
 import fallBackConfig from '../../uikit.config.json';
-import { amityUIKitTokens } from '../enum';
+import { amityUIKitTokens, UserRole } from '../enum';
 import useValidateConfig from '../hooks/useValidateConfig';
 import { BehaviourProvider } from '../providers/BehaviourProvider';
 import { store } from '../redux/store';
@@ -24,6 +24,45 @@ export interface IAmityUIkitProvider {
   authToken?: string;
   configs?: IConfigRaw;
   behaviour?: IBehaviour;
+  //Extra properties
+  userRole?: UserRole;
+  minMembersToShowCounter?: number;
+  //Callbacks. This is on Top of Social+
+  onUserFollow?: (data: { userId?: string; userName?: string }) => void;
+  onUserUnFollow?: (data: { userId?: string; userName?: string }) => void;
+  onViewMyProShop?: (data: { userId?: string; userName?: string }) => void;
+  onCommunityJoin?: (data: {
+    communityName?: string;
+    communityId?: string;
+  }) => void;
+  onCommunityLeave?: (data: {
+    communityName?: string;
+    communityId?: string;
+  }) => void;
+  onPostLike?: (data: { text?: string; postId?: string }) => void;
+  onPostUnLike?: (data: { text?: string; postId?: string }) => void;
+  onPostStart?: (data: {
+    text?: string;
+    postId?: string;
+    userId?: string;
+    userName?: string;
+    communityId?: string;
+    communityName?: string;
+    targetType?: string;
+  }) => void;
+  onPostComplete?: (data: {
+    text?: string;
+    postId?: string;
+    userId?: string;
+    userName?: string;
+    communityId?: string;
+    communityName?: string;
+    targetType?: string;
+  }) => void;
+  //Extra Components
+  CommunityLeaderboardComponent?: (props: {
+    communityId: string;
+  }) => JSX.Element;
 }
 
 export interface CustomColors {
@@ -64,6 +103,18 @@ export default function AmityUiKitProvider({
   authToken,
   configs,
   behaviour,
+  CommunityLeaderboardComponent,
+  onCommunityJoin,
+  onCommunityLeave,
+  onPostComplete,
+  onPostLike,
+  onPostStart,
+  onPostUnLike,
+  onUserFollow,
+  onUserUnFollow,
+  onViewMyProShop,
+  userRole,
+  minMembersToShowCounter,
 }: IAmityUIkitProvider) {
   const isValidConfig = useValidateConfig(configs);
   const configData = isValidConfig ? configs : (fallBackConfig as IConfigRaw);
@@ -87,6 +138,7 @@ export default function AmityUiKitProvider({
           apiEndpoint={apiEndpoint}
           authToken={authToken}
         >
+          {/* This is for proshop purpose */}
           <AuthStaticProvider
             userId={userId}
             displayName={displayName || userId}
@@ -94,6 +146,18 @@ export default function AmityUiKitProvider({
             apiRegion={apiRegion}
             apiEndpoint={apiEndpoint}
             authToken={authToken}
+            CommunityLeaderboardComponent={CommunityLeaderboardComponent}
+            onCommunityJoin={onCommunityJoin}
+            onCommunityLeave={onCommunityLeave}
+            onPostComplete={onPostComplete}
+            onPostLike={onPostLike}
+            onPostStart={onPostStart}
+            onPostUnLike={onPostUnLike}
+            onUserFollow={onUserFollow}
+            onUserUnFollow={onUserUnFollow}
+            onViewMyProShop={onViewMyProShop}
+            userRole={userRole}
+            minMembersToShowCounter={minMembersToShowCounter}
           >
             <ConfigProvider configs={configData}>
               <BehaviourProvider behaviour={behaviour}>
