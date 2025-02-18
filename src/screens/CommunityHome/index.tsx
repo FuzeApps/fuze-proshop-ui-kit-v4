@@ -72,7 +72,13 @@ export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
   const insets = useSafeAreaInsets();
-  const { onCommunityJoin, onPostStart, userId, displayName } = useAuthStatic();
+  const {
+    onCommunityJoin,
+    onPostStart,
+    userId,
+    displayName,
+    CommunityLeaderboardComponent,
+  } = useAuthStatic();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -118,19 +124,19 @@ export default function CommunityHome({ route }: any) {
       paddingTop: topInset,
       paddingBottom: amityUIKitTokens.spacing.m1,
     };
-  }, []);
+  }, [topInset]);
 
   const imageContainerStyles = useMemo(() => {
     return {
       height: communityImageHeight,
     };
-  }, []);
+  }, [communityImageHeight]);
 
   const topHeaderControlsExtraStyles = useMemo(() => {
     return {
       paddingTop: topInset,
     };
-  }, []);
+  }, [topInset]);
 
   const subscribePostTopic = useCallback(
     (targetType: string) => {
@@ -486,14 +492,12 @@ export default function CommunityHome({ route }: any) {
           />
         );
       case TabName.Leaderboard:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Leaderboard]}
-          />
-        );
+        // Return null if the leaderboard is not there
+        if (CommunityLeaderboardComponent) {
+          return <CommunityLeaderboardComponent communityId={communityId} />;
+        }
+        return null;
+
       case TabName.Gallery:
         return (
           <GalleryComponent
@@ -505,7 +509,7 @@ export default function CommunityHome({ route }: any) {
       default:
         return null;
     }
-  }, [communityId, currentTab]);
+  }, [CommunityLeaderboardComponent, communityId, currentTab]);
 
   return (
     <View style={styles.container}>
@@ -618,9 +622,9 @@ export default function CommunityHome({ route }: any) {
           tabName={[
             TabName.Timeline,
             TabName.Activities,
-            TabName.Leaderboard,
+            CommunityLeaderboardComponent ? TabName.Leaderboard : null,
             TabName.Gallery,
-          ]}
+          ].filter(Boolean)}
           onTabChange={handleTab}
         />
         {/* The tabs with complex ui */}

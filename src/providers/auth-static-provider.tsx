@@ -30,7 +30,7 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
   onUserFollow,
   onUserUnFollow,
   onViewMyProShop,
-  CommunityLeaderboard,
+  CommunityLeaderboardComponent,
   userRole,
   minMembersToShowCounter = DEFAULT_MEMBERS_TO_SHOW_COMMUNITY_COUNTER,
 }) => {
@@ -53,7 +53,7 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
         onUserFollow,
         onUserUnFollow,
         onViewMyProShop,
-        CommunityLeaderboard,
+        CommunityLeaderboardComponent,
         userRole,
         minMembersToShowCounter,
       }}

@@ -60,7 +60,9 @@ export interface IAmityUIkitProvider {
     targetType?: string;
   }) => void;
   //Extra Components
-  CommunityLeaderboard?: (props: { communityId: string }) => JSX.Element;
+  CommunityLeaderboardComponent?: (props: {
+    communityId: string;
+  }) => JSX.Element;
 }
 
 export interface CustomColors {
@@ -101,7 +103,7 @@ export default function AmityUiKitProvider({
   authToken,
   configs,
   behaviour,
-  CommunityLeaderboard,
+  CommunityLeaderboardComponent,
   onCommunityJoin,
   onCommunityLeave,
   onPostComplete,
@@ -144,7 +146,7 @@ export default function AmityUiKitProvider({
             apiRegion={apiRegion}
             apiEndpoint={apiEndpoint}
             authToken={authToken}
-            CommunityLeaderboard={CommunityLeaderboard}
+            CommunityLeaderboardComponent={CommunityLeaderboardComponent}
             onCommunityJoin={onCommunityJoin}
             onCommunityLeave={onCommunityLeave}
             onPostComplete={onPostComplete}

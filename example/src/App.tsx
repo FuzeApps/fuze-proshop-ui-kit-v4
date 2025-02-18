@@ -5,24 +5,14 @@ import {
   AmityUiKitSocial,
 } from '@amityco/react-native-social-ui-kit';
 
-import config from '../uikit.config.json';
-import useEventHandlers from '../hooks/useEventHandlers';
-import { Text } from 'react-native-paper';
-import { View } from 'react-native';
 import { UserRole } from '../../src/enum';
+import useEventHandlers from '../hooks/useEventHandlers';
+import config from '../uikit.config.json';
+import CommunityLeaderboard from './CommunityLeaderboard';
 
 if (__DEV__) {
   require('../ReactotronConfig');
 }
-
-const CommunityLeaderboard = ({ communityId }: { communityId: string }) => {
-  return (
-    <View>
-      <Text>Community Leaderboard</Text>
-      <Text>{communityId ?? 'No community ID is provided'}</Text>
-    </View>
-  );
-};
 
 export default function App() {
   const {
@@ -56,7 +46,7 @@ export default function App() {
       onUserFollow={onUserFollow}
       onUserUnFollow={onUserUnFollow}
       onViewMyProShop={onViewMyProShop}
-      CommunityLeaderboard={CommunityLeaderboard}
+      CommunityLeaderboardComponent={CommunityLeaderboard} //Sample leaderboard component...
     >
       <AmityUiKitSocial />
     </AmityUiKitProvider>

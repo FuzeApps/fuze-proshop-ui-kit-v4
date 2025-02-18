@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
   },
   pill: {
     backgroundColor: amityUIKitTokens.colors.baseShade4,
-    paddingHorizontal: amityUIKitTokens.spacing.xxs2,
+    paddingHorizontal: amityUIKitTokens.spacing.s1,
+    paddingVertical: amityUIKitTokens.spacing.xxs2,
     borderRadius: amityUIKitTokens.borderRadius.large,
   },
   pillText: {

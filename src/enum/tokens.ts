@@ -342,13 +342,13 @@ const colors: CustomColors = {
   /**
    * Alert colors
    */
-  background: '#344054',
+  background: '#182230',
   backgroundShade1: '#475467',
 
-  border: '#182230',
-  screenBackground: '#182230',
+  border: '#101828',
+  screenBackground: '#101828',
   alert: '#FA4D30',
-  baseDivider: '#182230',
+  baseDivider: '#101828',
 };
 
 export const amityUIKitTokens = {
