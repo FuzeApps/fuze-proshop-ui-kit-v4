@@ -46,6 +46,7 @@ export default function App() {
       displayName={'Zane Scotland'}
       apiEndpoint="https://api.eu.amity.co"
       userRole={UserRole.PRO}
+      minMembersToShowCounter={1000}
       onCommunityJoin={onCommunityJoin}
       onCommunityLeave={onCommunityLeave}
       onPostComplete={onPostComplete}

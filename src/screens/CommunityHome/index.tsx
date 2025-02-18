@@ -23,7 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CustomTab from '../../components/CustomTabV3';
+import CustomTabV4 from '../../components/CustomTabV4';
 import useAuth from '../../hooks/useAuth';
 import Feed from '../Feed';
 import { useStyles } from './styles';
@@ -44,15 +44,15 @@ import { amityPostsFormatter } from '../../util/postDataFormatter';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
+import CategoryPills from '../../components/CategoryPills';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
 import { amityUIKitTokens } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
 import { PostTargetType } from '../../enum/postTargetType';
 import { TabName } from '../../enum/tabNameState';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 import useFile from '../../hooks/useFile';
 import uiSlice from '../../redux/slices/uiSlice';
-import EditIcon from '../../svg/EditIcon';
-import { PlusIcon } from '../../svg/PlusIcon';
 import PrimaryDot from '../../svg/PrimaryDotIcon';
 import {
   kebabMenu,
@@ -61,7 +61,6 @@ import {
   verifiedIcon,
 } from '../../svg/svg-xml-list';
 import metadataHandlers from '../../util/metadataHandlers';
-import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 const COMMUNITY_IMAGE_HEIGHT = 180;
 
@@ -242,13 +241,13 @@ export default function CommunityHome({ route }: any) {
     }
   };
 
-  // const handleMembersPress = () => {
-  //   navigation.navigate('CommunityMemberDetail', {
-  //     communityId: communityId,
-  //     communityName: communityName,
-  //     isModerator: isUserHasPermission,
-  //   });
-  // };
+  const handleMembersPress = () => {
+    navigation.navigate('CommunityMemberDetail', {
+      communityId: communityId,
+      communityName: communityName,
+      isModerator: isUserHasPermission,
+    });
+  };
 
   function triggerLoadMoreFunction() {
     if (feedRef.current) {
@@ -277,12 +276,12 @@ export default function CommunityHome({ route }: any) {
     setCurrentTab(tabName);
   };
 
-  const handleClickPendingArea = () => {
+  const handleClickPendingArea = useCallback(() => {
     navigation.navigate('PendingPosts', {
       communityId: communityId,
       isModerator: isUserHasPermission,
     });
-  };
+  }, [communityId, isUserHasPermission, navigation]);
 
   const handleOnPressPostBtn = () => {
     return dispatch(
@@ -299,53 +298,11 @@ export default function CommunityHome({ route }: any) {
     );
   };
 
-  const onEditProfileTap = () => {
+  const onEditProfileTap = useCallback(() => {
     navigation.navigate('EditCommunity', {
       communityData,
     });
-  };
-
-  const renderTabs = () => {
-    switch (currentTab) {
-      case TabName.Timeline:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Feed]}
-          />
-        );
-      case TabName.Activity:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Activity]}
-          />
-        );
-      case TabName.Leaderboard:
-        return (
-          <Feed
-            targetType="community"
-            targetId={communityId}
-            ref={feedRef}
-            tags={[PostTag.Leaderboard]}
-          />
-        );
-      case TabName.Gallery:
-        return (
-          <GalleryComponent
-            targetId={communityId}
-            ref={feedRef}
-            targetType="community"
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  }, [communityData, navigation]);
 
   const backNavigationUi = useMemo(() => {
     if (!isBackEnabled) {
@@ -471,6 +428,92 @@ export default function CommunityHome({ route }: any) {
     theme.colors.primary,
   ]);
 
+  // Community Post and member counter
+
+  const communityPostAndMemberCounter = useMemo(() => {
+    if (communityData?.data.membersCount < 1000) {
+      return null;
+    }
+
+    return (
+      <View style={styles.row}>
+        <View style={styles.rowItem}>
+          <Text style={styles.rowNumber}>{communityData?.data.postsCount}</Text>
+          <Text style={styles.rowLabel}>post</Text>
+        </View>
+
+        <View style={styles.rowItemContent}>
+          <View style={styles.verticalLine} />
+          <TouchableOpacity
+            onPress={() => handleMembersPress()}
+            style={[styles.rowItem, { paddingLeft: 10 }]}
+          >
+            <Text style={styles.rowNumber}>
+              {communityData?.data.membersCount}
+            </Text>
+            <Text style={styles.rowLabel}>members</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }, [
+    communityData?.data.membersCount,
+    communityData?.data.postsCount,
+    handleMembersPress,
+    styles.row,
+    styles.rowItem,
+    styles.rowItemContent,
+    styles.rowLabel,
+    styles.rowNumber,
+    styles.verticalLine,
+  ]);
+
+  /**
+   * Tabs Section
+   * */
+
+  const renderTabs = useCallback(() => {
+    switch (currentTab) {
+      case TabName.Timeline:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Feed]}
+          />
+        );
+      case TabName.Activities:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Activity]}
+          />
+        );
+      case TabName.Leaderboard:
+        return (
+          <Feed
+            targetType="community"
+            targetId={communityId}
+            ref={feedRef}
+            tags={[PostTag.Leaderboard]}
+          />
+        );
+      case TabName.Gallery:
+        return (
+          <GalleryComponent
+            targetId={communityId}
+            ref={feedRef}
+            targetType="community"
+          />
+        );
+      default:
+        return null;
+    }
+  }, [communityId, currentTab]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -503,7 +546,7 @@ export default function CommunityHome({ route }: any) {
             {communityActionsUi}
           </View>
         </View>
-
+        {/* CategoryPills Section */}
         {/* Community Name Section */}
         <View
           style={[
@@ -551,6 +594,11 @@ export default function CommunityHome({ route }: any) {
           </View>
         </View>
 
+        {/* CategoryPills Section */}
+        <View style={styles.sectionWrapper}>
+          <CategoryPills categoryIds={communityData?.data?.categoryIds} />
+        </View>
+
         {/* Description Block Section */}
         <View style={styles.sectionWrapper}>
           <Text style={styles.description}>
@@ -573,40 +621,19 @@ export default function CommunityHome({ route }: any) {
           {pendingPostUiBlock}
         </View>
 
-        {/* TODO:   */}
-        {/* Counters: Members and Posts */}
-        {/* <View style={styles.row}>
-          <View style={styles.rowItem}>
-            <Text style={styles.rowNumber}>
-              {communityData?.data.postsCount}
-            </Text>
-            <Text style={styles.rowLabel}>post</Text>
-          </View>
-
-          <View style={styles.rowItemContent}>
-            <View style={styles.verticalLine} />
-            <TouchableOpacity
-              onPress={() => handleMembersPress()}
-              style={[styles.rowItem, { paddingLeft: 10 }]}
-            >
-              <Text style={styles.rowNumber}>
-                {communityData?.data.membersCount}
-              </Text>
-              <Text style={styles.rowLabel}>members</Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
+        {communityPostAndMemberCounter}
 
         {/* Tabs Section: Timeline, Activity, Leaderboard, Gallery */}
-        <CustomTab
+        <CustomTabV4
           tabName={[
             TabName.Timeline,
-            TabName.Activity,
+            TabName.Activities,
             TabName.Leaderboard,
             TabName.Gallery,
           ]}
           onTabChange={handleTab}
         />
+        {/* The tabs with complex ui */}
         <View style={styles.tabBackground}>{renderTabs()}</View>
       </ScrollView>
       {isJoin && (

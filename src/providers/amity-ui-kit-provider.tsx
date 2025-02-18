@@ -26,6 +26,7 @@ export interface IAmityUIkitProvider {
   behaviour?: IBehaviour;
   //Extra properties
   userRole?: UserRole;
+  minMembersToShowCounter?: number;
   //Callbacks. This is on Top of Social+
   onUserFollow?: (userId: string) => void;
   onUserUnFollow?: (userId: string) => void;
@@ -89,6 +90,7 @@ export default function AmityUiKitProvider({
   onUserUnFollow,
   onViewMyProShop,
   userRole,
+  minMembersToShowCounter,
 }: IAmityUIkitProvider) {
   const isValidConfig = useValidateConfig(configs);
   const configData = isValidConfig ? configs : (fallBackConfig as IConfigRaw);
@@ -131,6 +133,7 @@ export default function AmityUiKitProvider({
             onUserUnFollow={onUserUnFollow}
             onViewMyProShop={onViewMyProShop}
             userRole={userRole}
+            minMembersToShowCounter={minMembersToShowCounter}
           >
             <ConfigProvider configs={configData}>
               <BehaviourProvider behaviour={behaviour}>

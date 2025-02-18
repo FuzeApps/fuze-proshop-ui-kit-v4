@@ -130,6 +130,9 @@ export const useStyles = () => {
     },
     description: {
       color: amityUIKitTokens.colors.baseShade1,
+      fontSize: amityUIKitTokens.fontSize.body,
+      fontWeight: amityUIKitTokens.fontWeight.bodyRegular,
+      lineHeight: amityUIKitTokens.lineHeight.body,
     },
     joinIcon: {
       width: 18,
@@ -191,9 +194,10 @@ export const useStyles = () => {
       marginLeft: 6,
     },
     pendingDescriptionText: {
-      fontSize: 13,
-      fontWeight: '400',
-      color: theme.colors.baseShade1,
+      fontSize: amityUIKitTokens.fontSize.body,
+      fontWeight: amityUIKitTokens.fontWeight.bodyRegular,
+      lineHeight: amityUIKitTokens.lineHeight.body,
+      color: theme.colors.base,
     },
     pendingRow: {
       flexDirection: 'row',

@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { IAmityUIkitProvider } from './amity-ui-kit-provider';
 
+const DEFAULT_MEMBERS_TO_SHOW_COMMUNITY_COUNTER = 1000;
+
 export const AuthStaticContext = React.createContext<IAmityUIkitProvider>({
   userId: '',
   displayName: '',
@@ -29,6 +31,8 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
   onUserUnFollow,
   onViewMyProShop,
   CommunityLeaderboard,
+  userRole,
+  minMembersToShowCounter = DEFAULT_MEMBERS_TO_SHOW_COMMUNITY_COUNTER,
 }) => {
   return (
     <AuthStaticContext.Provider
@@ -50,6 +54,8 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
         onUserUnFollow,
         onViewMyProShop,
         CommunityLeaderboard,
+        userRole,
+        minMembersToShowCounter,
       }}
     >
       {children}

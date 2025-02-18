@@ -24,7 +24,7 @@ import {
   subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
 import Feed from '../Feed';
-import CustomTab from '../../components/CustomTab';
+import CustomTabV4 from '../../components/CustomTabV4';
 import type { FeedRefType } from '../CommunityHome';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -50,7 +50,7 @@ import { ImageSizeState } from '../../enum';
 
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
 import {} from '../../hooks';
-import { TabName } from '../../enum/enumTabName';
+import { TabName } from '../../enum';
 import { useFileV4 } from '../../hooks/useFilev4';
 import { PostTag } from '../../enum/enumPostTag';
 
@@ -392,7 +392,7 @@ export default function UserProfile({ route }: any) {
         </View>
         {!isBlocked && (
           <>
-            <CustomTab
+            <CustomTabV4
               tabName={
                 [
                   TabName.Timeline,
@@ -402,6 +402,7 @@ export default function UserProfile({ route }: any) {
               }
               onTabChange={setCurrentTab}
             />
+
             {renderTabs()}
           </>
         )}
