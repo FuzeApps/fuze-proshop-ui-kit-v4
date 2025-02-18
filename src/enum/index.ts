@@ -8,3 +8,4 @@ export * from './mediaAttachmentEnum';
 export * from './tokens';
 export * from './AmityUiKitRoutes';
 export * from './AmityUserMetadataKeys';
+export * from './userRole';

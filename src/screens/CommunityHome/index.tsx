@@ -61,6 +61,7 @@ import {
   verifiedIcon,
 } from '../../svg/svg-xml-list';
 import metadataHandlers from '../../util/metadataHandlers';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 const COMMUNITY_IMAGE_HEIGHT = 180;
 
@@ -72,6 +73,7 @@ export default function CommunityHome({ route }: any) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const theme = useTheme() as MyMD3Theme;
   const insets = useSafeAreaInsets();
+  const { onCommunityJoin, onViewMyProShop } = useAuthStatic();
   // const { excludes } = useConfig();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -254,9 +256,13 @@ export default function CommunityHome({ route }: any) {
     }
   }
 
-  const onJoinCommunityTap = async () => {
+  const onJoinCommunityTap = useCallback(async () => {
     const isJoined = await CommunityRepository.joinCommunity(communityId);
     if (isJoined) {
+      //Event callback for joining community.
+      onCommunityJoin?.(communityId);
+
+      // Add community to joined communities metadata
       await metadataHandlers.addToJoinedCommunities(
         (client as Amity.Client).userId,
         communityId
@@ -265,16 +271,7 @@ export default function CommunityHome({ route }: any) {
       return isJoined;
     }
     return null;
-  };
-
-  const joinCommunityButton = useMemo(() => {
-    return (
-      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
-        <PlusIcon color="#FFF" width={24} />
-        <Text style={styles.joinCommunityText}>Join</Text>
-      </TouchableOpacity>
-    );
-  }, []);
+  }, [client, communityId, onCommunityJoin]);
 
   const handleTab = (tabName: TabName) => {
     setCurrentTab(tabName);
@@ -286,27 +283,6 @@ export default function CommunityHome({ route }: any) {
       isModerator: isUserHasPermission,
     });
   };
-
-  const pendingPostUiBlock = useMemo(() => {
-    return (
-      <Pressable onPress={handleClickPendingArea}>
-        <View style={styles.pendingPostArea}>
-          <View style={styles.pendingRow}>
-            <PrimaryDot color={theme.colors.primary} />
-            <Text style={styles.pendingText}>Pending posts</Text>
-          </View>
-
-          <Text style={styles.pendingDescriptionText}>
-            {isUserHasPermission
-              ? (pendingPosts.length > 30 && 'More than ') +
-                pendingPosts.length +
-                ' posts need approval'
-              : 'Your posts are pending for review'}
-          </Text>
-        </View>
-      </Pressable>
-    );
-  }, [pendingPosts]);
 
   const handleOnPressPostBtn = () => {
     return dispatch(
@@ -386,7 +362,7 @@ export default function CommunityHome({ route }: any) {
     }
 
     return null;
-  }, [isStickyHeaderVisible]);
+  }, [isBackEnabled, isStickyHeaderVisible, navigation]);
 
   const communityActionsUi = useMemo(() => {
     return (
@@ -403,7 +379,97 @@ export default function CommunityHome({ route }: any) {
         <SvgXml xml={kebabMenu()} />
       </RoundButton>
     );
-  }, [isStickyHeaderVisible]);
+  }, [
+    communityId,
+    communityName,
+    isModerator,
+    isStickyHeaderVisible,
+    navigation,
+  ]);
+
+  /**
+   * Communinity CTAs section
+   * */
+
+  // Join Community Button
+  const joinCommunityButton = useMemo(() => {
+    if (isJoin) return null;
+
+    return (
+      <TouchableOpacity style={styles.button} onPress={onJoinCommunityTap}>
+        <Text style={styles.joinCommunityText}>Join</Text>
+      </TouchableOpacity>
+    );
+  }, [isJoin, onJoinCommunityTap, styles.button, styles.joinCommunityText]);
+
+  // View My Proshop Button
+  const viewMyProshopButton = useMemo(() => {
+    if (typeof onViewMyProShop !== 'function') {
+      return null;
+    }
+
+    return (
+      <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
+        <Text style={styles.editProfileText}>View my ProShop</Text>
+      </TouchableOpacity>
+    );
+  }, [
+    onEditProfileTap,
+    onViewMyProShop,
+    styles.button,
+    styles.editProfileText,
+  ]);
+
+  // Edit Community Button
+  const editCommunityButton = useMemo(() => {
+    return isUserHasPermission ? (
+      <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
+        <Text style={styles.editProfileText}>Edit</Text>
+      </TouchableOpacity>
+    ) : null;
+  }, [
+    isUserHasPermission,
+    onEditProfileTap,
+    styles.button,
+    styles.editProfileText,
+  ]);
+
+  // Pending Post Area
+  const pendingPostUiBlock = useMemo(() => {
+    if (isJoin && isShowPendingArea) {
+      return (
+        <Pressable onPress={handleClickPendingArea}>
+          <View style={styles.pendingPostArea}>
+            <View style={styles.pendingRow}>
+              <PrimaryDot color={theme.colors.primary} />
+              <Text style={styles.pendingText}>Pending posts</Text>
+            </View>
+
+            <Text style={styles.pendingDescriptionText}>
+              {isUserHasPermission
+                ? (pendingPosts.length > 30 && 'More than ') +
+                  pendingPosts.length +
+                  ' posts need approval'
+                : 'Your posts are pending for review'}
+            </Text>
+          </View>
+        </Pressable>
+      );
+    }
+
+    return null;
+  }, [
+    handleClickPendingArea,
+    isJoin,
+    isShowPendingArea,
+    isUserHasPermission,
+    pendingPosts.length,
+    styles.pendingDescriptionText,
+    styles.pendingPostArea,
+    styles.pendingRow,
+    styles.pendingText,
+    theme.colors.primary,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -495,16 +561,16 @@ export default function CommunityHome({ route }: any) {
         {/* CTA Section */}
         <View style={styles.ctaWrapper}>
           {/* Edit Group CTA */}
-          {isUserHasPermission ? (
-            <TouchableOpacity style={styles.button} onPress={onEditProfileTap}>
-              <EditIcon width={24} height={20} color={theme.colors.base} />
-              <Text style={styles.editProfileText}>Edit Group</Text>
-            </TouchableOpacity>
-          ) : null}
+          {editCommunityButton}
+
           {/* Join Community CTA */}
-          {!isJoin ? joinCommunityButton : null}
+          {joinCommunityButton}
+
+          {/* View my Proshop CTA */}
+          {viewMyProshopButton}
+
           {/* Pending Post area */}
-          {isJoin && isShowPendingArea ? pendingPostUiBlock : null}
+          {pendingPostUiBlock}
         </View>
 
         {/* TODO:   */}

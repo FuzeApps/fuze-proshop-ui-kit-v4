@@ -9,6 +9,7 @@ import { SvgXml } from 'react-native-svg';
 import { communitySettingMemberIcon } from '../../svg/svg-xml-list';
 import metadataHandlers from '../../util/metadataHandlers';
 import useAuth from '../../hooks/useAuth';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 interface ChatDetailProps {
   navigation: any;
@@ -27,7 +28,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
   const { client } = useAuth();
-
+  const { onCommunityLeave } = useAuthStatic();
   const { communityId, isModerator } = route.params;
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
@@ -39,6 +40,10 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   const handleLeaveCommunityPress = async () => {
     const hasLeft = await CommunityRepository.leaveCommunity(communityId);
 
+    //Event handler for leaving community.
+    onCommunityLeave?.(communityId);
+
+    // Remove community from joined communities metadata
     await metadataHandlers.removeFromJoinedCommunities(
       (client as Amity.Client).userId,
       communityId
@@ -50,6 +55,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   };
 
   const onCloseCommunity = async () => {
+    // TODO: JPN: On close community
     const deletedCommunity =
       await CommunityRepository.deleteCommunity(communityId);
     if (deletedCommunity) return navigation.navigate('Home');

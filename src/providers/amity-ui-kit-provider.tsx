@@ -3,7 +3,7 @@ import { DefaultTheme, PaperProvider, type MD3Theme } from 'react-native-paper';
 import { MenuProvider } from 'react-native-popup-menu';
 import { Provider } from 'react-redux';
 import fallBackConfig from '../../uikit.config.json';
-import { amityUIKitTokens } from '../enum';
+import { amityUIKitTokens, UserRole } from '../enum';
 import useValidateConfig from '../hooks/useValidateConfig';
 import { BehaviourProvider } from '../providers/BehaviourProvider';
 import { store } from '../redux/store';
@@ -24,6 +24,20 @@ export interface IAmityUIkitProvider {
   authToken?: string;
   configs?: IConfigRaw;
   behaviour?: IBehaviour;
+  //Extra properties
+  userRole?: UserRole;
+  //Callbacks. This is on Top of Social+
+  onUserFollow?: (userId: string) => void;
+  onUserUnFollow?: (userId: string) => void;
+  onCommunityJoin?: (communityId: string) => void;
+  onCommunityLeave?: (communityId: string) => void;
+  onPostLike?: (postId: string) => void;
+  onPostUnLike?: (postId: string) => void;
+  onPostStart?: (postId?: string) => void;
+  onPostComplete?: (postId?: string) => void;
+  onViewMyProShop?: (communityId: string) => void;
+  //Extra Components
+  CommunityLeaderboard?: (props: { communityId: string }) => JSX.Element;
 }
 
 export interface CustomColors {
@@ -64,6 +78,17 @@ export default function AmityUiKitProvider({
   authToken,
   configs,
   behaviour,
+  CommunityLeaderboard,
+  onCommunityJoin,
+  onCommunityLeave,
+  onPostComplete,
+  onPostLike,
+  onPostStart,
+  onPostUnLike,
+  onUserFollow,
+  onUserUnFollow,
+  onViewMyProShop,
+  userRole,
 }: IAmityUIkitProvider) {
   const isValidConfig = useValidateConfig(configs);
   const configData = isValidConfig ? configs : (fallBackConfig as IConfigRaw);
@@ -87,6 +112,7 @@ export default function AmityUiKitProvider({
           apiEndpoint={apiEndpoint}
           authToken={authToken}
         >
+          {/* This is for proshop purpose */}
           <AuthStaticProvider
             userId={userId}
             displayName={displayName || userId}
@@ -94,6 +120,17 @@ export default function AmityUiKitProvider({
             apiRegion={apiRegion}
             apiEndpoint={apiEndpoint}
             authToken={authToken}
+            CommunityLeaderboard={CommunityLeaderboard}
+            onCommunityJoin={onCommunityJoin}
+            onCommunityLeave={onCommunityLeave}
+            onPostComplete={onPostComplete}
+            onPostLike={onPostLike}
+            onPostStart={onPostStart}
+            onPostUnLike={onPostUnLike}
+            onUserFollow={onUserFollow}
+            onUserUnFollow={onUserUnFollow}
+            onViewMyProShop={onViewMyProShop}
+            userRole={userRole}
           >
             <ConfigProvider configs={configData}>
               <BehaviourProvider behaviour={behaviour}>

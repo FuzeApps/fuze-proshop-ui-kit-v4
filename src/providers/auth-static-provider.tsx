@@ -19,6 +19,16 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
   apiRegion,
   apiEndpoint,
   authToken,
+  onCommunityJoin,
+  onCommunityLeave,
+  onPostComplete,
+  onPostLike,
+  onPostStart,
+  onPostUnLike,
+  onUserFollow,
+  onUserUnFollow,
+  onViewMyProShop,
+  CommunityLeaderboard,
 }) => {
   return (
     <AuthStaticContext.Provider
@@ -30,6 +40,16 @@ export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
         apiEndpoint,
         authToken,
         children,
+        onCommunityJoin,
+        onCommunityLeave,
+        onPostComplete,
+        onPostLike,
+        onPostStart,
+        onPostUnLike,
+        onUserFollow,
+        onUserUnFollow,
+        onViewMyProShop,
+        CommunityLeaderboard,
       }}
     >
       {children}
