@@ -1,5 +1,7 @@
 import React from 'react';
-import AmityUiKitProvider from './providers/amity-ui-kit-provider';
+import AmityUiKitProvider, {
+  IAmityUIkitProvider,
+} from './providers/amity-ui-kit-provider';
 import AmityUiKitSocial from './routes/SocialNavigator';
 import { PostTag } from './enum/enumPostTag';
 import { AmityUiKitRoutes, AmityUserMetadataKeys } from './enum';
@@ -39,4 +41,6 @@ export {
   PostTag,
   AmityUiKitRoutes,
   AmityUserMetadataKeys,
+  // Interfaces
+  IAmityUIkitProvider,
 };
