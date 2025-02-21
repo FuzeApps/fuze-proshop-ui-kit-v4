@@ -9,6 +9,7 @@ import { UserRole } from '../../src/enum';
 import useEventHandlers from '../hooks/useEventHandlers';
 import config from '../uikit.config.json';
 import CommunityLeaderboard from './CommunityLeaderboard';
+import { NavigationContainer } from '@react-navigation/native';
 
 if (__DEV__) {
   require('../ReactotronConfig');
@@ -48,7 +49,9 @@ export default function App() {
       onViewMyProShop={onViewMyProShop}
       CommunityLeaderboardComponent={CommunityLeaderboard} //Sample leaderboard component...
     >
-      <AmityUiKitSocial />
+      <NavigationContainer>
+        <AmityUiKitSocial useOwnNavigationContainer />
+      </NavigationContainer>
     </AmityUiKitProvider>
   );
 }
