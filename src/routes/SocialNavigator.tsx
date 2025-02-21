@@ -42,6 +42,10 @@ import MyUserprofile from '../screens/MyUserProfile';
 import PostDetail from '../screens/PostDetail';
 import EditPost from '../screens/EditPost/EditPost';
 import Toast from '../components/Toast/Toast';
+
+import FollowerList from '../screens/FollowerList/FollowerList';
+import UserPendingRequest from '../screens/UserPendingRequest/UserPendingRequest';
+
 import { AmityUiKitRoutes } from '../enum';
 
 interface INavigator {
@@ -251,6 +255,26 @@ export default function SocialNavigator({ screen = 'Home' }: INavigator) {
             name={AmityUiKitRoutes.EditPost}
             component={EditPost}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.FollowerList}
+            component={FollowerList}
+            options={({
+              route: {
+                params: { displayName },
+              },
+            }: any) => ({
+              title: displayName,
+              headerLeft: () => <BackButton />,
+            })}
+          />
+          <Stack.Screen
+            name={AmityUiKitRoutes.UserPendingRequest}
+            component={UserPendingRequest}
+            options={{
+              title: 'Follow Requests',
+              headerLeft: () => <BackButton />,
+            }}
           />
         </Stack.Navigator>
       )}

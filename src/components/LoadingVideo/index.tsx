@@ -9,10 +9,9 @@ import {
 } from '../../providers/file-provider';
 import { closeIcon, playBtn } from '../../svg/svg-xml-list';
 import { createStyles } from './styles';
-
-import { Video, ResizeMode } from 'expo-av';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 interface OverlayImageProps {
   source: string;
@@ -51,8 +50,9 @@ const LoadingVideo = ({
   const styles = createStyles();
   const [playingUri] = useState<string>('');
   const [isPause] = useState<boolean>(true);
-
+  const [videoSource, setVideoSource] = useState('');
   const videoRef = React.useRef(null);
+  const player = useVideoPlayer(videoSource);
 
   const handleLoadEnd = () => {
     setLoading(false);
@@ -114,13 +114,12 @@ const LoadingVideo = ({
   }, [fileId, isUploaded, source]);
 
   const handleOnPlay = async () => {
-    // if (videoRef) {
-    //   await videoRef.current.loadAsync({
-    //     uri: `https://api.${apiRegion}.amity.co/api/v3/files/${videoPosts[currentImageIndex]?.videoFileId?.original}/download`,
-    //   });
-    //   await videoRef.current.presentFullscreenPlayer();
-    //   await videoRef.current.playAsync();
-    // }
+    // setVideoSource( `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download`)
+    if (videoRef) {
+      if (videoRef.current) {
+        videoRef.current.enterFullscreen();
+      }
+    }
   };
 
   return (
@@ -131,10 +130,12 @@ const LoadingVideo = ({
         </TouchableOpacity>
       )}
       {playingUri ? (
-        <Video
+        <VideoView
+          player={player}
           ref={videoRef}
-          resizeMode={ResizeMode.CONTAIN}
-          style={styles.image}
+          style={{ display: 'none' }}
+          onFullscreenExit={() => setVideoSource('')}
+          onFullscreenEnter={() => player.play()}
         />
       ) : thumbNailImage ? (
         <Image

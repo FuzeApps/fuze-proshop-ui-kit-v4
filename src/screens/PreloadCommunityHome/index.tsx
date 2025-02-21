@@ -31,7 +31,7 @@ export default function PreloadCommunityHome() {
         isBackEnabled: false,
       });
     }
-  }, [defaultCommunityId, defaultCommunityName]);
+  }, [defaultCommunityId, defaultCommunityName, navigation]);
 
   return <View />;
 }

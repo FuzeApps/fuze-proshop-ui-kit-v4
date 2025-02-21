@@ -1,9 +1,6 @@
-import { FlatList, StyleSheet, View } from 'react-native';
 import React, { FC, memo } from 'react';
-import { TabName } from '../../enum';
-
-import { ComponentID, PageID } from '../../enum';
-
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ComponentID, PageID, TabName } from '../../enum';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import SearchResultItem from '../SearchResultItem/SearchResultItem';
 
