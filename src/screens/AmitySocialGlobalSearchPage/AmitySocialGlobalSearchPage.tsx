@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native';
 import AmityCommunitySearchResultComponent from '../../components/AmityCommunitySearchResultComponent/AmityCommunitySearchResultComponent';
 import AmityTopSearchBarComponent from '../../components/AmityTopSearchBarComponent/AmityTopSearchBarComponent';
 import CustomTab from '../../components/CustomTab';

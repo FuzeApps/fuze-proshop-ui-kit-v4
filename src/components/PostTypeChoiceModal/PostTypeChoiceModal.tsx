@@ -30,7 +30,14 @@ const PostTypeChoiceModal = () => {
   const { community } = useCommunity(targetId);
 
   const onChooseType = (type: string) => {
-    if (targetId && targetName && targetType && community && type == 'post') {
+    if (targetType === 'user' && targetName && targetType && targetId) {
+      closeCreatePostModal();
+      navigation.navigate('CreatePost', {
+        targetId,
+        targetType,
+      });
+    }
+    if (targetId && targetName && targetType && community && type === 'post') {
       closeCreatePostModal();
       navigation.navigate('CreatePost', {
         targetId,
@@ -42,7 +49,7 @@ const PostTypeChoiceModal = () => {
       targetName &&
       targetType &&
       community &&
-      type == 'poll'
+      type === 'poll'
     ) {
       closeCreatePostModal();
       navigation.navigate('CreatePoll', {

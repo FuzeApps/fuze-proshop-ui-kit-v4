@@ -1,27 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { RootStackParamList } from '../../routes/RouteParamList';
-
 import { ComponentID, ElementID, PageID, TabName } from '../../enum';
 import { useBehaviour } from '../../providers/BehaviourProvider';
-// import { useConfigImageUri } from '../../hooks/useConfigImageUri';
 import { useUiKitConfig } from '../../hooks/useUiKitConfig';
-
 import PlusIconV4 from '../../svg/PlusIconV4';
 import SearchIconV4 from '../../svg/SearchIconV4';
 
-import { UserRepository } from '@amityco/ts-sdk-react-native';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { useAuthStatic } from '../../hooks/useAuthStatic';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 import { PollIcon } from '../../svg/PollIcon';
 import { PostIconOutlined } from '../../svg/PostIconOutlined';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
@@ -33,8 +30,6 @@ const AmitySocialHomeTopNavigationComponent = ({
 }) => {
   const theme = useTheme() as MyMD3Theme;
   const { AmitySocialHomeTopNavigationComponentBehaviour } = useBehaviour();
-  const [user, setUser] = useState<Amity.User>();
-  const { userId } = useAuthStatic();
   const [headerTitle] = useUiKitConfig({
     keys: ['text'],
     page: PageID.social_home_page,
@@ -44,50 +39,18 @@ const AmitySocialHomeTopNavigationComponent = ({
   const [openPostCreationMenu, setOpenPostCreationMenu] =
     useState<boolean>(false);
 
+  const { userId } = useSelector((state: RootState) => state.ui);
   const [postType, setPostType] = useState<string>();
   const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
-
-  useEffect(() => {
-    if (!userId) return;
-
-    const unsubscribe = UserRepository.getUser(
-      userId,
-      async ({ data, loading, error }) => {
-        if (!loading && !error) {
-          setUser(data);
-        }
-      }
-    );
-
-    unsubscribe();
-  }, [userId]);
 
   const onChooseType = (type: string) => {
     setOpenPostCreationMenu(false);
     setPostType(type);
     setCreatePostModalVisible(true);
   };
-
   const closeCreatePostModal = () => {
     setCreatePostModalVisible(false);
   };
-  // const searchIcon = useConfigImageUri({
-  //   configPath: {
-  //     page: PageID.social_home_page,
-  //     component: ComponentID.top_navigation,
-  //     element: ElementID.global_search_button,
-  //   },
-  //   configKey: 'icon',
-  // });
-
-  // const createIcon = useConfigImageUri({
-  //   configPath: {
-  //     page: PageID.social_home_page,
-  //     component: ComponentID.top_navigation,
-  //     element: ElementID.post_creation_button,
-  //   },
-  //   configKey: 'icon',
-  // });
   const navigation =
     useNavigation() as NativeStackNavigationProp<RootStackParamList>;
   const styles = StyleSheet.create({
@@ -152,13 +115,10 @@ const AmitySocialHomeTopNavigationComponent = ({
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('AmitySocialGlobalSearchPage');
-  }, [navigation]);
+  }, [AmitySocialHomeTopNavigationComponentBehaviour, navigation]);
 
   const onClickPlusIcon = useCallback(() => {
-    if (currentTab === TabName.FindGroups) {
-      //JPN: TODO: Add a check here if the user is eligible to create a community.
-      // If pro and haven't created a community yet, then navigate to create community.
-      // If a normal user, dont show this button.
+    if (currentTab === TabName.MyCommunities) {
       navigation.navigate('CreateCommunity');
     } else {
       setOpenPostCreationMenu(true);
@@ -170,67 +130,6 @@ const AmitySocialHomeTopNavigationComponent = ({
       return AmitySocialHomeTopNavigationComponentBehaviour.onPressCreate();
     return onClickPlusIcon();
   }, [AmitySocialHomeTopNavigationComponentBehaviour, onClickPlusIcon]);
-
-  const plusIconMenu = useMemo(() => {
-    //Hides the plus icon if the user is not a pro user
-    // if (user?.metadata?.[AmityUserMetadataKeys.ProShopRole] === 'user') {
-    //   return null;
-    // }
-
-    if (currentTab !== TabName.Explore) {
-      return (
-        <Menu
-          opened={openPostCreationMenu}
-          onBackdropPress={() => setOpenPostCreationMenu(false)}
-        >
-          <MenuTrigger>
-            <TouchableOpacity
-              style={styles.iconBtn}
-              onPress={onPressCreate}
-              testID="top_navigation/post_creation_button"
-              accessibilityLabel="top_navigation/post_creation_button"
-            >
-              {/* <Image source={createIcon} style={styles.icon} /> */}
-              <PlusIconV4 color={theme.colors.base} />
-            </TouchableOpacity>
-          </MenuTrigger>
-          <MenuOptions
-            customStyles={{ optionsContainer: styles.optionsContainer }}
-          >
-            <MenuOption>
-              <TouchableOpacity
-                onPress={() => onChooseType('post')}
-                style={styles.modalRow}
-              >
-                <PostIconOutlined color={theme.colors.base} />
-                <Text style={styles.postText}>Post</Text>
-              </TouchableOpacity>
-            </MenuOption>
-            <MenuOption>
-              <TouchableOpacity
-                onPress={() => onChooseType('poll')}
-                style={styles.modalRow}
-              >
-                <PollIcon color={theme.colors.base} />
-                <Text style={styles.postText}>Poll</Text>
-              </TouchableOpacity>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-      );
-    }
-    return null;
-  }, [
-    currentTab,
-    onPressCreate,
-    openPostCreationMenu,
-    styles.iconBtn,
-    styles.modalRow,
-    styles.optionsContainer,
-    styles.postText,
-    theme.colors.base,
-    user?.metadata,
-  ]);
 
   return (
     <View
@@ -255,8 +154,47 @@ const AmitySocialHomeTopNavigationComponent = ({
           <SearchIconV4 color={theme.colors.base} />
         </TouchableOpacity>
 
-        {/* Plus Icon menu */}
-        {plusIconMenu}
+        {/* <Image source={searchIcon} style={styles.icon} /> */}
+        {currentTab !== TabName.Explore && (
+          <Menu
+            opened={openPostCreationMenu}
+            onBackdropPress={() => setOpenPostCreationMenu(false)}
+          >
+            <MenuTrigger>
+              <TouchableOpacity
+                style={styles.iconBtn}
+                onPress={onPressCreate}
+                testID="top_navigation/post_creation_button"
+                accessibilityLabel="top_navigation/post_creation_button"
+              >
+                {/* <Image source={createIcon} style={styles.icon} /> */}
+                <PlusIconV4 color={theme.colors.base} />
+              </TouchableOpacity>
+            </MenuTrigger>
+            <MenuOptions
+              customStyles={{ optionsContainer: styles.optionsContainer }}
+            >
+              <MenuOption>
+                <TouchableOpacity
+                  onPress={() => onChooseType('post')}
+                  style={styles.modalRow}
+                >
+                  <PostIconOutlined color={theme.colors.base} />
+                  <Text style={styles.postText}>Post</Text>
+                </TouchableOpacity>
+              </MenuOption>
+              <MenuOption>
+                <TouchableOpacity
+                  onPress={() => onChooseType('poll')}
+                  style={styles.modalRow}
+                >
+                  <PollIcon color={theme.colors.base} />
+                  <Text style={styles.postText}>Poll</Text>
+                </TouchableOpacity>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
+        )}
         <CreatePostChooseTargetModal
           visible={createPostModalVisible}
           onClose={closeCreatePostModal}

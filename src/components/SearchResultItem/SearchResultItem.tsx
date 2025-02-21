@@ -1,16 +1,17 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { useStyles } from './styles';
-import { ComponentID, ElementID, PageID, TabName } from '../../enum';
 import { CategoryRepository } from '@amityco/ts-sdk-react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../routes/RouteParamList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useBehaviour } from '../../providers/BehaviourProvider';
-import { useAmityComponent } from '../../hooks/useUiKitReference';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import AvatarElement from '../../Elements/CommonElements/AvatarElement';
-import ImageElement from '../../Elements/CommonElements/ImageElement';
 import TextElement from '../../Elements/CommonElements/TextElement';
+import { ComponentID, ElementID, PageID, TabName } from '../../enum';
+import { useAmityComponent } from '../../hooks/useUiKitReference';
+import { useBehaviour } from '../../providers/BehaviourProvider';
+import { RootStackParamList } from '../../routes/RouteParamList';
+import { privateIcon, verifiedIcon } from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 
 type SearchResultItemType = {
   pageId?: PageID;
@@ -87,13 +88,7 @@ const SearchResultItem: FC<SearchResultItemType> = ({
       <View style={styles.profileInfoContainer}>
         <View style={styles.rowContainer}>
           {showPrivateIcon && (
-            <ImageElement
-              pageID={pageId}
-              componentID={componentId}
-              elementID={ElementID.community_private_badge}
-              style={styles.lockIcon}
-              configKey="icon"
-            />
+            <SvgXml xml={privateIcon()} style={styles.lockIcon} />
           )}
           <TextElement
             pageID={pageId}
@@ -104,13 +99,7 @@ const SearchResultItem: FC<SearchResultItemType> = ({
           />
 
           {showOfficialBadgeIcon && (
-            <ImageElement
-              pageID={pageId}
-              componentID={componentId}
-              elementID={ElementID.community_official_badge}
-              style={styles.badgeIcon}
-              configKey="icon"
-            />
+            <SvgXml xml={verifiedIcon()} style={styles.badgeIcon} />
           )}
         </View>
         {isCommunity && (

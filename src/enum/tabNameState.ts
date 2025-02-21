@@ -14,5 +14,7 @@ export enum TabName {
   Photos = 'Photos',
   FindGroups = 'Find Groups',
   Activities = 'Activities',
+  Following = 'Following',
+  Followers = 'Followers',
   Users = 'Users',
 }

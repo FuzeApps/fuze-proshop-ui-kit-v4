@@ -1,20 +1,14 @@
 import React, { memo } from 'react';
-import { Image } from 'react-native';
-
-import { useStyles } from './styles/styles';
-
-const emptyNewsFeedIcon = require('../../../configAssets/icons/emptyFeedIcon_dark.png');
-
+import useConfig from '../../../hooks/useConfig';
+import { SvgXml } from 'react-native-svg';
+import { emptyFeedIcon } from '../../../svg/svg-xml-list';
 const Illustration = () => {
-  const styles = useStyles();
+  const { excludes } = useConfig();
 
-  return (
-    <Image
-      source={emptyNewsFeedIcon}
-      style={styles.icon}
-      resizeMode="contain"
-    />
-  );
+  if (excludes.includes('social_home_page/empty_newsfeed/illustration'))
+    return null;
+
+  return <SvgXml xml={emptyFeedIcon()} />;
 };
 
 export default memo(Illustration);

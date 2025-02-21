@@ -26,4 +26,6 @@ export enum AmityUiKitRoutes {
   EditCommunity = 'EditCommunity',
   UserProfileSetting = 'UserProfileSetting',
   EditPost = 'EditPost',
+  FollowerList = 'FollowerList',
+  UserPendingRequest = 'UserPendingRequest',
 }

@@ -1,10 +1,9 @@
+import { Text, TouchableOpacity } from 'react-native';
 import React, { FC, memo } from 'react';
-import { Image, Text, TouchableOpacity } from 'react-native';
-import { ComponentID, ElementID, PageID } from '../../../enum';
 import { useUiKitConfig } from '../../../hooks/useUiKitConfig';
+import { ComponentID, ElementID, PageID } from '../../../enum';
+import useConfig from '../../../hooks/useConfig';
 import { useStyles } from './styles/styles';
-
-const exploreCommunityIcon = require('../../../configAssets/icons/exploreCommunityIcon.png');
 
 type ExploreCommunityButtonType = {
   onPressExploreCommunity?: () => void;
@@ -13,6 +12,7 @@ type ExploreCommunityButtonType = {
 const ExploreCommunityButton: FC<ExploreCommunityButtonType> = ({
   onPressExploreCommunity,
 }) => {
+  const { excludes } = useConfig();
   const styles = useStyles();
 
   const [text] = useUiKitConfig({
@@ -22,16 +22,18 @@ const ExploreCommunityButton: FC<ExploreCommunityButtonType> = ({
     element: ElementID.explore_communities_button,
   }) as string[];
 
+  if (
+    excludes.includes(
+      'social_home_page/empty_newsfeed/explore_communitties_button'
+    )
+  )
+    return null;
+
   return (
     <TouchableOpacity
       style={styles.exploreBtn}
       onPress={() => onPressExploreCommunity && onPressExploreCommunity()}
     >
-      <Image
-        source={exploreCommunityIcon}
-        style={styles.exploreIcon}
-        resizeMode="contain"
-      />
       <Text style={styles.exploreText}>{text}</Text>
     </TouchableOpacity>
   );
