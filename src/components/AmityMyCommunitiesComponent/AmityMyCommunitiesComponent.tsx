@@ -14,15 +14,15 @@ import ContentLoader, { Circle, Rect } from 'react-content-loader/native';
 import { SvgXml } from 'react-native-svg';
 import AvatarElement from '../../Elements/CommonElements/AvatarElement';
 import CategoryElement from '../../Elements/CommonElements/CategoryElement';
-import ImageElement from '../../Elements/CommonElements/ImageElement';
 import TextElement from '../../Elements/CommonElements/TextElement';
 import { ComponentID, ElementID, PageID } from '../../enum';
 import { useCommunities } from '../../hooks/useCommunities';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import { useBehaviour } from '../../providers/BehaviourProvider';
 import { RootStackParamList } from '../../routes/RouteParamList';
-import { verifiedIcon } from '../../svg/svg-xml-list';
+import { privateIcon, verifiedIcon } from '../../svg/svg-xml-list';
 import { formatNumber } from '../../util/numberUtil';
+
 type AmityMyCommunitiesComponentType = {
   pageId?: PageID;
   componentId?: ComponentID;
@@ -70,13 +70,7 @@ const AmityMyCommunitiesComponent: FC<AmityMyCommunitiesComponentType> = ({
         <View style={styles.communityInfoContainer}>
           <View style={styles.communityNameContainer}>
             {!item.isPublic && (
-              <ImageElement
-                pageID={pageId}
-                componentID={componentId}
-                elementID={ElementID.community_private_badge}
-                style={styles.privateBadge}
-                configKey="icon"
-              />
+              <SvgXml xml={privateIcon()} style={styles.privateBadge} />
             )}
             <TextElement
               ellipsizeMode="tail"

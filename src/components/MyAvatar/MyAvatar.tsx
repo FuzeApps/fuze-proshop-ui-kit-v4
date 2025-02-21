@@ -6,13 +6,15 @@ import { UserRepository } from '@amityco/ts-sdk-react-native';
 import { ImageSizeState } from '../../enum';
 import useAuth from '../../hooks/useAuth';
 import { useFileV4 } from '../../hooks/useFilev4';
+import { SvgXml } from 'react-native-svg';
+import { personXml } from '../../svg/svg-xml-list';
 
 type MyAvatarProp = Partial<ImageProps>;
 const MyAvatar: FC<MyAvatarProp> = (props) => {
   const { client } = useAuth();
   const { getImage } = useFileV4();
   const myId = (client as Amity.Client).userId;
-  const [avatarUrl, setAvatarUrl] = useState(defaultAvatarUri);
+  const [avatarUrl, setAvatarUrl] = useState('');
 
   useEffect(() => {
     UserRepository.getUser(myId, async ({ data, loading, error }) => {
@@ -26,7 +28,11 @@ const MyAvatar: FC<MyAvatarProp> = (props) => {
     });
   }, [getImage, myId]);
 
-  return <Image source={{ uri: avatarUrl }} style={styles.img} {...props} />;
+  return avatarUrl.length > 0 ? (
+    <Image source={{ uri: avatarUrl }} style={styles.img} {...props} />
+  ) : (
+    <SvgXml xml={personXml} />
+  );
 };
 
 export default memo(MyAvatar);
