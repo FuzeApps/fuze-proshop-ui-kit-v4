@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import {
   amityUIKitTokens,
+  AmityUserMetadataKeys,
   ComponentID,
   ElementID,
   PageID,
@@ -27,6 +28,7 @@ import { SvgXml } from 'react-native-svg';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
 import { communityIcon2, pollIcon2, postIcon2 } from '../../svg/svg-xml-list';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
+import { UserRepository } from '@amityco/ts-sdk-react-native';
 
 const AmitySocialHomeTopNavigationComponent = ({
   currentTab,
@@ -34,6 +36,7 @@ const AmitySocialHomeTopNavigationComponent = ({
   currentTab: string;
 }) => {
   const theme = useTheme() as MyMD3Theme;
+  const [userDetail, setUserDetail] = useState<Amity.User>();
   const [headerTitle] = useUiKitConfig({
     keys: ['text'],
     page: PageID.social_home_page,
@@ -85,18 +88,26 @@ const AmitySocialHomeTopNavigationComponent = ({
         title: 'Poll',
         icon: <SvgXml xml={pollIcon2()} />,
       },
-      userRole === UserRole.PRO && {
-        onPress: onPressCreateCommunity,
-        title: 'Group',
-        icon: <SvgXml xml={communityIcon2()} />,
-      },
+      userRole === UserRole.PRO &&
+      !userDetail?.metadata?.[AmityUserMetadataKeys.CreatedCommunityId]
+        ? {
+            onPress: onPressCreateCommunity,
+            title: 'Group',
+            icon: <SvgXml xml={communityIcon2()} />,
+          }
+        : null,
     ].filter(Boolean);
-  }, [onPressCreateCommunity, userRole]);
+  }, [onPressCreateCommunity, userDetail?.metadata, userRole]);
 
   useFocusEffect(
     useCallback(() => {
-      console.log('JPN: is focused!....');
-    }, [])
+      const unsubscribe = UserRepository.getUser(userId, (data) => {
+        if (data?.data && !data?.loading && !data?.error) {
+          setUserDetail(data.data);
+        }
+      });
+      unsubscribe();
+    }, [userId])
   );
 
   return (

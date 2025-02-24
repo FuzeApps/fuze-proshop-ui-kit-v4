@@ -62,6 +62,7 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
     },
     []
   );
+
   const renderCommentText = useCallback(
     (commentNumber: number | undefined): string => {
       if (!commentNumber) return '';
@@ -72,6 +73,10 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
   );
 
   const addReactionToPost = useCallback(async () => {
+    if (community && !community.isJoined) {
+      return;
+    }
+
     try {
       if (isLike) {
         setIsLike(false);
@@ -85,7 +90,7 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
     } catch (error) {
       console.log(error);
     }
-  }, [isLike, postId]);
+  }, [community, isLike, postId]);
 
   const onClickReactions = useCallback(() => {
     navigation.navigate('ReactionList', {
@@ -129,7 +134,7 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
           )}
         </View>
       )}
-      <></>
+
       <View style={[styles.actionSection, styles.detailActionSection]}>
         <View style={styles.row}>
           <TouchableOpacity onPress={addReactionToPost} style={styles.likeBtn}>

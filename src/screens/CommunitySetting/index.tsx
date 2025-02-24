@@ -62,13 +62,15 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
       await CommunityRepository.deleteCommunity(communityId);
 
     if (deletedCommunity) {
-      await metadataHandlers.removeFromJoinedCommunities(
-        (client as Amity.Client).userId,
-        communityId
-      );
+      await metadataHandlers
+        .deleteCreatedCommunityId((client as Amity.Client).userId, communityId)
+        .finally(() => {
+          if (deletedCommunity) return navigation.navigate('Home');
+        });
+
+      return;
     }
 
-    if (deletedCommunity) return navigation.navigate('Home');
     Alert.alert(
       'Unable to close community',
       'Something went wrong. Please try again later'

@@ -13,7 +13,7 @@ export const useStyles = (theme: MyMD3Theme) => {
       marginBottom: 4,
       paddingVertical: 8,
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
     },
     btnText: {
       color: theme.colors.baseShade2,

@@ -1,6 +1,7 @@
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const { top, bottom } = useSafeAreaInsets();
@@ -57,7 +58,7 @@ export const useStyles = (theme: MyMD3Theme) => {
       justifyContent: 'space-between',
       paddingHorizontal: 15,
       paddingBottom: 25,
-      paddingTop: 10,
+      paddingTop: amityUIKitTokens.spacing.m1,
       alignItems: 'center',
       borderTopWidth: 1,
       borderTopColor: theme.colors.baseShade4,

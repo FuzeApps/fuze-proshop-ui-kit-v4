@@ -82,21 +82,39 @@ export const setCreatedCommunityId = async (
         if (!error && !loading) {
           const createdCommunityId: string =
             data?.metadata?.[AmityUserMetadataKeys?.CreatedCommunityId] ?? null;
+          const joinedCommunities: string[] =
+            data?.metadata?.joinedCommunities || [];
+
+          console.log('JPN: createdCommunityId is ', createdCommunityId);
 
           //Check if community id is already created. If not yet created, update the metadata
-          if (!createdCommunityId) {
-            await UserRepository.updateUser(userId, {
-              metadata: {
-                ...data.metadata,
-                [AmityUserMetadataKeys.CreatedCommunityId]: communityId,
-              },
+          // if (!createdCommunityId) {
+          await UserRepository.updateUser(userId, {
+            metadata: {
+              ...data.metadata,
+              [AmityUserMetadataKeys.JoinedCommunities]: [
+                ...joinedCommunities,
+                communityId,
+              ],
+              [AmityUserMetadataKeys.CreatedCommunityId]: communityId,
+            },
+          })
+            .then((resp) => {
+              console.log(
+                'JPN: setCreatedCommunityId is set to ',
+                communityId,
+                JSON.stringify(resp)
+              );
+            })
+            .catch((error) => {
+              console.log('JPN: error setting setCreatedCommunityId', error);
             });
-          }
+          // }
         }
       }
     );
-
-    return Promise.resolve(unsubscribe());
+    unsubscribe();
+    return Promise.resolve();
   } catch (error) {
     return Promise.reject(error);
   }
@@ -116,21 +134,44 @@ export const deleteCreatedCommunityId = async (
         if (!error && !loading) {
           const createdCommunityId: string =
             data?.metadata?.[AmityUserMetadataKeys?.CreatedCommunityId] ?? null;
+          const joinedCommunities: string[] =
+            data?.metadata?.joinedCommunities || [];
+
+          if (createdCommunityId !== communityId) {
+            console.log(
+              'JPN: createdCommunityId is not equal to communityId.. ignoring the user update'
+            );
+            // return;
+          } else {
+            console.log('JPN: user owns the community, now deleting...');
+          }
 
           // if the community he created is equal to the target community, remove the created community id
-          if (createdCommunityId === communityId) {
-            await UserRepository.updateUser(userId, {
-              metadata: {
-                ...data.metadata,
-                [AmityUserMetadataKeys.CreatedCommunityId]: null,
-              },
+
+          await UserRepository.updateUser(userId, {
+            metadata: {
+              ...data.metadata,
+              [AmityUserMetadataKeys.JoinedCommunities]:
+                joinedCommunities.filter((item) => item !== communityId),
+              [AmityUserMetadataKeys.CreatedCommunityId]: null,
+            },
+          })
+            .then((resp) => {
+              console.log(
+                'JPN: deleteCreatedCommunityId is set to ',
+                communityId,
+                JSON.stringify(resp)
+              );
+            })
+            .catch((error) => {
+              console.log('JPN: error setting deleteCreatedCommunityId', error);
             });
-          }
         }
       }
     );
 
-    return Promise.resolve(unsubscribe());
+    unsubscribe();
+    return Promise.resolve();
   } catch (error) {
     return Promise.reject(error);
   }

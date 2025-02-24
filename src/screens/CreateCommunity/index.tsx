@@ -159,7 +159,7 @@ export default function CreateCommunity() {
         displayName: communityName,
         description: aboutText,
         isPublic: isPublic,
-        userIds: userIds,
+        userIds: [userId, ...userIds],
         category: categoryId,
         avatarFileId: imageFileId,
       };
@@ -167,15 +167,16 @@ export default function CreateCommunity() {
       const createdCommunity = await createCommunity(communityParam);
 
       if (createdCommunity) {
-        await metadataHandlers.setCreatedCommunityId(
-          userId,
-          createdCommunity.communityId
-        );
+        console.log('JPN: createdCommunity', createdCommunity);
 
-        navigation.navigate('CommunityHome', {
-          communityId: createdCommunity.communityId,
-          communityName: createdCommunity.displayName,
-        });
+        await metadataHandlers
+          .setCreatedCommunityId(userId, createdCommunity.communityId)
+          .finally(() => {
+            navigation.navigate('CommunityHome', {
+              communityId: createdCommunity.communityId,
+              communityName: createdCommunity.displayName,
+            });
+          });
       }
     }
   }, [
