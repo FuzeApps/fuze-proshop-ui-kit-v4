@@ -29,6 +29,7 @@ import { SearchIcon } from '../../svg/SearchIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import CircleCloseIcon from '../../svg/CircleCloseIcon';
 import CloseIcon from '../../svg/CloseIcon';
+import SearchIconV4 from '../../svg/SearchIconV4';
 
 export default function AllMyCommunity() {
   const theme = useTheme() as MyMD3Theme;
@@ -138,7 +139,7 @@ export default function AllMyCommunity() {
     <View style={styles.container}>
       <View style={styles.headerWrap}>
         <View style={styles.inputWrap}>
-          <SearchIcon color={theme.colors.base} />
+          <SearchIconV4 color={theme.colors.base} />
 
           <TextInput
             style={styles.input}

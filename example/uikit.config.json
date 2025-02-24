@@ -158,14 +158,14 @@
       "icon": "emptyFeedIcon"
     },
     "social_home_page/empty_newsfeed/title": {
-      "text": "Your Feed is empty"
+      "text": "Your feed is empty"
     },
     "social_home_page/empty_newsfeed/description": {
       "text": "Find community or create your own"
     },
     "social_home_page/empty_newsfeed/explore_communities_button": {
       "icon": "exploreCommunityIcon",
-      "text": "Explore Community"
+      "text": "Find groups"
     },
     "social_home_page/empty_newsfeed/create_community_button": {
       "icon": "createCommunityIcon"
@@ -231,6 +231,7 @@
       "icon": "officialBadgeIcon"
     },
     "social_global_search_page/community_search_result/community_category_name": {},
-    "social_global_search_page/community_search_result/community_members_count": {}
+    "social_global_search_page/community_search_result/community_members_count": {},
+    "create_group": "Create group"
   }
 }
