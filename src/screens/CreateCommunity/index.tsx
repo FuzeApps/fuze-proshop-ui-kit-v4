@@ -38,11 +38,14 @@ import PrivateIcon from '../../svg/PrivateIcon';
 import { PlusIcon } from '../../svg/PlusIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
 import { amityUIKitTokens } from '../../enum';
+import metadataHandlers from '../../util/metadataHandlers';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 export default function CreateCommunity() {
   const styles = useStyles();
   const theme = useTheme() as MyMD3Theme;
   const { apiRegion } = useAuth();
+  const { userId } = useAuthStatic();
   const [image, setImage] = useState<string>();
   const [communityName, setCommunityName] = useState<string>('');
   const [categoryName, setCategoryName] = useState<string>('');
@@ -160,11 +163,18 @@ export default function CreateCommunity() {
         category: categoryId,
         avatarFileId: imageFileId,
       };
-      const isCreated = await createCommunity(communityParam);
-      if (isCreated) {
+
+      const createdCommunity = await createCommunity(communityParam);
+
+      if (createdCommunity) {
+        await metadataHandlers.setCreatedCommunityId(
+          userId,
+          createdCommunity.communityId
+        );
+
         navigation.navigate('CommunityHome', {
-          communityId: isCreated.communityId,
-          communityName: isCreated.displayName,
+          communityId: createdCommunity.communityId,
+          communityName: createdCommunity.displayName,
         });
       }
     }

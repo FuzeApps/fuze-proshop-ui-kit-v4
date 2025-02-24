@@ -39,7 +39,7 @@ const addToJoinedCommunities = async (userId: string, communityId: string) => {
  */
 export const removeFromJoinedCommunities = async (
   userId: string,
-  customerId: string
+  communityId: string
 ) => {
   try {
     const unsubscribe = await UserRepository.getUser(
@@ -49,12 +49,80 @@ export const removeFromJoinedCommunities = async (
           const joinedCommunities: string[] =
             data?.metadata?.joinedCommunities || [];
 
-          if (joinedCommunities.includes(customerId)) {
+          if (joinedCommunities.includes(communityId)) {
             await UserRepository.updateUser(userId, {
               metadata: {
                 ...data.metadata,
                 [AmityUserMetadataKeys.JoinedCommunities]:
-                  joinedCommunities?.filter((item) => item !== customerId),
+                  joinedCommunities?.filter((item) => item !== communityId),
+              },
+            });
+          }
+        }
+      }
+    );
+
+    return Promise.resolve(unsubscribe());
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+/**
+ * Given a community ID, set the user's created community ID.
+ */
+export const setCreatedCommunityId = async (
+  userId: string,
+  communityId: string
+) => {
+  try {
+    const unsubscribe = await UserRepository.getUser(
+      userId,
+      async ({ data, loading, error }) => {
+        if (!error && !loading) {
+          const createdCommunityId: string =
+            data?.metadata?.[AmityUserMetadataKeys?.CreatedCommunityId] ?? null;
+
+          //Check if community id is already created. If not yet created, update the metadata
+          if (!createdCommunityId) {
+            await UserRepository.updateUser(userId, {
+              metadata: {
+                ...data.metadata,
+                [AmityUserMetadataKeys.CreatedCommunityId]: communityId,
+              },
+            });
+          }
+        }
+      }
+    );
+
+    return Promise.resolve(unsubscribe());
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+/**
+ * Given a community ID, remove the created community Id to user's metadata.
+ */
+export const deleteCreatedCommunityId = async (
+  userId: string,
+  communityId: string
+) => {
+  try {
+    const unsubscribe = await UserRepository.getUser(
+      userId,
+      async ({ data, loading, error }) => {
+        if (!error && !loading) {
+          const createdCommunityId: string =
+            data?.metadata?.[AmityUserMetadataKeys?.CreatedCommunityId] ?? null;
+
+          // if the community he created is equal to the target community, remove the created community id
+          if (createdCommunityId === communityId) {
+            await UserRepository.updateUser(userId, {
+              metadata: {
+                ...data.metadata,
+                [AmityUserMetadataKeys.CreatedCommunityId]: null,
               },
             });
           }
@@ -71,6 +139,8 @@ export const removeFromJoinedCommunities = async (
 export const metadataHandlers = {
   addToJoinedCommunities,
   removeFromJoinedCommunities,
+  setCreatedCommunityId,
+  deleteCreatedCommunityId,
 };
 
 export default metadataHandlers;

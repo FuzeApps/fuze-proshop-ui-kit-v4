@@ -8,4 +8,5 @@ export enum AmityUserMetadataKeys {
   HasSyncedUserAvatar = 'hasSyncedUserAvatar',
   OwnedCommunities = 'ownedCommunities',
   JoinedCommunities = 'joinedCommunities',
+  CreatedCommunityId = 'createdCommunityId', // Right now, Pros are only entitled to one community.
 }
