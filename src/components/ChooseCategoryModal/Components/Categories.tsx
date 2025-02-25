@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import useFile from '../../../hooks/useFile';
 import { proShopButtonIconRound } from '../../../svg/svg-xml-list';
 import { useStyle } from '../styles';
-import { amityUIKitTokens } from '../../../enum';
 
 const Categories = ({
   item,

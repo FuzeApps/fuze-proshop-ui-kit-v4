@@ -1,26 +1,25 @@
 import { UserRepository } from '@amityco/ts-sdk-react-native';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  TouchableOpacity,
-  View,
-  Text,
   Modal,
   SectionList,
-  type NativeScrollEvent,
-  type ListRenderItemInfo,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
+  type ListRenderItemInfo,
 } from 'react-native';
 
-import { useStyle } from './styles';
-import type { UserInterface } from '../../types/user.interface';
-import UserItem from '../UserItem';
-import SectionHeader from '../ListSectionHeader';
-import SelectedUserHorizontal from '../SelectedUserHorizontal';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import CircleCloseIcon from '../../svg/CircleCloseIcon';
 import CloseIcon from '../../svg/CloseIcon';
 import { SearchIcon } from '../../svg/SearchIcon';
-import CircleCloseIcon from '../../svg/CircleCloseIcon';
+import type { UserInterface } from '../../types/user.interface';
+import SectionHeader from '../ListSectionHeader';
+import SelectedUserHorizontal from '../SelectedUserHorizontal';
+import UserItem from '../UserItem';
+import { useStyle } from './styles';
 interface IModal {
   visible: boolean;
   userId?: string;
@@ -142,11 +141,6 @@ const AddMembersModal = ({
       />
     );
   };
-  const handleScroll = ({
-    nativeEvent,
-  }: {
-    nativeEvent: NativeScrollEvent;
-  }) => {};
 
   const handleOnClose = () => {
     setSelectedUserList(initUserList);
@@ -215,7 +209,6 @@ const AddMembersModal = ({
         <SectionList
           sections={sectionedGroupUserList}
           renderItem={renderItem}
-          onScroll={handleScroll}
           renderSectionHeader={renderSectionHeader}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.8}

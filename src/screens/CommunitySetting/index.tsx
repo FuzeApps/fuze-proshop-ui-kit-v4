@@ -4,7 +4,6 @@ import { Alert, SectionList, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SvgXml } from 'react-native-svg';
 import { amityUIKitTokens } from '../../enum';
-import useAuth from '../../hooks/useAuth';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
