@@ -26,6 +26,8 @@ export default function App() {
     onUserFollow,
     onUserUnFollow,
     onViewMyProShop,
+    onCommunityCreate,
+    onCommunityDelete,
   } = useEventHandlers();
 
   return (
@@ -47,6 +49,8 @@ export default function App() {
       onUserFollow={onUserFollow}
       onUserUnFollow={onUserUnFollow}
       onViewMyProShop={onViewMyProShop}
+      onCommunityCreate={onCommunityCreate}
+      onCommunityDelete={onCommunityDelete}
       CommunityLeaderboardComponent={CommunityLeaderboard} //Sample leaderboard component...
     >
       <NavigationContainer>

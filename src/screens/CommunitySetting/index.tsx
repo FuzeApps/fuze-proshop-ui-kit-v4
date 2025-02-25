@@ -32,8 +32,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 }) => {
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
-  const { client } = useAuth();
-  const { onCommunityLeave } = useAuthStatic();
+  const { onCommunityLeave, onCommunityDelete, userId } = useAuthStatic();
   const { communityId, isModerator, communityName } = route.params;
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
@@ -52,10 +51,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     });
 
     // Remove community from joined communities metadata
-    await metadataHandlers.removeFromJoinedCommunities(
-      (client as Amity.Client).userId,
-      communityId
-    );
+    await metadataHandlers.removeFromJoinedCommunities(userId, communityId);
 
     if (hasLeft) {
       navigation.goBack();
@@ -67,8 +63,14 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
       await CommunityRepository.deleteCommunity(communityId);
 
     if (deletedCommunity) {
+      onCommunityDelete?.({
+        communityId: communityId,
+        communityName: communityName,
+        userId: userId,
+      });
+
       await metadataHandlers
-        .deleteCreatedCommunityId((client as Amity.Client).userId, communityId)
+        .deleteCreatedCommunityId(userId, communityId)
         .finally(() => {
           if (deletedCommunity) return navigation.navigate('Home');
         });

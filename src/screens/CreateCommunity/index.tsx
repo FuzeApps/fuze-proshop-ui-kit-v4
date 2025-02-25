@@ -45,7 +45,7 @@ export default function CreateCommunity() {
   const styles = useStyles();
   const theme = useTheme() as MyMD3Theme;
   const { apiRegion } = useAuth();
-  const { userId } = useAuthStatic();
+  const { userId, onCommunityCreate } = useAuthStatic();
   const [image, setImage] = useState<string>();
   const [communityName, setCommunityName] = useState<string>('');
   const [categoryName, setCategoryName] = useState<string>('');
@@ -167,7 +167,11 @@ export default function CreateCommunity() {
       const createdCommunity = await createCommunity(communityParam);
 
       if (createdCommunity) {
-        console.log('JPN: createdCommunity', createdCommunity);
+        onCommunityCreate?.({
+          communityName: createdCommunity?.displayName,
+          communityId: createdCommunity?.communityId,
+          userId: createdCommunity?.userId,
+        });
 
         await metadataHandlers
           .setCreatedCommunityId(userId, createdCommunity.communityId)
