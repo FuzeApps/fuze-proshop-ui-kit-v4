@@ -144,17 +144,7 @@ export const deleteCreatedCommunityId = async (
                 joinedCommunities.filter((item) => item !== communityId),
               [AmityUserMetadataKeys.CreatedCommunityId]: null,
             },
-          })
-            .then((resp) => {
-              console.log(
-                'JPN: deleteCreatedCommunityId is set to ',
-                communityId,
-                JSON.stringify(resp)
-              );
-            })
-            .catch((error) => {
-              console.log('JPN: error setting deleteCreatedCommunityId', error);
-            });
+          });
         }
       }
     );
