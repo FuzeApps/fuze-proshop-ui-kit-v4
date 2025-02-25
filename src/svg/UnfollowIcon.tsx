@@ -1,12 +1,13 @@
 import React from 'react';
 import { Svg, Path, SvgProps } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 interface UnfollowIconProps extends SvgProps {
   color?: string;
 }
 
 const UnfollowIcon: React.FC<UnfollowIconProps> = ({
-  color = '#292B32',
+  color = amityUIKitTokens.colors.base,
   width = 21,
   height = 16,
   ...props

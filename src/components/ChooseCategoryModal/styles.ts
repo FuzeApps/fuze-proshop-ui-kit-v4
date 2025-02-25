@@ -58,7 +58,7 @@ export const useStyle = () => {
       paddingBottom: 16,
       paddingTop: 26,
       paddingHorizontal: 16,
-      borderBottomColor: '#EBECEF',
+      borderBottomColor: amityUIKitTokens.colors.border,
       borderBottomWidth: 1,
     },
     avatar: {

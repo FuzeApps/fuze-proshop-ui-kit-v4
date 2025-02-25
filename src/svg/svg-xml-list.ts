@@ -597,3 +597,39 @@ export const proShopButtonIconRound = (
 <path d="M9 25.9698H12.4342C14.2664 25.9698 16.0241 25.2421 17.3197 23.9465L22.2559 19.0103H18.8217C16.9895 19.0103 15.2319 19.738 13.9362 21.0336L9 25.9698Z" fill="${color}"/>
 </svg>
 `;
+
+export const proshopSmallIcon = (
+  color: string = amityUIKitTokens.colors.baseShade3
+) => `<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.6077 9.85328L12.9356 9.18085L10.0863 6.33154H14.2286L15.679 7.78194L17.0779 9.18085L17.75 9.85328L17.0779 10.5254L15.679 11.9243L14.2283 13.3747H10.0859L12.9356 10.5254L13.6077 9.85328Z" fill="${color}"/>
+<path d="M2.94727 14.7449H5.36113C6.649 14.7449 7.88443 14.2333 8.79513 13.3226L12.2647 9.85303H9.85087C8.563 9.85303 7.32758 10.3645 6.41688 11.2753L2.94727 14.7449Z" fill="${color}"/>
+</svg>`;
+
+export const unFollowIcon = (color: string = amityUIKitTokens.colors.base) => `
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.5 16L21.5 21M21.5 16L16.5 21M12 15.5H7.5C6.10444 15.5 5.40665 15.5 4.83886 15.6722C3.56045 16.06 2.56004 17.0605 2.17224 18.3389C2 18.9067 2 19.6044 2 21M14.5 7.5C14.5 9.98528 12.4853 12 10 12C7.51472 12 5.5 9.98528 5.5 7.5C5.5 5.01472 7.51472 3 10 3C12.4853 3 14.5 5.01472 14.5 7.5Z" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
+
+export const followIcon = (
+  color: string = amityUIKitTokens.colors.base
+) => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15.5H7.5C6.10444 15.5 5.40665 15.5 4.83886 15.6722C3.56045 16.06 2.56004 17.0605 2.17224 18.3389C2 18.9067 2 19.6044 2 21M19 21V15M16 18H22M14.5 7.5C14.5 9.98528 12.4853 12 10 12C7.51472 12 5.5 9.98528 5.5 7.5C5.5 5.01472 7.51472 3 10 3C12.4853 3 14.5 5.01472 14.5 7.5Z" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+`;
+
+export const followPlusIcon = (
+  color: string = amityUIKitTokens.colors.base
+) => `
+<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.75 9.5C16 9.5 16.25 9.75 16.25 10V11C16.25 11.2812 16 11.5 15.75 11.5H11.25V16C11.25 16.2812 11 16.5 10.75 16.5H9.75C9.46875 16.5 9.25 16.2812 9.25 16V11.5H4.75C4.46875 11.5 4.25 11.2812 4.25 11V10C4.25 9.75 4.46875 9.5 4.75 9.5H9.25V5C9.25 4.75 9.46875 4.5 9.75 4.5H10.75C11 4.5 11.25 4.75 11.25 5V9.5H15.75Z" fill="${color}"/>
+</svg>
+`;
+
+export const trashIcon = (
+  color: string = amityUIKitTokens.colors.base
+) => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 6V5.2C16 4.0799 16 3.51984 15.782 3.09202C15.5903 2.71569 15.2843 2.40973 14.908 2.21799C14.4802 2 13.9201 2 12.8 2H11.2C10.0799 2 9.51984 2 9.09202 2.21799C8.71569 2.40973 8.40973 2.71569 8.21799 3.09202C8 3.51984 8 4.0799 8 5.2V6M10 11.5V16.5M14 11.5V16.5M3 6H21M19 6V17.2C19 18.8802 19 19.7202 18.673 20.362C18.3854 20.9265 17.9265 21.3854 17.362 21.673C16.7202 22 15.8802 22 14.2 22H9.8C8.11984 22 7.27976 22 6.63803 21.673C6.07354 21.3854 5.6146 20.9265 5.32698 20.362C5 19.7202 5 18.8802 5 17.2V6" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;

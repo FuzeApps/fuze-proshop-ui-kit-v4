@@ -1,16 +1,15 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { useStyles } from './styles';
-import type { UserInterface } from '../../types/user.interface';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import AddMembersModal from '../../components/AddMembersModal';
-import { updateCommunityMember } from '../../providers/Social/communities-sdk';
-import MemberActionModal from './Components/MemberActionModal';
 import CustomTab from '../../components/CustomTabV3';
 import { TabName } from '../../enum/tabNameState';
+import { updateCommunityMember } from '../../providers/Social/communities-sdk';
+import type { UserInterface } from '../../types/user.interface';
 import CommunityMembersTab from './Components/CommunityMembersTab';
-import { PlusIcon } from '../../svg/PlusIcon';
+import MemberActionModal from './Components/MemberActionModal';
+import { useStyles } from './styles';
 
-export default function CommunityMemberDetail({ navigation, route }: any) {
+export default function CommunityMemberDetail({ route }: any) {
   const styles = useStyles();
   const [member, setMember] = useState<UserInterface[]>([]);
   const { communityId, isModerator } = route.params;
@@ -19,20 +18,20 @@ export default function CommunityMemberDetail({ navigation, route }: any) {
   const [userId, setUserId] = useState('');
   const [activeTab, setActiveTab] = useState(TabName.Members);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            setAddMembersModal(true);
-          }}
-        >
-          <PlusIcon style={styles.plusIcon} />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation, styles.dotIcon]);
+  // TODO: Will hide this for now as it is buggy and not necessary for the release.
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity
+  //         onPress={() => {
+  //           setAddMembersModal(true);
+  //         }}
+  //       >
+  //         <PlusIcon style={styles.plusIcon} />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation, styles.dotIcon, styles.plusIcon]);
 
   const onSelectMember = async (users: UserInterface[]) => {
     const memberIds = users.map((user) => user.userId);

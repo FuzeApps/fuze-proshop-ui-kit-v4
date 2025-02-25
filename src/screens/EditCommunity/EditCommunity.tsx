@@ -72,6 +72,8 @@ const EditCommunity = ({ navigation, route }) => {
       community_name: string;
       community_description: string;
     }) => {
+      console.log('JPN: PRESSED');
+
       const communityDetail = {
         isPublic: isPublic,
         description: community_description,

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const EditIcon = ({
-  color = '#292B32',
+  color = amityUIKitTokens.colors.base,
   width = 21,
   height = 20,
   style,

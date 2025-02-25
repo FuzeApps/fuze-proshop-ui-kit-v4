@@ -85,10 +85,13 @@ export const setCreatedCommunityId = async (
           const joinedCommunities: string[] =
             data?.metadata?.joinedCommunities || [];
 
-          console.log('JPN: createdCommunityId is ', createdCommunityId);
+          if (createdCommunityId === communityId) {
+            console.info(
+              '[Social+]: communityId is equal to createdCommunityId! Ignoring the user update.'
+            );
+            return;
+          }
 
-          //Check if community id is already created. If not yet created, update the metadata
-          // if (!createdCommunityId) {
           await UserRepository.updateUser(userId, {
             metadata: {
               ...data.metadata,
@@ -98,18 +101,7 @@ export const setCreatedCommunityId = async (
               ],
               [AmityUserMetadataKeys.CreatedCommunityId]: communityId,
             },
-          })
-            .then((resp) => {
-              console.log(
-                'JPN: setCreatedCommunityId is set to ',
-                communityId,
-                JSON.stringify(resp)
-              );
-            })
-            .catch((error) => {
-              console.log('JPN: error setting setCreatedCommunityId', error);
-            });
-          // }
+          });
         }
       }
     );
@@ -138,14 +130,11 @@ export const deleteCreatedCommunityId = async (
             data?.metadata?.joinedCommunities || [];
 
           if (createdCommunityId !== communityId) {
-            console.log(
-              'JPN: createdCommunityId is not equal to communityId.. ignoring the user update'
+            console.info(
+              '[Social+]: The communityId is not owned by this user! Ignoring the user update.'
             );
-            // return;
-          } else {
-            console.log('JPN: user owns the community, now deleting...');
+            return;
           }
-
           // if the community he created is equal to the target community, remove the created community id
 
           await UserRepository.updateUser(userId, {

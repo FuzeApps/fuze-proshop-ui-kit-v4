@@ -1,4 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import debounce from 'lodash.debounce';
 import React, {
   useCallback,
   useEffect,
@@ -7,29 +11,24 @@ import React, {
   useState,
 } from 'react';
 import {
-  View,
+  LogBox,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  LogBox,
-  ScrollView,
-  type NativeSyntheticEvent,
+  View,
   type NativeScrollEvent,
+  type NativeSyntheticEvent,
 } from 'react-native';
-import debounce from 'lodash.debounce';
-import { useStyles } from './styles';
-import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import { useTheme } from 'react-native-paper';
 import type { ISearchItem } from '../../components/SearchItem';
 import SearchItem from '../../components/SearchItem';
-import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { SearchIcon } from '../../svg/SearchIcon';
-import { PlusIcon } from '../../svg/PlusIcon';
 import CircleCloseIcon from '../../svg/CircleCloseIcon';
 import CloseIcon from '../../svg/CloseIcon';
+import { PlusIcon } from '../../svg/PlusIcon';
 import SearchIconV4 from '../../svg/SearchIconV4';
+import { useStyles } from './styles';
 
 export default function AllMyCommunity() {
   const theme = useTheme() as MyMD3Theme;

@@ -1,15 +1,20 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, SectionList, Alert } from 'react-native';
-import { useStyles } from './styles';
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import React from 'react';
+import { Alert, SectionList, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import { SvgXml } from 'react-native-svg';
-import { communitySettingMemberIcon } from '../../svg/svg-xml-list';
-import metadataHandlers from '../../util/metadataHandlers';
+import { amityUIKitTokens } from '../../enum';
 import useAuth from '../../hooks/useAuth';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
+import {
+  communityIcon2,
+  trashIcon,
+  unFollowIcon,
+} from '../../svg/svg-xml-list';
+import metadataHandlers from '../../util/metadataHandlers';
+import { useStyles } from './styles';
 
 interface ChatDetailProps {
   navigation: any;
@@ -100,37 +105,27 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 
   const communitySettingData = [
     {
-      title: 'Basic info',
       data: [
         {
           name: 'Members',
-          leftIcon: (
-            <SvgXml
-              width={30}
-              height={30}
-              xml={communitySettingMemberIcon}
-              color={theme.colors.base}
-            />
-          ),
+          leftIcon: <SvgXml xml={communityIcon2()} />,
           callBack: handleMembersPress,
           rightIcon: <ArrowOutlinedIcon width={24} color={theme.colors.base} />,
           type: SettingType.basicInfo,
         },
-      ],
-    },
-    {
-      title: '',
-      data: [
         {
           name: 'Leave group',
-          leftIcon: null,
+          leftIcon: (
+            <SvgXml xml={unFollowIcon(amityUIKitTokens.colors.alert)} />
+          ),
+
           callBack: handleLeaveCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
         },
         {
           name: 'Close group',
-          leftIcon: null,
+          leftIcon: <SvgXml xml={trashIcon(amityUIKitTokens.colors.alert)} />,
           callBack: handleCloseCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
@@ -151,6 +146,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     } else {
       return (
         <TouchableOpacity style={styles.rowContainer} onPress={item.callBack}>
+          <View style={styles.iconContainer}>{item.leftIcon}</View>
           <View style={styles.leaveChatContainer}>
             <Text style={styles.leaveChatLabel}>{item.name}</Text>
           </View>
@@ -165,9 +161,6 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
         sections={communitySettingData}
         renderItem={renderSettingItems}
         keyExtractor={(item, index) => item + index}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
       />
     </View>
   );

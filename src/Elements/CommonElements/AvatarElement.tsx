@@ -1,11 +1,10 @@
+import React, { FC, useLayoutEffect, useMemo, useState } from 'react';
 import { Image, ImageProps } from 'react-native';
-import React, { FC, useLayoutEffect, useState } from 'react';
 import { ComponentID, ElementID, ImageSizeState, PageID } from '../../enum';
 import useConfig from '../../hooks/useConfig';
-
 import { SvgXml } from 'react-native-svg';
-import { communityIcon, userIcon } from '../../svg/svg-xml-list';
 import { useFileV4 } from '../../hooks/useFilev4';
+import { communityIcon, userIcon } from '../../svg/svg-xml-list';
 
 type AvatarElementType = Partial<ImageProps> & {
   avatarId: string;
@@ -23,8 +22,13 @@ const AvatarElement: FC<AvatarElementType> = ({
   targetType,
   ...props
 }) => {
-  const defaultAvatar =
-    targetType === 'community' ? (
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
+  const { excludes } = useConfig();
+  const configId = `${pageID}/${componentID}/${elementID}`;
+  const { getImage } = useFileV4();
+
+  const defaultAvatar = useMemo(() => {
+    return targetType === 'community' ? (
       <SvgXml width={40} height={40} xml={communityIcon} />
     ) : (
       <SvgXml
@@ -34,10 +38,7 @@ const AvatarElement: FC<AvatarElementType> = ({
         xml={userIcon()}
       />
     );
-  const [avatarUrl, setAvatarUrl] = useState<string>('');
-  const { excludes } = useConfig();
-  const configId = `${pageID}/${componentID}/${elementID}`;
-  const { getImage } = useFileV4();
+  }, [targetType]);
 
   useLayoutEffect(() => {
     if (!avatarId) {

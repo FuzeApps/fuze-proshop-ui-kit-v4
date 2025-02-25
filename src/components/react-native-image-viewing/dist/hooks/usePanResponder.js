@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { useMemo, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Animated, Dimensions } from 'react-native';
 import {
   createPanResponder,
   getDistanceBetweenTouches,
-  getImageTranslate,
   getImageDimensionsByTranslate,
+  getImageTranslate,
 } from '../utils';
 const SCREEN = Dimensions.get('window');
 const SCREEN_WIDTH = SCREEN.width;
