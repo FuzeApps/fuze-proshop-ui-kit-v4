@@ -1,11 +1,10 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { memo, useCallback, useState } from 'react';
-import { useStyles } from './styles';
 import { useNavigation } from '@react-navigation/native';
+import React, { memo, useCallback, useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useStyles } from './styles';
 
 import { amityUIKitTokens, ComponentID, ElementID, PageID } from '../../enum';
 import { useUiKitConfig } from '../../hooks/useUiKitConfig';
-import { SearchIcon } from '../../svg/SearchIcon';
 import CircleCloseIcon from '../../svg/CircleCloseIcon';
 import SearchIconV4 from '../../svg/SearchIconV4';
 
