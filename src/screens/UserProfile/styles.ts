@@ -103,6 +103,7 @@ export const useStyles = () => {
     },
     editProfileText: {
       fontSize: 14,
+      paddingStart: amityUIKitTokens.spacing.xxs2,
       fontWeight: '600',
       color: 'white',
     },

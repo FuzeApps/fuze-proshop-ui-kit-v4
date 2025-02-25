@@ -1,18 +1,22 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, SectionList } from 'react-native';
 import { UserRepository, createReport } from '@amityco/ts-sdk-react-native';
-import CloseButton from '../../components/BackButton';
-import { useStyles } from './styles';
-import { LoadingOverlay } from '../../components/LoadingOverlay';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useMemo, useState } from 'react';
+import { SectionList, Text, TouchableOpacity, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import CloseButton from '../../components/BackButton';
+import { LoadingOverlay } from '../../components/LoadingOverlay';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 import { RootStackParamList } from '../../routes/RouteParamList';
-import ReportIcon from '../../svg/ReportIcon';
-import BlockOrUnblockIcon from '../../svg/BlockOrUnBlockIcon';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import EditIcon from '../../svg/EditIcon';
-import UnfollowIcon from '../../svg/UnfollowIcon';
-import { useAuthStatic } from '../../hooks/useAuthStatic';
+import {
+  blockUserIcon,
+  flagIcon,
+  unBlockUserIcon,
+  unFollowIcon,
+} from '../../svg/svg-xml-list';
+import { useStyles } from './styles';
 
 export default function UserProfileSetting({
   navigation,
@@ -77,17 +81,18 @@ export default function UserProfileSetting({
     const userSettingData = [];
     if (!isMyProfile) {
       userSettingData.push({
-        title: 'Manage',
         data: [
           {
             type: 'manage',
-            leftIcon: <ReportIcon width={20} height={20} />,
+            leftIcon: <SvgXml xml={flagIcon()} />,
             label: 'Report user',
             callBack: handleReportUserPress,
           },
           {
             type: 'manage',
-            leftIcon: <BlockOrUnblockIcon width={20} height={20} />,
+            leftIcon: (
+              <SvgXml xml={isBlocked ? unBlockUserIcon() : blockUserIcon()} />
+            ),
             label: isBlocked ? 'Unblock user' : 'Block user',
             callBack: isBlocked ? handleUnblockUser : handleBlockUser,
           },
@@ -97,7 +102,7 @@ export default function UserProfileSetting({
         userSettingData.map((setting) => {
           setting.data.unshift({
             type: 'manage',
-            leftIcon: <UnfollowIcon />,
+            leftIcon: <SvgXml xml={unFollowIcon()} />,
             label: 'Unfollow',
             callBack: handleUnfollowPress,
           });
@@ -107,8 +112,9 @@ export default function UserProfileSetting({
 
       return userSettingData;
     }
+
+    //means it is my profile.
     userSettingData.push({
-      // title: 'Basic info',
       data: [
         {
           label: 'Edit Profile',

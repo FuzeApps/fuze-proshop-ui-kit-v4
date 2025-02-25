@@ -1,15 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { amityUIKitTokens } from '../../enum';
 
 export const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#fff',
+    backgroundColor: amityUIKitTokens.colors.background,
     zIndex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   indicatorContainer: {
-    backgroundColor: 'rgba(0,0,0,0.7)',
     padding: 20,
     borderRadius: 8,
     alignItems: 'center',
@@ -18,6 +18,6 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: amityUIKitTokens.colors.base,
   },
 });
