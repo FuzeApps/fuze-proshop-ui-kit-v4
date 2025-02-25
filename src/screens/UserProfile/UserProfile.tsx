@@ -36,8 +36,10 @@ import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import {
   blockOrUnblock,
   cancelFollowRequest,
+  followPlusIcon,
   primaryDot,
   privateUserProfile,
+  proshopSmallIcon,
   userIcon,
 } from '../../svg/svg-xml-list';
 import type { FeedRefType } from '../CommunityHome';
@@ -48,9 +50,8 @@ import { useDispatch } from 'react-redux';
 import { PostTargetType } from '../../enum/postTargetType';
 import uiSlice from '../../redux/slices/uiSlice';
 
-import { amityUIKitTokens, ImageSizeState } from '../../enum';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
-import { TabName } from '../../enum';
+import { amityUIKitTokens, ImageSizeState, TabName } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
 import {} from '../../hooks';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
@@ -203,14 +204,11 @@ export default function UserProfile({ route }: any) {
   const followButton = useMemo(() => {
     return (
       <TouchableOpacity style={styles.button} onPress={onFollowTap}>
-        <Image
-          source={require('../../assets/icon/followPlus.png')}
-          style={styles.followIcon}
-        />
+        <SvgXml xml={followPlusIcon()} />
         <Text style={styles.followText}>Follow</Text>
       </TouchableOpacity>
     );
-  }, [onFollowTap, styles.button, styles.followIcon, styles.followText]);
+  }, [onFollowTap, styles.button, styles.followText]);
 
   const unBlockButton = useMemo(() => {
     return (
@@ -369,7 +367,7 @@ export default function UserProfile({ route }: any) {
 
     return (
       <TouchableOpacity
-        style={styles.button}
+        style={styles.buttonGhost}
         onPress={() =>
           onViewMyProShop?.({
             userId: userId,
@@ -377,12 +375,17 @@ export default function UserProfile({ route }: any) {
           })
         }
       >
-        <Text style={styles.editProfileText}>View my ProShop</Text>
+        <SvgXml
+          width={40}
+          height={40}
+          xml={proshopSmallIcon(amityUIKitTokens.colors.base)}
+        />
+        <Text style={styles.editProfileText}>View My ProShop</Text>
       </TouchableOpacity>
     );
   }, [
     onViewMyProShop,
-    styles.button,
+    styles.buttonGhost,
     styles.editProfileText,
     user?.displayName,
     userId,

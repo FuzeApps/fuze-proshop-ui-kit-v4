@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { amityUIKitTokens } from '../../enum';
 
 export const styles = StyleSheet.create({
   sectionHeader: {
-    backgroundColor: '#EBECEF',
+    backgroundColor: amityUIKitTokens.colors.backgroundShade1,
     paddingVertical: 10,
     paddingHorizontal: 10,
   },

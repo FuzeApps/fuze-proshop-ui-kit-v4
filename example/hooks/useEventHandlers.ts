@@ -80,6 +80,18 @@ const useEventHandlers = () => {
     []
   );
 
+  const onCommunityCreate: IAmityUIkitProvider['onCommunityCreate'] =
+    useCallback((data) => {
+      console.log(`JPN: onCommunityCreate: ${JSON.stringify(data)}`);
+      // Implement post complete logic here
+    }, []);
+
+  const onCommunityDelete: IAmityUIkitProvider['onCommunityDelete'] =
+    useCallback((data) => {
+      console.log(`JPN: onCommunityDelete: ${JSON.stringify(data)}`);
+      // Implement post complete logic here
+    }, []);
+
   return {
     onUserFollow,
     onUserUnFollow,
@@ -90,6 +102,8 @@ const useEventHandlers = () => {
     onPostStart,
     onPostComplete,
     onViewMyProShop,
+    onCommunityCreate,
+    onCommunityDelete,
   };
 };
 

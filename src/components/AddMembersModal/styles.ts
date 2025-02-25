@@ -33,6 +33,7 @@ export const useStyle = () => {
       fontWeight: '600',
       fontSize: 17,
       textAlign: 'center',
+      color: amityUIKitTokens.colors.base,
     },
     communityText: {
       marginLeft: 12,
@@ -81,7 +82,7 @@ export const useStyle = () => {
     },
     inputWrap: {
       marginHorizontal: 16,
-      backgroundColor: '#EBECEF',
+      backgroundColor: amityUIKitTokens.colors.background,
       paddingHorizontal: 10,
       borderRadius: 4,
       flexDirection: 'row',
@@ -92,6 +93,7 @@ export const useStyle = () => {
     input: {
       flex: 1,
       marginHorizontal: 6,
+      color: amityUIKitTokens.colors.base,
     },
     cancelBtn: {
       marginRight: 16,

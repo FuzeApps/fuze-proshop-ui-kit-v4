@@ -1,4 +1,19 @@
 import {
+  Client,
+  UserRepository,
+  createReport,
+  deleteReport,
+  isReportedByMe,
+} from '@amityco/ts-sdk-react-native';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
   Alert,
   Animated,
   Image,
@@ -8,35 +23,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { useStyles } from '../styles';
-import {
-  Client,
-  UserRepository,
-  createReport,
-  deleteReport,
-  isReportedByMe,
-} from '@amityco/ts-sdk-react-native';
+import { defaultAvatarUri } from '../../../assets';
 import { ImageSizeState } from '../../../enum';
 import { TabName } from '../../../enum/tabNameState';
-import { defaultAvatarUri } from '../../../assets';
+import { useStyles } from '../styles';
 
-import { SvgXml } from 'react-native-svg';
-import { threeDots } from '../../../svg/svg-xml-list';
-import { useTheme } from 'react-native-paper';
-import { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../routes/RouteParamList';
+import { useTheme } from 'react-native-paper';
+import { SvgXml } from 'react-native-svg';
 import { useFileV4 } from '../../../hooks/useFilev4';
-import UserIcon from '../../../svg/UserIcon';
+import { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
+import { RootStackParamList } from '../../../routes/RouteParamList';
+import { threeDots, userIcon } from '../../../svg/svg-xml-list';
 
 type FollowerListItemType = {
   userId: string;
@@ -156,7 +155,12 @@ const FollowerListItem: FC<FollowerListItemType> = ({
         {avatar.length > 0 ? (
           <Image source={{ uri: avatar }} style={styles.avatar} />
         ) : (
-          <UserIcon style={styles.defaultAvatar} />
+          <SvgXml
+            xml={userIcon()}
+            width="40"
+            height="40"
+            style={styles.defaultAvatar}
+          />
         )}
 
         <Text style={styles.userName} ellipsizeMode="tail" numberOfLines={1}>

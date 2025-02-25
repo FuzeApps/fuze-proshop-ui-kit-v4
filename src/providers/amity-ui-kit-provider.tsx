@@ -38,6 +38,17 @@ export interface IAmityUIkitProvider {
   onCommunityLeave?: (data: {
     communityName?: string;
     communityId?: string;
+    userId?: string;
+  }) => void;
+  onCommunityCreate?: (data: {
+    communityName?: string;
+    communityId?: string;
+    userId?: string;
+  }) => void;
+  onCommunityDelete?: (data: {
+    communityName?: string;
+    communityId?: string;
+    userId?: string;
   }) => void;
   onPostLike?: (data: { text?: string; postId?: string }) => void;
   onPostUnLike?: (data: { text?: string; postId?: string }) => void;
@@ -113,6 +124,8 @@ export default function AmityUiKitProvider({
   onUserFollow,
   onUserUnFollow,
   onViewMyProShop,
+  onCommunityCreate,
+  onCommunityDelete,
   userRole,
   minMembersToShowCounter,
 }: IAmityUIkitProvider) {
@@ -158,6 +171,8 @@ export default function AmityUiKitProvider({
             onViewMyProShop={onViewMyProShop}
             userRole={userRole}
             minMembersToShowCounter={minMembersToShowCounter}
+            onCommunityCreate={onCommunityCreate}
+            onCommunityDelete={onCommunityDelete}
           >
             <ConfigProvider configs={configData}>
               <BehaviourProvider behaviour={behaviour}>

@@ -1,5 +1,6 @@
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const { width } = useWindowDimensions();
@@ -33,7 +34,7 @@ export const useStyles = (theme: MyMD3Theme) => {
     iconBtn: {
       width: 24,
       height: 24,
-      tintColor: theme.colors.base,
+      tintColor: amityUIKitTokens.colors.base,
       marginRight: 12,
     },
     iconText: {

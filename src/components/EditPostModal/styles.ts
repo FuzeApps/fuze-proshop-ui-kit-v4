@@ -1,6 +1,7 @@
 import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -60,7 +61,7 @@ export const useStyles = () => {
       paddingBottom: 16,
       paddingTop: 26,
       paddingHorizontal: 16,
-      borderBottomColor: '#EBECEF',
+      backgroundColor: amityUIKitTokens.colors.background,
       borderBottomWidth: 1,
     },
     avatar: {
@@ -68,7 +69,7 @@ export const useStyles = () => {
       height: 40,
       borderRadius: 20,
       marginBottom: 10,
-      backgroundColor: '#D9E5FC',
+      backgroundColor: amityUIKitTokens.colors.baseShade4,
     },
     LoadingIndicator: {
       paddingVertical: 20,
@@ -112,7 +113,7 @@ export const useStyles = () => {
       borderTopColor: theme.colors.baseShade4,
     },
     iconWrap: {
-      backgroundColor: '#EBECEF',
+      backgroundColor: amityUIKitTokens.colors.background,
       borderRadius: 72,
       alignItems: 'center',
       justifyContent: 'center',

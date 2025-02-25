@@ -1,12 +1,13 @@
 import React from 'react';
 import { Svg, Rect, Path, SvgProps } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 interface BlockOrUnblockIconProps extends SvgProps {
   color?: string;
 }
 
 const BlockOrUnblockIcon: React.FC<BlockOrUnblockIconProps> = ({
-  color = '#292B32',
+  color = amityUIKitTokens.colors.base,
   width = 28,
   height = 28,
   style,

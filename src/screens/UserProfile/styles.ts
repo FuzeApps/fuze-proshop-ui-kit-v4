@@ -88,7 +88,7 @@ export const useStyles = () => {
       alignItems: 'center',
     },
     followButton: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: 'transparent',
       padding: 8,
       borderRadius: 4,
       flexDirection: 'row',
@@ -97,11 +97,16 @@ export const useStyles = () => {
     },
     followText: {
       marginLeft: 8,
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: '600',
       color: 'white',
     },
     editProfileText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: 'white',
+    },
+    viewProshopButtonText: {
       marginLeft: 8,
       fontSize: 16,
       fontWeight: '600',
@@ -200,13 +205,28 @@ export const useStyles = () => {
     button: {
       backgroundColor: theme.colors.primary,
       paddingHorizontal: 8,
-      borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       flex: 1,
       minHeight: 40,
       marginBottom: amityUIKitTokens.spacing.m1,
+      borderWidth: 1,
+      borderColor: amityUIKitTokens.colors.primary,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
+    },
+    buttonGhost: {
+      backgroundColor: 'transparent',
+      paddingHorizontal: 8,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      minHeight: 40,
+      marginBottom: amityUIKitTokens.spacing.m1,
+      borderWidth: 1,
+      borderColor: amityUIKitTokens.colors.baseShade3,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
     },
   });
 

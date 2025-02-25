@@ -1,15 +1,20 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, SectionList, Alert } from 'react-native';
-import { useStyles } from './styles';
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
+import React from 'react';
+import { Alert, SectionList, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import { SvgXml } from 'react-native-svg';
-import { communitySettingMemberIcon } from '../../svg/svg-xml-list';
-import metadataHandlers from '../../util/metadataHandlers';
+import { amityUIKitTokens } from '../../enum';
 import useAuth from '../../hooks/useAuth';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
+import {
+  communityIcon2,
+  trashIcon,
+  unFollowIcon,
+} from '../../svg/svg-xml-list';
+import metadataHandlers from '../../util/metadataHandlers';
+import { useStyles } from './styles';
 
 interface ChatDetailProps {
   navigation: any;
@@ -27,8 +32,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 }) => {
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
-  const { client } = useAuth();
-  const { onCommunityLeave } = useAuthStatic();
+  const { onCommunityLeave, onCommunityDelete, userId } = useAuthStatic();
   const { communityId, isModerator, communityName } = route.params;
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
@@ -47,10 +51,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     });
 
     // Remove community from joined communities metadata
-    await metadataHandlers.removeFromJoinedCommunities(
-      (client as Amity.Client).userId,
-      communityId
-    );
+    await metadataHandlers.removeFromJoinedCommunities(userId, communityId);
 
     if (hasLeft) {
       navigation.goBack();
@@ -58,10 +59,25 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   };
 
   const onCloseCommunity = async () => {
-    // TODO: JPN: On close community
     const deletedCommunity =
       await CommunityRepository.deleteCommunity(communityId);
-    if (deletedCommunity) return navigation.navigate('Home');
+
+    if (deletedCommunity) {
+      onCommunityDelete?.({
+        communityId: communityId,
+        communityName: communityName,
+        userId: userId,
+      });
+
+      await metadataHandlers
+        .deleteCreatedCommunityId(userId, communityId)
+        .finally(() => {
+          if (deletedCommunity) return navigation.navigate('Home');
+        });
+
+      return;
+    }
+
     Alert.alert(
       'Unable to close community',
       'Something went wrong. Please try again later'
@@ -91,37 +107,27 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
 
   const communitySettingData = [
     {
-      title: 'Basic info',
       data: [
         {
           name: 'Members',
-          leftIcon: (
-            <SvgXml
-              width={30}
-              height={30}
-              xml={communitySettingMemberIcon}
-              color={theme.colors.base}
-            />
-          ),
+          leftIcon: <SvgXml xml={communityIcon2()} />,
           callBack: handleMembersPress,
           rightIcon: <ArrowOutlinedIcon width={24} color={theme.colors.base} />,
           type: SettingType.basicInfo,
         },
-      ],
-    },
-    {
-      title: '',
-      data: [
         {
-          name: 'Leave Community',
-          leftIcon: null,
+          name: 'Leave group',
+          leftIcon: (
+            <SvgXml xml={unFollowIcon(amityUIKitTokens.colors.alert)} />
+          ),
+
           callBack: handleLeaveCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
         },
         {
-          name: 'Close Community',
-          leftIcon: null,
+          name: 'Close group',
+          leftIcon: <SvgXml xml={trashIcon(amityUIKitTokens.colors.alert)} />,
           callBack: handleCloseCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
@@ -142,6 +148,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
     } else {
       return (
         <TouchableOpacity style={styles.rowContainer} onPress={item.callBack}>
+          <View style={styles.iconContainer}>{item.leftIcon}</View>
           <View style={styles.leaveChatContainer}>
             <Text style={styles.leaveChatLabel}>{item.name}</Text>
           </View>
@@ -156,9 +163,6 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
         sections={communitySettingData}
         renderItem={renderSettingItems}
         keyExtractor={(item, index) => item + index}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
-        )}
       />
     </View>
   );

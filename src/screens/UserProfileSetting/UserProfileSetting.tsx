@@ -108,7 +108,7 @@ export default function UserProfileSetting({
       return userSettingData;
     }
     userSettingData.push({
-      title: 'Basic info',
+      // title: 'Basic info',
       data: [
         {
           label: 'Edit Profile',

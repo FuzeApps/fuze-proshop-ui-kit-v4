@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 const CAMERA_ICON_SIZE = 30;
 
 export const useStyles = () => {
@@ -34,7 +35,7 @@ export const useStyles = () => {
       right: -5,
     },
     cameraIcon: {
-      backgroundColor: '#EBECEF',
+      backgroundColor: amityUIKitTokens.colors.background,
       borderRadius: CAMERA_ICON_SIZE / 2,
       padding: 5,
       margin: 5,
@@ -64,7 +65,7 @@ export const useStyles = () => {
       padding: 10,
       borderBottomWidth: 1,
       borderRadius: 5,
-      borderColor: '#EBECEF',
+      borderColor: amityUIKitTokens.colors.border,
       fontSize: 16,
     },
   });

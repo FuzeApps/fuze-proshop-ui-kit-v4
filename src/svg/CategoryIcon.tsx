@@ -1,8 +1,9 @@
 import React from 'react';
 import { Svg, Rect, Path } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const CategoryIcon = ({
-  color = '#D9E5FC',
+  color = amityUIKitTokens.colors.backgroundShade1,
   width = 40,
   height = 40,
   style,

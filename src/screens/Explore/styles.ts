@@ -11,7 +11,7 @@ export const useStyles = () => {
       backgroundColor: theme.colors.baseShade4,
     },
     recommendContainer: {
-      backgroundColor: theme.colors.baseShade4,
+      backgroundColor: theme.colors.baseDivider,
       paddingVertical: 10,
     },
     trendingContainer: {

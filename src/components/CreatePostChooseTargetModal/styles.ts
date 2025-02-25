@@ -37,7 +37,6 @@ export const useStyles = () => {
     },
     communityText: {
       marginLeft: 12,
-      marginBottom: 10,
       fontSize: 15,
       fontWeight: '600',
       color: theme.colors.base,
@@ -68,7 +67,6 @@ export const useStyles = () => {
       height: 40,
       borderRadius: 20,
       marginBottom: 10,
-      backgroundColor: '#D9E5FC',
       marginRight: 12,
     },
     LoadingIndicator: {

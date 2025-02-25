@@ -3,10 +3,11 @@ import React, { memo, useCallback, useState } from 'react';
 import { useStyles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
-import { ComponentID, ElementID, PageID } from '../../enum';
+import { amityUIKitTokens, ComponentID, ElementID, PageID } from '../../enum';
 import { useUiKitConfig } from '../../hooks/useUiKitConfig';
 import { SearchIcon } from '../../svg/SearchIcon';
 import CircleCloseIcon from '../../svg/CircleCloseIcon';
+import SearchIconV4 from '../../svg/SearchIconV4';
 
 type AmityTopSearchBarComponentType = {
   setSearchValue: (arg: string) => void;
@@ -46,7 +47,7 @@ const AmityTopSearchBarComponent = ({
   return (
     <View style={styles.headerWrap}>
       <View style={styles.inputWrap}>
-        <SearchIcon />
+        <SearchIconV4 color={amityUIKitTokens.colors.base} />
         <TextInput
           value={inputValue}
           style={styles.input}

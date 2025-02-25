@@ -265,7 +265,7 @@ export default function SocialNavigator({
                 navigation: NativeStackNavigationProp<any>;
               }) => ({
                 headerLeft: () => <CloseButton navigation={navigation} />,
-                title: 'Edit Profile',
+                title: 'Edit group',
                 headerTitleAlign: 'center',
               })}
             />

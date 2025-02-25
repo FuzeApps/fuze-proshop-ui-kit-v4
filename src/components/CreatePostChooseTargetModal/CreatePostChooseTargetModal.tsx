@@ -1,23 +1,23 @@
 import { CommunityRepository } from '@amityco/ts-sdk-react-native';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  Modal,
-  Image,
-  FlatList,
-} from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { getAmityUser } from '../../providers/user-provider';
-import type { UserInterface } from '../../types/user.interface';
-import { closeIcon, communityIcon } from '../../svg/svg-xml-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import useAuth from '../../hooks/useAuth';
-import { useStyles } from './styles';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { SvgXml } from 'react-native-svg';
+import useAuth from '../../hooks/useAuth';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { getAmityUser } from '../../providers/user-provider';
+import { closeIcon, communityIcon, userIcon } from '../../svg/svg-xml-list';
+import type { UserInterface } from '../../types/user.interface';
+import { useStyles } from './styles';
 interface IModal {
   visible: boolean;
   userId?: string;
@@ -91,16 +91,17 @@ const CreatePostChooseTargetModal = ({
         onPress={() => onSelectFeed(userId as string, 'user')}
         style={styles.rowContainerMyTimeLine}
       >
-        <Image
-          style={styles.avatar}
-          source={
-            myUser
-              ? {
-                  uri: `https://api.${apiRegion}.amity.co/api/v3/files/${myUser.avatarFileId}/download`,
-                }
-              : require('./../../../assets/icon/Placeholder.png')
-          }
-        />
+        {myUser?.avatarFileId ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: `https://api.${apiRegion}.amity.co/api/v3/files/${myUser.avatarFileId}/download`,
+            }}
+          />
+        ) : (
+          <SvgXml width={40} height={40} xml={userIcon()} />
+        )}
+
         <Text style={styles.communityText}>My Timeline</Text>
       </TouchableOpacity>
     );

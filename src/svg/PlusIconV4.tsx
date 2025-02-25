@@ -1,8 +1,9 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const PlusIconV4 = ({
-  color = '#292B32',
+  color = amityUIKitTokens.colors.base,
   width = 14,
   height = 15,
   style = {},

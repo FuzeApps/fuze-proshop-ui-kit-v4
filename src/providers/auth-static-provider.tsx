@@ -15,47 +15,15 @@ export const AuthStaticContext = React.createContext<IAmityUIkitProvider>({
 
 export const AuthStaticProvider: FC<IAmityUIkitProvider> = ({
   children,
-  userId,
-  displayName,
-  apiKey,
-  apiRegion,
-  apiEndpoint,
-  authToken,
-  onCommunityJoin,
-  onCommunityLeave,
-  onPostComplete,
-  onPostLike,
-  onPostStart,
-  onPostUnLike,
-  onUserFollow,
-  onUserUnFollow,
-  onViewMyProShop,
-  CommunityLeaderboardComponent,
-  userRole,
   minMembersToShowCounter = DEFAULT_MEMBERS_TO_SHOW_COMMUNITY_COUNTER,
+  ...rest
 }) => {
   return (
     <AuthStaticContext.Provider
       value={{
-        userId,
-        displayName,
-        apiKey,
-        apiRegion,
-        apiEndpoint,
-        authToken,
-        children,
-        onCommunityJoin,
-        onCommunityLeave,
-        onPostComplete,
-        onPostLike,
-        onPostStart,
-        onPostUnLike,
-        onUserFollow,
-        onUserUnFollow,
-        onViewMyProShop,
-        CommunityLeaderboardComponent,
-        userRole,
         minMembersToShowCounter,
+        children,
+        ...rest,
       }}
     >
       {children}

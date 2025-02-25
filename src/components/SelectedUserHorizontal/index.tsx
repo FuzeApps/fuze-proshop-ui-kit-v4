@@ -40,7 +40,6 @@ const AvatarListItem = ({
             />
           ) : (
             <View style={styles.avatar}>
-              {' '}
               <AvatarIcon />
             </View>
           )}

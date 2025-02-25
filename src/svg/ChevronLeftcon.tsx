@@ -1,10 +1,11 @@
 import React from 'react';
 import { Svg, Path } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 const ChevronLeftIcon = ({
+  color = amityUIKitTokens.colors.base,
   width = 25,
   height = 24,
-  color = '#292B32',
   style = {},
 }) => (
   <Svg

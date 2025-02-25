@@ -1,13 +1,20 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import {
+  amityUIKitTokens,
+  AmityUserMetadataKeys,
+  ComponentID,
+  ElementID,
+  PageID,
+  TabName,
+  UserRole,
+} from '../../enum';
+import { useUiKitConfig } from '../../hooks/useUiKitConfig';
 import { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { RootStackParamList } from '../../routes/RouteParamList';
-import { ComponentID, ElementID, PageID, TabName } from '../../enum';
-import { useBehaviour } from '../../providers/BehaviourProvider';
-import { useUiKitConfig } from '../../hooks/useUiKitConfig';
 import PlusIconV4 from '../../svg/PlusIconV4';
 import SearchIconV4 from '../../svg/SearchIconV4';
 
@@ -17,11 +24,11 @@ import {
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { PollIcon } from '../../svg/PollIcon';
-import { PostIconOutlined } from '../../svg/PostIconOutlined';
+import { SvgXml } from 'react-native-svg';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
+import { communityIcon2, pollIcon2, postIcon2 } from '../../svg/svg-xml-list';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
+import { UserRepository } from '@amityco/ts-sdk-react-native';
 
 const AmitySocialHomeTopNavigationComponent = ({
   currentTab,
@@ -29,7 +36,7 @@ const AmitySocialHomeTopNavigationComponent = ({
   currentTab: string;
 }) => {
   const theme = useTheme() as MyMD3Theme;
-  const { AmitySocialHomeTopNavigationComponentBehaviour } = useBehaviour();
+  const [userDetail, setUserDetail] = useState<Amity.User>();
   const [headerTitle] = useUiKitConfig({
     keys: ['text'],
     page: PageID.social_home_page,
@@ -38,98 +45,70 @@ const AmitySocialHomeTopNavigationComponent = ({
   }) as string[];
   const [openPostCreationMenu, setOpenPostCreationMenu] =
     useState<boolean>(false);
-
-  const { userId } = useSelector((state: RootState) => state.ui);
   const [postType, setPostType] = useState<string>();
   const [createPostModalVisible, setCreatePostModalVisible] = useState(false);
-
+  const { userRole, userId } = useAuthStatic();
   const onChooseType = (type: string) => {
     setOpenPostCreationMenu(false);
     setPostType(type);
     setCreatePostModalVisible(true);
   };
-  const closeCreatePostModal = () => {
-    setCreatePostModalVisible(false);
-  };
+
   const navigation =
     useNavigation() as NativeStackNavigationProp<RootStackParamList>;
-  const styles = StyleSheet.create({
-    headerContainer: {
-      width: '100%',
-      alignSelf: 'center',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 24,
-      paddingVertical: 8,
-      marginVertical: 8,
-    },
-    title: {
-      fontWeight: 'bold',
-      color: theme.colors.base,
-      fontSize: 20,
-    },
-    flexContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    iconBtn: {
-      borderRadius: 50,
-      backgroundColor: theme.colors.baseShade4,
-      padding: 4,
-      marginHorizontal: 4,
-      width: 32,
-      height: 32,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    icon: {
-      tintColor: theme.colors.base,
-      padding: 4,
-    },
-    optionsContainer: {
-      backgroundColor: theme.colors.background,
-      borderRadius: 12,
-      paddingHorizontal: 12,
-      paddingVertical: 12,
-      shadowColor: '#606170',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.2,
-      shadowRadius: 8,
-      elevation: 5,
-      marginTop: 40,
-    },
-    modalRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 5,
-      marginVertical: 5,
-    },
-    postText: {
-      paddingLeft: 12,
-      fontWeight: '600',
-      color: theme.colors.base,
-    },
-  });
+
+  const closeCreatePostModal = useCallback(() => {
+    setCreatePostModalVisible(false);
+  }, []);
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('AmitySocialGlobalSearchPage');
-  }, [AmitySocialHomeTopNavigationComponentBehaviour, navigation]);
+  }, [navigation]);
 
-  const onClickPlusIcon = useCallback(() => {
-    if (currentTab === TabName.MyCommunities) {
-      navigation.navigate('CreateCommunity');
-    } else {
-      setOpenPostCreationMenu(true);
-    }
-  }, [navigation, currentTab]);
+  const onPressCreateCommunity = useCallback(() => {
+    setOpenPostCreationMenu(false);
+    setCreatePostModalVisible(false);
+    navigation.navigate('CreateCommunity');
+  }, [navigation]);
 
   const onPressCreate = useCallback(() => {
-    if (AmitySocialHomeTopNavigationComponentBehaviour.onPressCreate)
-      return AmitySocialHomeTopNavigationComponentBehaviour.onPressCreate();
-    return onClickPlusIcon();
-  }, [AmitySocialHomeTopNavigationComponentBehaviour, onClickPlusIcon]);
+    setOpenPostCreationMenu(true);
+  }, []);
+
+  // Dropdown options.
+  const options = useMemo((): OptionItem[] => {
+    return [
+      {
+        onPress: () => onChooseType('post'),
+        title: 'Post',
+        icon: <SvgXml xml={postIcon2()} />,
+      },
+      {
+        onPress: () => onChooseType('poll'),
+        title: 'Poll',
+        icon: <SvgXml xml={pollIcon2()} />,
+      },
+      userRole === UserRole.PRO &&
+      !userDetail?.metadata?.[AmityUserMetadataKeys.CreatedCommunityId]
+        ? {
+            onPress: onPressCreateCommunity,
+            title: 'Group',
+            icon: <SvgXml xml={communityIcon2()} />,
+          }
+        : null,
+    ].filter(Boolean);
+  }, [onPressCreateCommunity, userDetail?.metadata, userRole]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = UserRepository.getUser(userId, (data) => {
+        if (data?.data && !data?.loading && !data?.error) {
+          setUserDetail(data.data);
+        }
+      });
+      unsubscribe();
+    }, [userId])
+  );
 
   return (
     <View
@@ -154,7 +133,6 @@ const AmitySocialHomeTopNavigationComponent = ({
           <SearchIconV4 color={theme.colors.base} />
         </TouchableOpacity>
 
-        {/* <Image source={searchIcon} style={styles.icon} /> */}
         {currentTab !== TabName.Explore && (
           <Menu
             opened={openPostCreationMenu}
@@ -167,31 +145,22 @@ const AmitySocialHomeTopNavigationComponent = ({
                 testID="top_navigation/post_creation_button"
                 accessibilityLabel="top_navigation/post_creation_button"
               >
-                {/* <Image source={createIcon} style={styles.icon} /> */}
                 <PlusIconV4 color={theme.colors.base} />
               </TouchableOpacity>
             </MenuTrigger>
             <MenuOptions
               customStyles={{ optionsContainer: styles.optionsContainer }}
             >
-              <MenuOption>
-                <TouchableOpacity
-                  onPress={() => onChooseType('post')}
+              {options?.map((option, index) => (
+                <MenuOption
+                  key={`${option.title}-${index}`}
+                  onSelect={option.onPress}
                   style={styles.modalRow}
                 >
-                  <PostIconOutlined color={theme.colors.base} />
-                  <Text style={styles.postText}>Post</Text>
-                </TouchableOpacity>
-              </MenuOption>
-              <MenuOption>
-                <TouchableOpacity
-                  onPress={() => onChooseType('poll')}
-                  style={styles.modalRow}
-                >
-                  <PollIcon color={theme.colors.base} />
-                  <Text style={styles.postText}>Poll</Text>
-                </TouchableOpacity>
-              </MenuOption>
+                  {option.icon}
+                  <Text style={styles.postText}>{option.title}</Text>
+                </MenuOption>
+              ))}
             </MenuOptions>
           </Menu>
         )}
@@ -206,5 +175,71 @@ const AmitySocialHomeTopNavigationComponent = ({
     </View>
   );
 };
+
+type OptionItem = {
+  title: string;
+  icon: React.JSX.Element;
+  onPress: () => void;
+};
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    width: '100%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    marginVertical: 8,
+  },
+  title: {
+    fontWeight: 'bold',
+    color: amityUIKitTokens.colors.base,
+    fontSize: 20,
+  },
+  flexContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconBtn: {
+    borderRadius: 50,
+    backgroundColor: amityUIKitTokens.colors.baseShade4,
+    padding: 4,
+    marginHorizontal: 4,
+    width: 32,
+    height: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    tintColor: amityUIKitTokens.colors.base,
+    padding: 4,
+  },
+  optionsContainer: {
+    backgroundColor: amityUIKitTokens.colors.background,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    shadowColor: '#606170',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+    marginTop: 40,
+  },
+  modalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+    marginVertical: 5,
+  },
+  postText: {
+    paddingLeft: 12,
+    fontWeight: '600',
+    color: amityUIKitTokens.colors.base,
+  },
+});
 
 export default memo(AmitySocialHomeTopNavigationComponent);

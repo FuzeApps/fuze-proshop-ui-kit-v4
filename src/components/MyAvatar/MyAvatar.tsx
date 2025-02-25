@@ -1,9 +1,9 @@
-import { Image, ImageProps, StyleSheet } from 'react-native';
+import { Image, ImageProps, StyleSheet, View } from 'react-native';
 import React, { FC, memo, useEffect, useState } from 'react';
 
 import { defaultAvatarUri } from '../../assets';
 import { UserRepository } from '@amityco/ts-sdk-react-native';
-import { ImageSizeState } from '../../enum';
+import { amityUIKitTokens, ImageSizeState } from '../../enum';
 import useAuth from '../../hooks/useAuth';
 import { useFileV4 } from '../../hooks/useFilev4';
 import { SvgXml } from 'react-native-svg';
@@ -28,10 +28,16 @@ const MyAvatar: FC<MyAvatarProp> = (props) => {
     });
   }, [getImage, myId]);
 
-  return avatarUrl.length > 0 ? (
-    <Image source={{ uri: avatarUrl }} style={styles.img} {...props} />
-  ) : (
-    <SvgXml xml={personXml} />
+  return (
+    <View style={styles.avatarWrapper}>
+      <View style={styles.imgPlaceholder}>
+        {avatarUrl.length > 0 ? (
+          <Image source={{ uri: avatarUrl }} style={styles.img} {...props} />
+        ) : (
+          <SvgXml xml={personXml} />
+        )}
+      </View>
+    </View>
   );
 };
 
@@ -41,6 +47,17 @@ const styles = StyleSheet.create({
   img: {
     width: 32,
     height: 32,
-    borderRadius: 32,
+    borderRadius: 100,
+  },
+  avatarWrapper: {
+    backgroundColor: amityUIKitTokens.colors.baseShade4,
+    marginEnd: amityUIKitTokens.spacing.m1,
+    borderRadius: 100,
+  },
+  imgPlaceholder: {
+    height: 32,
+    width: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
