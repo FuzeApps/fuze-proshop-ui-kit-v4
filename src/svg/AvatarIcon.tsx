@@ -1,10 +1,11 @@
 import React from 'react';
 import { Svg, Path, Rect } from 'react-native-svg';
+import { amityUIKitTokens } from '../enum';
 
 export const AvatarIcon = ({
   width = 40,
   height = 40,
-  color = '#D9E5FC',
+  color = amityUIKitTokens.colors.backgroundShade1,
 }: {
   color?: string;
   width?: number;

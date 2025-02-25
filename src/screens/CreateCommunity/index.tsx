@@ -356,7 +356,6 @@ export default function CreateCommunity() {
                               />
                             ) : (
                               <View style={styles.avatar}>
-                                {' '}
                                 <AvatarIcon />
                               </View>
                             )}

@@ -122,14 +122,14 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
       title: '',
       data: [
         {
-          name: 'Leave Community',
+          name: 'Leave group',
           leftIcon: null,
           callBack: handleLeaveCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
         },
         {
-          name: 'Close Community',
+          name: 'Close group',
           leftIcon: null,
           callBack: handleCloseCommunityPress,
           rightIcon: null,

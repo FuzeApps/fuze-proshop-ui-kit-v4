@@ -1,8 +1,10 @@
-import { Image, Text, TouchableOpacity } from 'react-native';
 import React, { memo } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import useFile from '../../../hooks/useFile';
+import { proShopButtonIconRound } from '../../../svg/svg-xml-list';
 import { useStyle } from '../styles';
-import CategoryIcon from '../../../svg/CategoryIcon';
+import { amityUIKitTokens } from '../../../enum';
 
 const Categories = ({
   item,
@@ -12,21 +14,22 @@ const Categories = ({
   onSelectCategory: (id: string, name: string) => void;
 }) => {
   const avatarURL = useFile({ fileId: item.avatarFileId });
+
   const styles = useStyle();
   return (
     <TouchableOpacity
       onPress={() => onSelectCategory(item.categoryId, item.name)}
       style={styles.rowContainer}
     >
-      {item.avatarFileId ? (
+      {!item?.avatarFileId ? (
+        <SvgXml xml={proShopButtonIconRound()} />
+      ) : (
         <Image
           style={styles.avatar}
           source={{
             uri: avatarURL,
           }}
         />
-      ) : (
-        <CategoryIcon width={40} height={40} />
       )}
 
       <Text style={styles.communityText}>{item.name}</Text>

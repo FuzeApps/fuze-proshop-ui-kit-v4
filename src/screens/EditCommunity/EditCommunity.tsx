@@ -362,7 +362,6 @@ const EditCommunity = ({ navigation, route }) => {
                               />
                             ) : (
                               <View style={styles.avatar}>
-                                {' '}
                                 <AvatarIcon />
                               </View>
                             )}

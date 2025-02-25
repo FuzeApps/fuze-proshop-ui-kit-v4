@@ -81,7 +81,6 @@ export default function CategoryList({ navigation }: any) {
           />
         ) : (
           <View style={styles.avatar}>
-            {' '}
             <AvatarIcon />
           </View>
         )}

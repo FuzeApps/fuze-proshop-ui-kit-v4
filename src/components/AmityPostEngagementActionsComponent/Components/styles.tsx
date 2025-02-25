@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../../enum';
 
 export const useStyles = (theme: MyMD3Theme) => {
   const styles = StyleSheet.create({
@@ -13,11 +14,27 @@ export const useStyles = (theme: MyMD3Theme) => {
       marginBottom: 4,
       paddingVertical: 8,
       alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    joinBannerSection: {
+      padding: amityUIKitTokens.spacing.m1,
+      backgroundColor: theme.colors.screenBackground,
+      borderRadius: amityUIKitTokens.borderRadius.medium,
+      alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column',
+    },
+    joinBannerText: {
+      color: theme.colors.base,
+      fontSize: 16,
+      fontWeight: '600',
+      paddingTop: amityUIKitTokens.spacing.s2,
+      paddingStart: amityUIKitTokens.spacing.m1,
+      textAlign: 'center',
     },
     btnText: {
       color: theme.colors.baseShade2,
-      fontSize: 15,
+      fontSize: amityUIKitTokens.fontSize.body,
       fontWeight: '600',
       marginHorizontal: 4,
     },

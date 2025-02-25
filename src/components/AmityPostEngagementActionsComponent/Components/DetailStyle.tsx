@@ -1,26 +1,28 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import React, { FC, memo, useState, useCallback, useEffect } from 'react';
 import {
   PostRepository,
   SubscriptionLevels,
   getPostTopic,
   subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
-import { AmityPostEngagementActionsSubComponentType } from './type';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useStyles } from './styles';
+import { AmityPostEngagementActionsSubComponentType } from './type';
 
-import { PageID, ComponentID } from '../../../enum';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SvgXml } from 'react-native-svg';
+import CommentButtonIconElement from '../../../Elements/CommentButtonIconElement/CommentButtonIconElement';
+import LikeButtonIconElement from '../../../Elements/LikeButtonIconElement/LikeButtonIconElement';
+import { ComponentID, PageID } from '../../../enum';
+import { useAmityComponent } from '../../../hooks/useUiKitReference';
 import {
   addPostReaction,
   removePostReaction,
 } from '../../../providers/Social/feed-sdk';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../routes/RouteParamList';
-import LikeButtonIconElement from '../../../Elements/LikeButtonIconElement/LikeButtonIconElement';
-import CommentButtonIconElement from '../../../Elements/CommentButtonIconElement/CommentButtonIconElement';
-import { useAmityComponent } from '../../../hooks/useUiKitReference';
 import LikeReaction from '../../../svg/LikeReactionIcon';
+import { lockIcon } from '../../../svg/svg-xml-list';
 
 const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
   community,
@@ -101,8 +103,9 @@ const DetailStyle: FC<AmityPostEngagementActionsSubComponentType> = ({
 
   if (community && !community.isJoined) {
     return (
-      <View style={styles.actionSection}>
-        <Text style={styles.btnText}>
+      <View style={styles.joinBannerSection}>
+        <SvgXml xml={lockIcon()} />
+        <Text style={styles.joinBannerText}>
           Join community to interact with all posts
         </Text>
       </View>
