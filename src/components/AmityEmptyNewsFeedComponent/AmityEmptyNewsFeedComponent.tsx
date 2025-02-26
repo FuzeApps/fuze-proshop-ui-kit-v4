@@ -50,8 +50,6 @@ const AmityEmptyNewsFeedComponent: FC<AmityEmptyNewsFeedComponentType> = ({
     //@ts-ignore
   }, [params?.user?.metadata, userRole]);
 
-  console.log('JPN: params.user', params?.user?.metadata);
-
   if (excludes.includes(uiReference)) return null;
   return (
     <View
