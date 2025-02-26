@@ -38,7 +38,7 @@ export const useStyles = () => {
       paddingVertical: 15,
       paddingHorizontal: 16,
       borderBottomWidth: 1,
-      borderBottomColor: '#DDDDDD',
+      borderBottomColor: amityUIKitTokens.colors.border,
     },
     iconContainer: {
       width: 28,

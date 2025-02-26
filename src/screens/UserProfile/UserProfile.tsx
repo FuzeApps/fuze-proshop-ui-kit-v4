@@ -158,10 +158,6 @@ export default function UserProfile({ route }: any) {
 
   useEffect(() => {
     if (!user?.avatarFileId) {
-      console.log(
-        'JPN: avatarFileId not found.. using the default url',
-        defaultAvatar?.uri
-      );
       return setAvatar(null);
     }
 
@@ -171,7 +167,6 @@ export default function UserProfile({ route }: any) {
         fileId: user.avatarFileId,
         imageSize: ImageSizeState.small,
       });
-      console.log('JPN: avatarUrl', avatarUrl);
       setAvatar(avatarUrl);
     })();
   }, [getImage, user?.avatarFileId]);
@@ -441,12 +436,6 @@ export default function UserProfile({ route }: any) {
       </View>
     );
   }, [renderButtons, viewMyProshopButton]);
-
-  const finalAvatarUri = useMemo(() => {
-    return avatar ? avatar : defaultAvatar?.uri;
-  }, [avatar]);
-
-  console.log('JPN: finalAvatarUri', finalAvatarUri, defaultAvatar?.uri);
 
   return (
     <View style={styles.container}>

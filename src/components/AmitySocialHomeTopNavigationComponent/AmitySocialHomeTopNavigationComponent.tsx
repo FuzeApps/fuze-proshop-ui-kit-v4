@@ -1,6 +1,11 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import {
@@ -18,6 +23,7 @@ import { RootStackParamList } from '../../routes/RouteParamList';
 import PlusIconV4 from '../../svg/PlusIconV4';
 import SearchIconV4 from '../../svg/SearchIconV4';
 
+import { UserRepository } from '@amityco/ts-sdk-react-native';
 import {
   Menu,
   MenuOption,
@@ -28,7 +34,6 @@ import { SvgXml } from 'react-native-svg';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
 import { communityIcon2, pollIcon2, postIcon2 } from '../../svg/svg-xml-list';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
-import { UserRepository } from '@amityco/ts-sdk-react-native';
 
 const AmitySocialHomeTopNavigationComponent = ({
   currentTab,
@@ -36,7 +41,6 @@ const AmitySocialHomeTopNavigationComponent = ({
   currentTab: string;
 }) => {
   const theme = useTheme() as MyMD3Theme;
-  const [userDetail, setUserDetail] = useState<Amity.User>();
   const [headerTitle] = useUiKitConfig({
     keys: ['text'],
     page: PageID.social_home_page,
@@ -53,9 +57,11 @@ const AmitySocialHomeTopNavigationComponent = ({
     setPostType(type);
     setCreatePostModalVisible(true);
   };
-
+  const isFocused = useIsFocused();
   const navigation =
     useNavigation() as NativeStackNavigationProp<RootStackParamList>;
+  const route = useRoute<RouteProp<RootStackParamList>>();
+  const { params } = route;
 
   const closeCreatePostModal = useCallback(() => {
     setCreatePostModalVisible(false);
@@ -88,8 +94,10 @@ const AmitySocialHomeTopNavigationComponent = ({
         title: 'Poll',
         icon: <SvgXml xml={pollIcon2()} />,
       },
+
       userRole === UserRole.PRO &&
-      !userDetail?.metadata?.[AmityUserMetadataKeys.CreatedCommunityId]
+      // @ts-ignore
+      !params?.user?.metadata?.[AmityUserMetadataKeys.CreatedCommunityId]
         ? {
             onPress: onPressCreateCommunity,
             title: 'Group',
@@ -97,18 +105,28 @@ const AmitySocialHomeTopNavigationComponent = ({
           }
         : null,
     ].filter(Boolean);
-  }, [onPressCreateCommunity, userDetail?.metadata, userRole]);
+    // @ts-ignore
+  }, [onPressCreateCommunity, params?.user?.metadata, userRole]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const unsubscribe = UserRepository.getUser(userId, (data) => {
-        if (data?.data && !data?.loading && !data?.error) {
-          setUserDetail(data.data);
-        }
-      });
-      unsubscribe();
-    }, [userId])
-  );
+  const getUser = useCallback(() => {
+    if (!userId) {
+      return;
+    }
+    const unsubscribe = UserRepository.getUser(userId, (data) => {
+      if (data?.data && !data?.loading && !data?.error) {
+        navigation.setParams({ user: data.data });
+      }
+    });
+    unsubscribe();
+  }, [navigation, userId]);
+
+  useEffect(() => {
+    if (isFocused) {
+      setTimeout(() => {
+        getUser();
+      }, 1000);
+    }
+  }, [getUser, isFocused]);
 
   return (
     <View

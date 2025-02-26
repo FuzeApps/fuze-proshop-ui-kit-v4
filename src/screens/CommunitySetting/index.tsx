@@ -71,7 +71,10 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
       await metadataHandlers
         .deleteCreatedCommunityId(userId, communityId)
         .finally(() => {
-          if (deletedCommunity) return navigation.navigate('Home');
+          if (deletedCommunity)
+            return navigation.navigate('Home', {
+              shouldRefresh: true,
+            });
         });
 
       return;
