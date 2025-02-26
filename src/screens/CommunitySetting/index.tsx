@@ -10,7 +10,7 @@ import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
 import {
   communityIcon2,
   trashIcon,
-  unFollowIcon,
+  userLeaveIcon,
 } from '../../svg/svg-xml-list';
 import metadataHandlers from '../../util/metadataHandlers';
 import { useStyles } from './styles';
@@ -117,7 +117,7 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
         {
           name: 'Leave group',
           leftIcon: (
-            <SvgXml xml={unFollowIcon(amityUIKitTokens.colors.alert)} />
+            <SvgXml xml={userLeaveIcon(amityUIKitTokens.colors.alert)} />
           ),
 
           callBack: handleLeaveCommunityPress,

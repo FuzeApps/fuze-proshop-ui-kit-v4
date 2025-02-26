@@ -34,12 +34,13 @@ import FloatingButton from '../../components/FloatingButton';
 import useAuth from '../../hooks/useAuth';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import {
-  blockOrUnblock,
   cancelFollowRequest,
-  followPlusIcon,
+  followIcon,
   primaryDot,
   privateUserProfile,
   proshopSmallIcon,
+  threeDots,
+  unFollowIcon,
   userIcon,
 } from '../../svg/svg-xml-list';
 import type { FeedRefType } from '../CommunityHome';
@@ -53,7 +54,6 @@ import uiSlice from '../../redux/slices/uiSlice';
 import GalleryComponent from '../../components/Gallery/GalleryComponent';
 import { amityUIKitTokens, ImageSizeState, TabName } from '../../enum';
 import { PostTag } from '../../enum/enumPostTag';
-import {} from '../../hooks';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
 import { useFileV4 } from '../../hooks/useFilev4';
 
@@ -61,7 +61,12 @@ const defaultAvatar = require('../../assets/icon/Placeholder.png');
 
 export default function UserProfile({ route }: any) {
   const theme = useTheme() as MyMD3Theme;
-  const { onViewMyProShop, onUserFollow, onPostStart } = useAuthStatic();
+  const {
+    onViewMyProShop,
+    onUserFollow,
+    onPostStart,
+    userId: currentSessionUserId,
+  } = useAuthStatic();
   const styles = useStyles();
   const { client } = useAuth();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -116,25 +121,31 @@ export default function UserProfile({ route }: any) {
   }, [userId]);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('UserProfileSetting', {
-              user,
-              follow: followStatus,
-            });
-          }}
-        >
-          <Image
-            source={require('../../assets/icon/threeDot.png')}
-            style={styles.dotIcon}
-          />
-        </TouchableOpacity>
-      ),
-    });
-  }, [followStatus, navigation, styles.dotIcon, user]);
+    if (currentSessionUserId !== userId) {
+      navigation.setOptions({
+        // eslint-disable-next-line react/no-unstable-nested-components
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('UserProfileSetting', {
+                user,
+                follow: followStatus,
+              });
+            }}
+          >
+            <SvgXml xml={threeDots()} />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [
+    currentSessionUserId,
+    followStatus,
+    navigation,
+    styles.dotIcon,
+    user,
+    userId,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -204,7 +215,7 @@ export default function UserProfile({ route }: any) {
   const followButton = useMemo(() => {
     return (
       <TouchableOpacity style={styles.button} onPress={onFollowTap}>
-        <SvgXml xml={followPlusIcon()} />
+        <SvgXml xml={followIcon()} />
         <Text style={styles.followText}>Follow</Text>
       </TouchableOpacity>
     );
@@ -213,20 +224,11 @@ export default function UserProfile({ route }: any) {
   const unBlockButton = useMemo(() => {
     return (
       <TouchableOpacity style={styles.button} onPress={onUnblockUser}>
-        <SvgXml
-          width={24}
-          height={20}
-          xml={blockOrUnblock(theme.colors.baseShade4)}
-        />
+        <SvgXml xml={unFollowIcon()} />
         <Text style={styles.editProfileText}>Unblock user</Text>
       </TouchableOpacity>
     );
-  }, [
-    onUnblockUser,
-    styles.button,
-    styles.editProfileText,
-    theme.colors.baseShade4,
-  ]);
+  }, [onUnblockUser, styles.button, styles.editProfileText]);
 
   const cancelRequestButton = useMemo(() => {
     const onCancelRequest = async () => {

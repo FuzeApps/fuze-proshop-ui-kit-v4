@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: amityUIKitTokens.colors.background,
     },
     navBar: {
       height: 60,
@@ -43,7 +44,6 @@ export const useStyles = () => {
       width: 28,
       height: 28,
       borderRadius: 4,
-      backgroundColor: '#EFEFEF',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 15,
