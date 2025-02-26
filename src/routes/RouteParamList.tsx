@@ -1,7 +1,7 @@
 import { AmityPostComposerPageType } from '../types/global.interface';
 
 export type RootStackParamList = {
-  Home: { postIdCallBack?: string };
+  Home: { postIdCallBack?: string; shouldRefresh?: boolean; user: Amity.User };
   AmitySocialGlobalSearchPage: undefined;
   AmitySocialUIKitV4Navigator: undefined;
   CommunitySearch: undefined;

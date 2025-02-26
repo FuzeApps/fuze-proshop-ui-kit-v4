@@ -160,9 +160,6 @@ export default function UserProfileSetting({
         sections={settingData}
         renderItem={renderSectionItem}
         keyExtractor={(_, index) => index.toString()}
-        renderSectionHeader={({ section: { title } }) => {
-          return <Text style={styles.sectionHeader}>{title}</Text>;
-        }}
       />
     </View>
   );

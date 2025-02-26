@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -63,6 +64,9 @@ export const useStyles = () => {
       borderColor: theme.colors.baseShade3,
       borderRadius: 3,
       paddingVertical: 10,
+    },
+    moreOptionsText: {
+      color: amityUIKitTokens.colors.base,
     },
     selectedOptionContainer: {
       borderColor: theme.colors.primary,

@@ -85,15 +85,16 @@ const PollOptionList: FC<IPollOptionList> = ({
         onPress={onPressMoreOption}
         style={styles.moreOptionsBtn}
       >
-        <Text>{resultText}</Text>
+        <Text style={styles.moreOptionsText}>{resultText}</Text>
       </TouchableOpacity>
     );
   }, [
-    hiddenOptions,
     isPollClosed,
     isAlreadyVoted,
+    hiddenOptions,
     onPressMoreOption,
     styles.moreOptionsBtn,
+    styles.moreOptionsText,
   ]);
 
   return (
