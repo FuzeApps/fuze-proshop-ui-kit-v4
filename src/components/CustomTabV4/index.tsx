@@ -11,7 +11,6 @@ import { amityUIKitTokens } from '../../enum';
 import { TabName } from '../../enum/tabNameState';
 import {
   activityIcon,
-  galleryIcon,
   galleryTabIcon,
   leaderboardIcon,
   timelineIcon,

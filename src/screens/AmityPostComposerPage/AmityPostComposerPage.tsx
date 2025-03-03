@@ -722,8 +722,10 @@ const AmityPostComposerPage: FC<AmityPostComposerPageType> = ({
           nestedScrollEnabled={true}
           scrollEnabled={!isShowingSuggestion}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
           <AmityMentionInput
+            autoFocus
             setIsShowingSuggestion={setIsShowingSuggestion}
             initialValue={initialText}
             privateCommunityId={privateCommunityId}

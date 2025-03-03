@@ -468,7 +468,8 @@ export default function UserProfile({ route }: any) {
                   {followingCount + ' Following '}
                 </Text>
                 <Text style={styles.textComponent}>
-                  {followerCount + ' Follower'}
+                  {followerCount +
+                    ` ${followerCount > 1 ? 'Followers' : 'Follower'}`}
                 </Text>
               </Pressable>
             </View>

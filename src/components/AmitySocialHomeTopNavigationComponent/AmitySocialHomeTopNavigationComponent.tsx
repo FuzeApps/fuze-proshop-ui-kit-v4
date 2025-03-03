@@ -32,7 +32,12 @@ import {
 } from 'react-native-popup-menu';
 import { SvgXml } from 'react-native-svg';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
-import { communityIcon2, pollIcon2, postIcon2 } from '../../svg/svg-xml-list';
+import {
+  communityIcon2,
+  pollIcon2,
+  postIcon2,
+  singleUserIcon,
+} from '../../svg/svg-xml-list';
 import CreatePostChooseTargetModal from '../CreatePostChooseTargetModal/CreatePostChooseTargetModal';
 
 const AmitySocialHomeTopNavigationComponent = ({
@@ -120,6 +125,10 @@ const AmitySocialHomeTopNavigationComponent = ({
     unsubscribe();
   }, [navigation, userId]);
 
+  const toToMyProfile = useCallback(() => {
+    navigation.navigate('UserProfile', { userId });
+  }, [navigation, userId]);
+
   useEffect(() => {
     if (isFocused) {
       setTimeout(() => {
@@ -149,6 +158,10 @@ const AmitySocialHomeTopNavigationComponent = ({
           accessibilityLabel="top_navigation/global_search_button"
         >
           <SearchIconV4 color={theme.colors.base} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.iconBtn} onPress={toToMyProfile}>
+          <SvgXml xml={singleUserIcon()} />
         </TouchableOpacity>
 
         {currentTab !== TabName.Explore && (

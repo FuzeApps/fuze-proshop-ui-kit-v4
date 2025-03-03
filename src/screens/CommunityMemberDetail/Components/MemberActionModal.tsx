@@ -1,11 +1,4 @@
-import {
-  Animated,
-  Modal,
-  Pressable,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-} from 'react-native';
+import { createReport } from '@amityco/ts-sdk-react-native';
 import React, {
   FC,
   memo,
@@ -14,15 +7,21 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { useStyles } from '../styles';
-import { createReport } from '@amityco/ts-sdk-react-native';
+import {
+  Animated,
+  Modal,
+  Pressable,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+} from 'react-native';
+import { useAuthStatic } from '../../../hooks/useAuthStatic';
 import {
   assignRolesToUsers,
   removeRolesFromUsers,
   updateCommunityMember,
 } from '../../../providers/Social/communities-sdk';
-import useAuth from '../../../hooks/useAuth';
-import { useAuthStatic } from '../../../hooks/useAuthStatic';
+import { useStyles } from '../styles';
 
 interface IMemberActionModal {
   isVisible: boolean;
