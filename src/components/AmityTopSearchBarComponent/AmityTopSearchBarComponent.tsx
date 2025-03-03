@@ -48,6 +48,7 @@ const AmityTopSearchBarComponent = ({
       <View style={styles.inputWrap}>
         <SearchIconV4 color={amityUIKitTokens.colors.base} />
         <TextInput
+          autoFocus
           value={inputValue}
           style={styles.input}
           onChangeText={onChangeText}

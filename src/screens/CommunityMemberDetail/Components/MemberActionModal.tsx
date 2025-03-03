@@ -1,11 +1,4 @@
-import {
-  Animated,
-  Modal,
-  Pressable,
-  Text,
-  TextStyle,
-  TouchableOpacity,
-} from 'react-native';
+import { createReport } from '@amityco/ts-sdk-react-native';
 import React, {
   FC,
   memo,
@@ -14,14 +7,21 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { useStyles } from '../styles';
-import { createReport } from '@amityco/ts-sdk-react-native';
+import {
+  Animated,
+  Modal,
+  Pressable,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+} from 'react-native';
+import { useAuthStatic } from '../../../hooks/useAuthStatic';
 import {
   assignRolesToUsers,
   removeRolesFromUsers,
   updateCommunityMember,
 } from '../../../providers/Social/communities-sdk';
-import useAuth from '../../../hooks/useAuth';
+import { useStyles } from '../styles';
 
 interface IMemberActionModal {
   isVisible: boolean;
@@ -41,9 +41,8 @@ const MemberActionModal: FC<IMemberActionModal> = ({
   isInModeratorTab,
 }) => {
   const styles = useStyles();
+  const { userId: currentUserId } = useAuthStatic();
   const slideAnimation = useRef(new Animated.Value(0)).current;
-  const { client } = useAuth() as { client: { userId: string } };
-  const currentUserId = client.userId ?? '';
   const actionData = useMemo(
     () => [
       {
@@ -76,7 +75,7 @@ const MemberActionModal: FC<IMemberActionModal> = ({
       },
       {
         id: 'report',
-        label: 'Report User',
+        label: 'Report user',
         shouldShow: currentUserId !== userId,
         callBack: async () => await createReport('user', userId),
       },
@@ -152,6 +151,7 @@ const MemberActionModal: FC<IMemberActionModal> = ({
           {actionData.map((data) => {
             const warningStyle: TextStyle =
               data.id === 'remove' ? { color: 'red' } : null;
+
             if (data.shouldShow) {
               return (
                 <TouchableOpacity

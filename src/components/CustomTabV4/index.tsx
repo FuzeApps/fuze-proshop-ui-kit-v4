@@ -11,6 +11,7 @@ import { amityUIKitTokens } from '../../enum';
 import { TabName } from '../../enum/tabNameState';
 import {
   activityIcon,
+  galleryTabIcon,
   leaderboardIcon,
   timelineIcon,
 } from '../../svg/svg-xml-list';
@@ -51,7 +52,7 @@ const CustomTabV4 = ({ tabName, onTabChange }: ICustomTab): ReactElement => {
       case TabName.Leaderboard:
         return <SvgXml style={styles.icon} xml={leaderboardIcon(color)} />;
       case TabName.Gallery:
-        return <SvgXml style={styles.icon} xml={timelineIcon(color)} />;
+        return <SvgXml style={styles.icon} xml={galleryTabIcon(color)} />;
       default:
         return null;
     }
