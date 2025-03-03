@@ -34,8 +34,6 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   const { onCommunityLeave, onCommunityDelete, userId } = useAuthStatic();
   const { communityId, isModerator = false, communityName } = route.params;
 
-  console.log('JPN: isModerator', isModerator);
-
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
       communityId: communityId,
