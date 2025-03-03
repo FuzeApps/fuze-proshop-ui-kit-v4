@@ -32,7 +32,10 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
   const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
   const { onCommunityLeave, onCommunityDelete, userId } = useAuthStatic();
-  const { communityId, isModerator, communityName } = route.params;
+  const { communityId, isModerator = false, communityName } = route.params;
+
+  console.log('JPN: isModerator', isModerator);
+
   const handleMembersPress = () => {
     navigation.navigate('CommunityMemberDetail', {
       communityId: communityId,
@@ -117,7 +120,8 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
           rightIcon: <ArrowOutlinedIcon width={24} color={theme.colors.base} />,
           type: SettingType.basicInfo,
         },
-        {
+        //If the user is the moderator in the community, he should be able to leave the community
+        !isModerator && {
           name: 'Leave group',
           leftIcon: (
             <SvgXml xml={userLeaveIcon(amityUIKitTokens.colors.alert)} />
@@ -127,14 +131,15 @@ export const CommunitySetting: React.FC<ChatDetailProps> = ({
           rightIcon: null,
           type: SettingType.leaveOrClose,
         },
-        {
+        //If user is moderator, show close group option
+        isModerator && {
           name: 'Close group',
           leftIcon: <SvgXml xml={trashIcon(amityUIKitTokens.colors.alert)} />,
           callBack: handleCloseCommunityPress,
           rightIcon: null,
           type: SettingType.leaveOrClose,
         },
-      ],
+      ].filter(Boolean),
     },
   ];
 

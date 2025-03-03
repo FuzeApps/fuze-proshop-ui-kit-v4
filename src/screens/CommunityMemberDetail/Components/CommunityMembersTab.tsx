@@ -5,6 +5,7 @@ import { UserInterface } from '../../../types/user.interface';
 import UserItem from '../../../components/UserItem';
 import { useStyles } from '../styles';
 import { TabName } from '../../../enum/tabNameState';
+import { useAuthStatic } from '../../../hooks/useAuthStatic';
 
 interface ICommunityMembersTab {
   activeTab: string;
@@ -22,6 +23,7 @@ const CommunityMembersTab: React.FC<ICommunityMembersTab> = ({
   const [memberList, setMemberList] = useState<Amity.Member<'community'>[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
+  const { userId } = useAuthStatic();
   const onNextPageRef = useRef<(() => void) | null>(null);
   const isFetchingRef = useRef(false);
   const flatListRef = useRef(null);
@@ -70,6 +72,7 @@ const CommunityMembersTab: React.FC<ICommunityMembersTab> = ({
           user={userObject}
           showThreeDot={true}
           onThreeDotTap={onThreeDotTap}
+          showActions={userObject?.userId !== userId}
         />
       );
     }

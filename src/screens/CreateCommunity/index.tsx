@@ -4,48 +4,45 @@ import { useCallback, useEffect, useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  ScrollView,
-  Pressable,
   FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useStyles } from './styles';
-import ChooseCategoryModal from '../../components/ChooseCategoryModal';
+import * as ImagePicker from 'expo-image-picker';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { RadioButton } from 'react-native-radio-buttons-group';
 import AddMembersModal from '../../components/AddMembersModal';
-import type { UserInterface } from '../../types/user.interface';
+import ChooseCategoryModal from '../../components/ChooseCategoryModal';
+import { amityUIKitTokens } from '../../enum';
+import { PrivacyState } from '../../enum/privacyState';
+import useAuth from '../../hooks/useAuth';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { uploadImageFile } from '../../providers/file-provider';
 import {
   createCommunity,
   type ICreateCommunity,
 } from '../../providers/Social/communities-sdk';
-import useAuth from '../../hooks/useAuth';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import * as ImagePicker from 'expo-image-picker';
-import { uploadImageFile } from '../../providers/file-provider';
-import { PrivacyState } from '../../enum/privacyState';
-import CloseIcon from '../../svg/CloseIcon';
 import ArrowOutlinedIcon from '../../svg/ArrowOutlinedIcon';
-import PublicIcon from '../../svg/PublicIcon';
-import PrivateIcon from '../../svg/PrivateIcon';
-import { PlusIcon } from '../../svg/PlusIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
-import { amityUIKitTokens } from '../../enum';
-import metadataHandlers from '../../util/metadataHandlers';
-import { useAuthStatic } from '../../hooks/useAuthStatic';
+import CloseIcon from '../../svg/CloseIcon';
+import { PlusIcon } from '../../svg/PlusIcon';
+import PrivateIcon from '../../svg/PrivateIcon';
+import PublicIcon from '../../svg/PublicIcon';
+import type { UserInterface } from '../../types/user.interface';
+import { useStyles } from './styles';
 
 export default function CreateCommunity() {
   const styles = useStyles();
   const theme = useTheme() as MyMD3Theme;
   const { apiRegion } = useAuth();
-  const { userId, onCommunityCreate } = useAuthStatic();
   const [image, setImage] = useState<string>();
   const [communityName, setCommunityName] = useState<string>('');
   const [categoryName, setCategoryName] = useState<string>('');
@@ -56,7 +53,7 @@ export default function CreateCommunity() {
   const [selectedId, setSelectedId] = useState<string>();
   const [selectedUserList, setSelectedUserList] = useState<UserInterface[]>([]);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
-  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [isCreateReady, setIsCreateReady] = useState<boolean>(false);
   const [imageFileId, setImageFileId] = useState<string>('');
 
   const MAX_COMMUNITY_NAME_LENGTH = 30;
@@ -117,6 +114,7 @@ export default function CreateCommunity() {
       allowsMultipleSelection: true,
     });
     if (!result.canceled && result.assets && result.assets.length > 0) {
+      setIsCreateReady(false);
       setImage(result.assets[0]?.uri);
     }
   };
@@ -149,9 +147,29 @@ export default function CreateCommunity() {
     setSelectedUserList(removedUser);
   };
 
-  const onCreateCommunity = useCallback(async () => {
-    setIsCreating(true);
-    if (!uploadingImage) {
+  useEffect(() => {
+    if (
+      selectedId === PrivacyState.public &&
+      communityName.length > 0 &&
+      categoryId.length > 0 &&
+      !uploadingImage
+    ) {
+      setIsCreateReady(true);
+      isCreateReady;
+    } else if (
+      selectedId === PrivacyState.private &&
+      communityName.length > 0 &&
+      categoryId.length > 0 &&
+      selectedUserList.length > 0 &&
+      !uploadingImage
+    ) {
+      setIsCreateReady(true);
+    }
+  }, [communityName, categoryId, selectedId, selectedUserList, uploadingImage]);
+
+  const onCreateCommunity = async () => {
+    if (!uploadingImage && isCreateReady) {
+      console.log('pass: ');
       const userIds: string[] = selectedUserList.map((item) => item.userId);
       const isPublic: boolean =
         selectedId === PrivacyState.private ? false : true;
@@ -159,40 +177,19 @@ export default function CreateCommunity() {
         displayName: communityName,
         description: aboutText,
         isPublic: isPublic,
-        userIds: [userId, ...userIds],
+        userIds: userIds,
         category: categoryId,
         avatarFileId: imageFileId,
       };
-
-      const createdCommunity = await createCommunity(communityParam);
-
-      if (createdCommunity) {
-        onCommunityCreate?.({
-          communityName: createdCommunity?.displayName,
-          communityId: createdCommunity?.communityId,
-          userId: createdCommunity?.userId,
+      const isCreated = await createCommunity(communityParam);
+      if (isCreated) {
+        navigation.navigate('CommunityHome', {
+          communityId: isCreated.communityId,
+          communityName: isCreated.displayName,
         });
-
-        await metadataHandlers
-          .setCreatedCommunityId(userId, createdCommunity.communityId)
-          .finally(() => {
-            navigation.navigate('CommunityHome', {
-              communityId: createdCommunity.communityId,
-              communityName: createdCommunity.displayName,
-            });
-          });
       }
     }
-  }, [
-    aboutText,
-    categoryId,
-    communityName,
-    imageFileId,
-    navigation,
-    selectedId,
-    selectedUserList,
-    uploadingImage,
-  ]);
+  };
 
   return (
     <ScrollView
@@ -400,12 +397,16 @@ export default function CreateCommunity() {
           )}
 
           <TouchableOpacity
-            disabled={isCreating && uploadingImage ? true : false}
+            disabled={!isCreateReady ? true : false}
             onPress={onCreateCommunity}
-            style={styles.createButton}
+            style={
+              !isCreateReady
+                ? [styles.disableBtn, styles.createButton]
+                : styles.createButton
+            }
           >
             <Text style={styles.createText}>Create community </Text>
-            {isCreating && uploadingImage && (
+            {uploadingImage && (
               <ActivityIndicator
                 style={styles.loading}
                 animating={true}
@@ -420,13 +421,15 @@ export default function CreateCommunity() {
         onClose={() => setCategoryModal(false)}
         visible={categoryModal}
       />
-      <AddMembersModal
-        onSelect={handleAddMembers}
-        onClose={() => setAddMembersModal(false)}
-        visible={addMembersModal}
-        initUserList={selectedUserList}
-        excludeUserList={[]}
-      />
+      {addMembersModal && (
+        <AddMembersModal
+          onSelect={handleAddMembers}
+          onClose={() => setAddMembersModal(false)}
+          visible={addMembersModal}
+          initUserList={selectedUserList}
+          excludeUserList={[]}
+        />
+      )}
     </ScrollView>
   );
 }

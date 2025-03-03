@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import AddMembersModal from '../../components/AddMembersModal';
-import CustomTab from '../../components/CustomTabV3';
+//import CustomTab from '../../components/CustomTabV3';
 import { TabName } from '../../enum/tabNameState';
 import { updateCommunityMember } from '../../providers/Social/communities-sdk';
 import type { UserInterface } from '../../types/user.interface';
@@ -16,7 +16,9 @@ export default function CommunityMemberDetail({ route }: any) {
   const [addMembersModal, setAddMembersModal] = React.useState(false);
   const [actionModalVisible, setActionModalVisible] = useState(false);
   const [userId, setUserId] = useState('');
-  const [activeTab, setActiveTab] = useState(TabName.Members);
+
+  //TODO: Hide the modal options for now
+  // const [activeTab, setActiveTab] = useState(TabName.Members);
 
   // TODO: Will hide this for now as it is buggy and not necessary for the release.
   // useLayoutEffect(() => {
@@ -50,13 +52,21 @@ export default function CommunityMemberDetail({ route }: any) {
 
   return (
     <View style={styles.container}>
-      <CustomTab
+      {/* TODO: Hide the modal options for now */}
+      {/* <CustomTab
         tabName={[TabName.Members, TabName.Moderators]}
         onTabChange={setActiveTab}
       />
 
       <CommunityMembersTab
         activeTab={activeTab}
+        communityId={communityId}
+        onThreeDotTap={onThreeDotTap}
+        setMember={setMember}
+      /> */}
+
+      <CommunityMembersTab
+        activeTab={TabName.Members}
         communityId={communityId}
         onThreeDotTap={onThreeDotTap}
         setMember={setMember}
@@ -74,7 +84,8 @@ export default function CommunityMemberDetail({ route }: any) {
         userId={userId}
         communityId={communityId}
         hasModeratorPermission={isModerator}
-        isInModeratorTab={activeTab === TabName.Moderators}
+        // isInModeratorTab={activeTab === TabName.Moderators}
+        isInModeratorTab={false}
       />
     </View>
   );

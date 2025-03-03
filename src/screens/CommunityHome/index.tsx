@@ -79,7 +79,7 @@ export default function CommunityHome({ route }: any) {
     displayName,
     CommunityLeaderboardComponent,
   } = useAuthStatic();
-  // const { excludes } = useConfig();
+
   const styles = useStyles();
   const dispatch = useDispatch();
   const { openPostTypeChoiceModal } = uiSlice.actions;
@@ -317,7 +317,7 @@ export default function CommunityHome({ route }: any) {
 
   const onEditProfileTap = useCallback(() => {
     navigation.navigate('EditCommunity', {
-      communityData,
+      communityData: communityData?.data,
     });
   }, [communityData, navigation]);
 
