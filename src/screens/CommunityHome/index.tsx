@@ -95,7 +95,7 @@ export default function CommunityHome({ route }: any) {
   const [currentTab, setCurrentTab] = useState<TabName>(TabName.Timeline);
   const [communityData, setCommunityData] =
     useState<Amity.LiveObject<Amity.Community>>();
-  const avatarUrl = useFile({ fileId: communityData?.data.avatarFileId });
+  const avatarUrl = useFile({ fileId: communityData?.data?.avatarFileId });
   const feedRef: MutableRefObject<FeedRefType | null> =
     useRef<FeedRefType | null>(null);
   const scrollViewRef = useRef(null);
@@ -209,7 +209,7 @@ export default function CommunityHome({ route }: any) {
           if (community.data?.postSetting === 'ADMIN_REVIEW_POST_REQUIRED') {
             setPostSetting('ADMIN_REVIEW_POST_REQUIRED');
           }
-          setIsJoin(community?.data.isJoined || false); // Set isJoin to communityData?.data.isJoined value
+          setIsJoin(community?.data?.isJoined || false);
         }
       );
       unsubscribe();
@@ -305,7 +305,7 @@ export default function CommunityHome({ route }: any) {
       openPostTypeChoiceModal({
         userId: (client as Amity.Client).userId as string,
         targetId: communityId,
-        isPublic: communityData?.data.isPublic,
+        isPublic: communityData?.data?.isPublic,
         targetName: communityName,
         targetType: PostTargetType.community,
         postSetting: postSetting,
@@ -430,14 +430,16 @@ export default function CommunityHome({ route }: any) {
   // Community Post and member counter
 
   const communityPostAndMemberCounter = useMemo(() => {
-    if (communityData?.data.membersCount < 1000) {
+    if (communityData?.data?.membersCount < 1000) {
       return null;
     }
 
     return (
       <View style={styles.row}>
         <View style={styles.rowItem}>
-          <Text style={styles.rowNumber}>{communityData?.data.postsCount}</Text>
+          <Text style={styles.rowNumber}>
+            {communityData?.data?.postsCount}
+          </Text>
           <Text style={styles.rowLabel}>post</Text>
         </View>
 
@@ -448,7 +450,7 @@ export default function CommunityHome({ route }: any) {
             style={[styles.rowItem, { paddingLeft: 10 }]}
           >
             <Text style={styles.rowNumber}>
-              {communityData?.data.membersCount}
+              {communityData?.data?.membersCount}
             </Text>
             <Text style={styles.rowLabel}>members</Text>
           </TouchableOpacity>
@@ -456,8 +458,8 @@ export default function CommunityHome({ route }: any) {
       </View>
     );
   }, [
-    communityData?.data.membersCount,
-    communityData?.data.postsCount,
+    communityData?.data?.membersCount,
+    communityData?.data?.postsCount,
     handleMembersPress,
     styles.row,
     styles.rowItem,
@@ -566,10 +568,10 @@ export default function CommunityHome({ route }: any) {
                 ]}
                 numberOfLines={isStickyHeaderVisible ? 1 : 3}
               >
-                {communityData?.data.displayName}
-                {`${communityData?.data.isOfficial && !isStickyHeaderVisible ? ' ' : ''}`}
+                {communityData?.data?.displayName}
+                {`${communityData?.data?.isOfficial && !isStickyHeaderVisible ? ' ' : ''}`}
 
-                {communityData?.data.isOfficial && !isStickyHeaderVisible && (
+                {communityData?.data?.isOfficial && !isStickyHeaderVisible && (
                   <SvgXml
                     style={{ marginTop: -6 }}
                     width={24}
@@ -579,7 +581,7 @@ export default function CommunityHome({ route }: any) {
                 )}
               </Text>
               {/* Verified icon: shown if sticky header is visible. */}
-              {communityData?.data.isOfficial && isStickyHeaderVisible && (
+              {communityData?.data?.isOfficial && isStickyHeaderVisible && (
                 <View style={styles.verifiedIconWrapper}>
                   <SvgXml width={24} height={24} xml={verifiedIcon()} />
                 </View>
@@ -599,7 +601,7 @@ export default function CommunityHome({ route }: any) {
         {/* Description Block Section */}
         <View style={styles.sectionWrapper}>
           <Text style={styles.description}>
-            {communityData?.data.description}
+            {communityData?.data?.description}
           </Text>
         </View>
 
