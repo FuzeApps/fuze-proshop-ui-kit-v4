@@ -46,9 +46,9 @@ const CreatePostChooseTargetModal = ({
       let formattedUserObject: UserInterface;
 
       formattedUserObject = {
-        userId: userObject.data.userId,
-        displayName: userObject.data.displayName,
-        avatarFileId: userObject.data.avatarFileId,
+        userId: userObject?.data?.userId,
+        displayName: userObject?.data?.displayName,
+        avatarFileId: userObject?.data?.avatarFileId,
       };
       setMyUser(formattedUserObject);
     }
