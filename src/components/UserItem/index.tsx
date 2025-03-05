@@ -61,6 +61,7 @@ export default function UserItem({
       <RoundCheckbox isChecked={isCheckmark ?? false} />
     ) : (
       <TouchableOpacity
+        style={styles.rightContainer}
         onPress={() => {
           if (onThreeDotTap) {
             onThreeDotTap(user);
@@ -76,6 +77,7 @@ export default function UserItem({
     showActions,
     showThreeDot,
     styles.dotIcon,
+    styles.rightContainer,
     user,
   ]);
 
@@ -85,21 +87,19 @@ export default function UserItem({
 
   return (
     <Pressable style={styles.listItem} onPress={handleToggle}>
-      <Pressable onPress={navigateToUserDetail}>
-        <View style={styles.leftContainer}>
-          {user.avatarFileId ? (
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
-              }}
-            />
-          ) : (
-            <SvgXml style={styles.avatar} xml={userIcon()} />
-          )}
+      <Pressable onPress={navigateToUserDetail} style={styles.leftContainer}>
+        {user.avatarFileId ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
+            }}
+          />
+        ) : (
+          <SvgXml style={styles.avatar} xml={userIcon()} />
+        )}
 
-          <Text style={styles.itemText}>{displayName()}</Text>
-        </View>
+        <Text style={styles.itemText}>{displayName()}</Text>
       </Pressable>
 
       {/* Menu actions that is displayed with three dots. */}
