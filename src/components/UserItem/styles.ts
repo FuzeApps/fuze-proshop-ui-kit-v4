@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { amityUIKitTokens } from '../../enum';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -9,8 +10,6 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 8,
-      paddingHorizontal: 16,
     },
     avatar: {
       width: 40,
@@ -26,6 +25,15 @@ export const useStyles = () => {
     leftContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      paddingVertical: amityUIKitTokens.spacing.s1,
+    },
+    rightContainer: {
+      alignItems: 'center',
+      paddingHorizontal: amityUIKitTokens.spacing.m1,
+      minHeight: amityUIKitTokens.spacing.l4,
+      justifyContent: 'center',
     },
     dotIcon: {
       width: 16,

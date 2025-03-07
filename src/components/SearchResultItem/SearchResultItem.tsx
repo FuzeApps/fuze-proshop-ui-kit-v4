@@ -8,7 +8,6 @@ import AvatarElement from '../../Elements/CommonElements/AvatarElement';
 import TextElement from '../../Elements/CommonElements/TextElement';
 import { ComponentID, ElementID, PageID, TabName } from '../../enum';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
-import { useBehaviour } from '../../providers/BehaviourProvider';
 import { RootStackParamList } from '../../routes/RouteParamList';
 import { privateIcon, verifiedIcon } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
@@ -32,7 +31,6 @@ const SearchResultItem: FC<SearchResultItemType> = ({
   });
   const styles = useStyles(themeStyles);
 
-  const { AmityCommunitySearchResultComponent } = useBehaviour();
   const navigation =
     useNavigation() as NativeStackNavigationProp<RootStackParamList>;
   const [communityCategory, setCommunityCategory] =
@@ -53,14 +51,7 @@ const SearchResultItem: FC<SearchResultItemType> = ({
         userId: item.userId,
       });
     }
-  }, [
-    AmityCommunitySearchResultComponent,
-    item.communityId,
-    item.displayName,
-    item.userId,
-    navigation,
-    searchType,
-  ]);
+  }, [item.communityId, item.displayName, item.userId, navigation, searchType]);
 
   useEffect(() => {
     (async () => {

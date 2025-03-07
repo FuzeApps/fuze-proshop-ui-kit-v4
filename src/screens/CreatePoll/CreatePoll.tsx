@@ -1,31 +1,31 @@
+import { PollRepository, PostRepository } from '@amityco/ts-sdk-react-native';
 import React, { useCallback, useState } from 'react';
 import {
-  TouchableOpacity,
-  View,
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  Switch,
   Text,
   TextInput,
-  Switch,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
+  TouchableOpacity,
+  View,
   ViewStyle,
-  SafeAreaView,
 } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { circleCloseIcon, plusIcon } from '../../svg/svg-xml-list';
-import { useStyles } from './styles';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { useTheme } from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
-import Header from './Components/Header';
-import { PollRepository, PostRepository } from '@amityco/ts-sdk-react-native';
-import { checkCommunityPermission } from '../../providers/Social/communities-sdk';
-import useAuth from '../../hooks/useAuth';
+import { useTheme } from 'react-native-paper';
+import { SvgXml } from 'react-native-svg';
 import AmityMentionInput from '../../components/MentionInput/AmityMentionInput';
-import { TSearchItem } from '../../hooks/useSearch';
-import { text_contain_blocked_word } from '../../util/constants';
 import { PostTag } from '../../enum/enumPostTag';
+import useAuth from '../../hooks/useAuth';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
+import { TSearchItem } from '../../hooks/useSearch';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { checkCommunityPermission } from '../../providers/Social/communities-sdk';
+import { circleCloseIcon, plusIcon } from '../../svg/svg-xml-list';
+import { text_contain_blocked_word } from '../../util/constants';
+import Header from './Components/Header';
+import { useStyles } from './styles';
 
 const CreatePoll = ({ navigation, route }) => {
   const { onPostComplete, displayName, userId } = useAuthStatic();
