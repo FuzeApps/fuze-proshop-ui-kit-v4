@@ -143,13 +143,13 @@ const FollowerListItem: FC<FollowerListItemType> = ({
     try {
       const unfollowed = await UserRepository.Relationship.unfollow(userId);
       if (unfollowed) {
-        onUserUnFollow?.({ userId: userId, userName: userData.displayName });
+        onUserUnFollow?.({ userId: userId, userName: userData?.displayName });
         return Alert.alert('User is unfollowed');
       }
     } catch (error) {
       Alert.alert('Error on unfollow');
     }
-  }, [onUserUnFollow, userData.displayName, userId]);
+  }, [onUserUnFollow, userData?.displayName, userId]);
 
   return (
     <View style={styles.listItemContainer}>
