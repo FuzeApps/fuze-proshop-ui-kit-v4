@@ -36,6 +36,7 @@ import { useFileV4 } from '../../../hooks/useFilev4';
 import { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 import { RootStackParamList } from '../../../routes/RouteParamList';
 import { threeDots, userIcon } from '../../../svg/svg-xml-list';
+import { useAuthStatic } from '../../../hooks/useAuthStatic';
 
 type FollowerListItemType = {
   userId: string;
@@ -61,6 +62,7 @@ const FollowerListItem: FC<FollowerListItemType> = ({
   const [avatar, setAvatar] = useState(defaultAvatarUri);
   const [isVisible, setIsVisible] = useState(false);
   const [isReported, setIsReported] = useState(false);
+  const { onUserUnFollow } = useAuthStatic();
 
   useEffect(() => {
     UserRepository.getUser(userId, async ({ data, error, loading }) => {
@@ -140,11 +142,14 @@ const FollowerListItem: FC<FollowerListItemType> = ({
   const onPressUnfollow = useCallback(async () => {
     try {
       const unfollowed = await UserRepository.Relationship.unfollow(userId);
-      if (unfollowed) return Alert.alert('User is unfollowed');
+      if (unfollowed) {
+        onUserUnFollow?.({ userId: userId, userName: userData.displayName });
+        return Alert.alert('User is unfollowed');
+      }
     } catch (error) {
       Alert.alert('Error on unfollow');
     }
-  }, [userId]);
+  }, [onUserUnFollow, userData.displayName, userId]);
 
   return (
     <View style={styles.listItemContainer}>
