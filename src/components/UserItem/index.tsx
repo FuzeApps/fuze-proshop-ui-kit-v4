@@ -1,15 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { useStyles } from './styles';
-import RoundCheckbox from '../RoundCheckbox/index';
-import type { UserInterface } from '../../types/user.interface';
-import useAuth from '../../hooks/useAuth';
-import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
-import { SvgXml } from 'react-native-svg';
-import { userIcon } from '../../svg/svg-xml-list';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Image, Pressable, Text, TouchableOpacity } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import useAuth from '../../hooks/useAuth';
 import { RootStackParamList } from '../../routes/RouteParamList';
+import { userIcon } from '../../svg/svg-xml-list';
+import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
+import type { UserInterface } from '../../types/user.interface';
+import RoundCheckbox from '../RoundCheckbox/index';
+import { useStyles } from './styles';
 
 export default function UserItem({
   user,

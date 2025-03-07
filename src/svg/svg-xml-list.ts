@@ -672,3 +672,27 @@ export const singleUserIcon = (
 ) => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M20 21C20 19.6044 20 18.9067 19.8278 18.3389C19.44 17.0605 18.4395 16.06 17.1611 15.6722C16.5933 15.5 15.8956 15.5 14.5 15.5H9.5C8.10444 15.5 7.40665 15.5 6.83886 15.6722C5.56045 16.06 4.56004 17.0605 4.17224 18.3389C4 18.9067 4 19.6044 4 21M16.5 7.5C16.5 9.98528 14.4853 12 12 12C9.51472 12 7.5 9.98528 7.5 7.5C7.5 5.01472 9.51472 3 12 3C14.4853 3 16.5 5.01472 16.5 7.5Z" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
+
+export const searchEmptyIcon = (
+  color: string = amityUIKitTokens.colors.base
+) => `<svg width="108" height="108" viewBox="0 0 108 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M60.8499 47.0308H100.084V99.6639H44.0762V58.3539" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M58.5547 34.0039L94.8697 34.0039C97.7308 34.0039 100.05 31.6845 100.05 28.8233C100.05 25.9621 97.7308 23.6427 94.8697 23.6427L58.5547 23.6427C55.6935 23.6427 53.374 25.9621 53.374 28.8233C53.374 31.6845 55.6935 34.0039 58.5547 34.0039Z" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M67.8887 87.7675V72.8838H53.0049V87.7675H67.8887Z" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M45.2266 49.5458L63.3503 67.6695C64.4641 68.7833 66.2528 68.7833 67.3666 67.6695C68.4803 66.5558 68.4803 64.767 67.3666 63.6533L49.2428 45.5295" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M45.2234 49.545C36.0603 56.7169 22.7797 56.0925 14.3422 47.655C5.22969 38.5425 5.22969 23.76 14.3422 14.6475C20.6028 8.3869 29.5128 6.4294 37.4441 8.75815" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M51.1476 42.71C50.5907 43.6887 49.9495 44.6337 49.2407 45.545" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M30.8478 49.7976C41.1368 49.7976 49.4778 41.4567 49.4778 31.1676C49.4778 20.8785 41.1368 12.5376 30.8478 12.5376C20.5587 12.5376 12.2178 20.8785 12.2178 31.1676C12.2178 41.4567 20.5587 49.7976 30.8478 49.7976Z" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M20.873 21.1953C26.3743 15.694 35.3012 15.694 40.8024 21.1953" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M30.8478 49.7976C41.1368 49.7976 49.4778 41.4567 49.4778 31.1676C49.4778 20.8785 41.1368 12.5376 30.8478 12.5376C20.5587 12.5376 12.2178 20.8785 12.2178 31.1676C12.2178 41.4567 20.5587 49.7976 30.8478 49.7976Z" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M33.9045 44.9214C31.8795 45.3601 29.7701 45.3601 27.7451 44.9214" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M92.2535 84.9814H73.3535" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M92.2535 79.3125H73.3535" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M92.2556 73.6418H89.0156" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M85.7904 73.6418H73.3535" stroke="${color}" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M58.5747 29.6829C59.0407 29.6829 59.4185 29.3051 59.4185 28.8391C59.4185 28.3731 59.0407 27.9954 58.5747 27.9954C58.1087 27.9954 57.731 28.3731 57.731 28.8391C57.731 29.3051 58.1087 29.6829 58.5747 29.6829Z" fill="${color}"/>
+<path d="M62.7075 29.6831C63.1735 29.6831 63.5513 29.3053 63.5513 28.8394C63.5513 28.3734 63.1735 27.9956 62.7075 27.9956C62.2415 27.9956 61.8638 28.3734 61.8638 28.8394C61.8638 29.3053 62.2415 29.6831 62.7075 29.6831Z" fill="${color}"/>
+<path d="M66.8408 29.6829C67.3068 29.6829 67.6846 29.3051 67.6846 28.8391C67.6846 28.3731 67.3068 27.9954 66.8408 27.9954C66.3748 27.9954 65.9971 28.3731 65.9971 28.8391C65.9971 29.3051 66.3748 29.6829 66.8408 29.6829Z" fill="${color}"/>
+<path d="M70.9736 29.6829C71.4396 29.6829 71.8174 29.3051 71.8174 28.8391C71.8174 28.3731 71.4396 27.9954 70.9736 27.9954C70.5076 27.9954 70.1299 28.3731 70.1299 28.8391C70.1299 29.3051 70.5076 29.6829 70.9736 29.6829Z" fill="${color}"/>
+</svg>
+`;
