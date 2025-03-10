@@ -1,8 +1,4 @@
-import {
-  Client,
-  UserRepository,
-  createReport,
-} from '@amityco/ts-sdk-react-native';
+import { UserRepository, createReport } from '@amityco/ts-sdk-react-native';
 import { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -17,12 +13,10 @@ import EditIcon from '../../svg/EditIcon';
 import {
   blockUserIcon,
   flagIcon,
-  trashIcon,
   unBlockUserIcon,
   unFollowIcon,
 } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
-
 export default function UserProfileSetting({
   navigation,
   route,
@@ -83,10 +77,6 @@ export default function UserProfileSetting({
     navigation.navigate('EditProfile', { user });
   }, [navigation, user]);
 
-  const onDeleteUser = useCallback(async () => {
-    await Client.User.deleteUser(userId);
-  }, [userId]);
-
   const settingData = useMemo(() => {
     const userSettingData = [];
     if (!isMyProfile) {
@@ -105,12 +95,6 @@ export default function UserProfileSetting({
             ),
             label: isBlocked ? 'Unblock user' : 'Block user',
             callBack: isBlocked ? handleUnblockUser : handleBlockUser,
-          },
-          {
-            type: 'manage',
-            leftIcon: <SvgXml xml={trashIcon()} />,
-            label: 'Delete user',
-            callBack: onDeleteUser,
           },
         ],
       });
@@ -149,7 +133,6 @@ export default function UserProfileSetting({
     isBlocked,
     isFollowed,
     isMyProfile,
-    onDeleteUser,
     onProfileEditPress,
   ]);
 

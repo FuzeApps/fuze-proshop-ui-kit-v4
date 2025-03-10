@@ -40,6 +40,7 @@ import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentC
 import { PostTargetType } from '../../enum/postTargetType';
 import AmityPostEngagementActionsComponent from '../AmityPostEngagementActionsComponent/AmityPostEngagementActionsComponent';
 
+import ContentLoader, { Rect } from 'react-content-loader/native';
 import { useDispatch } from 'react-redux';
 import { PostTag } from '../../enum/enumPostTag';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
@@ -57,7 +58,6 @@ import uiSlice from '../../redux/slices/uiSlice';
 import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
 import { LinkPreview } from '../PreviewLink/LinkPreview';
 import RenderTextWithMention from '../RenderTextWithMention /RenderTextWithMention';
-import ContentLoader, { Rect } from 'react-content-loader/native';
 
 export interface IPost {
   postId: string;
@@ -166,7 +166,14 @@ const AmityPostContentComponent = ({
     if (targetType === 'community' && targetId && !isFromCommunityFeed) {
       getCommunityInfo(targetId);
     }
-  }, [data?.text, isFromCommunityFeed, targetId, targetType]);
+  }, [
+    data?.text,
+    isFromCommunityFeed,
+    myReactions,
+    reactionCount.like,
+    targetId,
+    targetType,
+  ]);
 
   async function getCommunityInfo(id: string) {
     const { data: community }: { data: Amity.LiveObject<Amity.Community> } =
@@ -220,19 +227,6 @@ const AmityPostContentComponent = ({
     navigation.navigate('EditPost', { post, community: communityData });
   };
 
-  const openModal = () => {
-    checkIsReport();
-    setIsVisible(true);
-  };
-
-  const closeModal = () => {
-    Animated.timing(slideAnimation, {
-      toValue: 0,
-      duration: 100,
-      useNativeDriver: true,
-    }).start(() => setIsVisible(false));
-  };
-
   const checkIsReport = useCallback(async () => {
     setIsCheckReportLoading(true);
     const isReport = await isReportTarget('post', postId);
@@ -243,6 +237,19 @@ const AmityPostContentComponent = ({
       setIsCheckReportLoading(false);
     }
   }, [postId]);
+
+  const openModal = useCallback(() => {
+    checkIsReport();
+    setIsVisible(true);
+  }, [checkIsReport]);
+
+  const closeModal = () => {
+    Animated.timing(slideAnimation, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: true,
+    }).start(() => setIsVisible(false));
+  };
 
   useEffect(() => {
     checkIsReport();
