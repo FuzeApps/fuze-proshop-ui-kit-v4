@@ -17,7 +17,6 @@ import {
   unFollowIcon,
 } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
-
 export default function UserProfileSetting({
   navigation,
   route,
@@ -34,6 +33,7 @@ export default function UserProfileSetting({
   const isMyProfile = !followStatus;
   const isBlocked = followStatus === 'blocked';
   const isFollowed = followStatus === 'accepted';
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <CloseButton />,

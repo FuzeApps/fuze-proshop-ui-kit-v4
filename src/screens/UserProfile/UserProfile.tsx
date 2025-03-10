@@ -105,12 +105,11 @@ export default function UserProfile({ route }: any) {
     const { data: followStatus } =
       await UserRepository.Relationship.follow(userId);
 
-    onUserFollow?.({
-      userId: userId,
-      userName: user?.displayName,
-    });
-
     if (followStatus) {
+      onUserFollow?.({
+        userId: userId,
+        userName: user?.displayName,
+      });
       setFollowStatus(followStatus.status);
     }
   }, [onUserFollow, user?.displayName, userId]);

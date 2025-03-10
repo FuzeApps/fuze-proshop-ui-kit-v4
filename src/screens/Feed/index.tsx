@@ -119,6 +119,7 @@ function Feed(
       <AmityPostContentComponent
         post={item}
         AmityPostContentComponentStyle={AmityPostContentComponentStyleEnum.feed}
+        isFromCommunityFeed
       />
     ),
     []

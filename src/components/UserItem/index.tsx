@@ -1,15 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { useStyles } from './styles';
-import RoundCheckbox from '../RoundCheckbox/index';
-import type { UserInterface } from '../../types/user.interface';
-import useAuth from '../../hooks/useAuth';
-import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
-import { SvgXml } from 'react-native-svg';
-import { userIcon } from '../../svg/svg-xml-list';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Image, Pressable, Text, TouchableOpacity } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import useAuth from '../../hooks/useAuth';
 import { RootStackParamList } from '../../routes/RouteParamList';
+import { userIcon } from '../../svg/svg-xml-list';
+import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
+import type { UserInterface } from '../../types/user.interface';
+import RoundCheckbox from '../RoundCheckbox/index';
+import { useStyles } from './styles';
 
 export default function UserItem({
   user,
@@ -57,10 +57,13 @@ export default function UserItem({
       return null;
     }
 
-    return !showThreeDot ? (
-      <RoundCheckbox isChecked={isCheckmark ?? false} />
-    ) : (
+    if (!showThreeDot) {
+      return <RoundCheckbox isChecked={isCheckmark ?? false} />;
+    }
+
+    return (
       <TouchableOpacity
+        style={styles.rightContainer}
         onPress={() => {
           if (onThreeDotTap) {
             onThreeDotTap(user);
@@ -76,6 +79,7 @@ export default function UserItem({
     showActions,
     showThreeDot,
     styles.dotIcon,
+    styles.rightContainer,
     user,
   ]);
 
@@ -85,21 +89,19 @@ export default function UserItem({
 
   return (
     <Pressable style={styles.listItem} onPress={handleToggle}>
-      <Pressable onPress={navigateToUserDetail}>
-        <View style={styles.leftContainer}>
-          {user.avatarFileId ? (
-            <Image
-              style={styles.avatar}
-              source={{
-                uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
-              }}
-            />
-          ) : (
-            <SvgXml style={styles.avatar} xml={userIcon()} />
-          )}
+      <Pressable onPress={navigateToUserDetail} style={styles.leftContainer}>
+        {user.avatarFileId ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: user.avatarFileId && avatarFileURL(user.avatarFileId),
+            }}
+          />
+        ) : (
+          <SvgXml style={styles.avatar} xml={userIcon()} />
+        )}
 
-          <Text style={styles.itemText}>{displayName()}</Text>
-        </View>
+        <Text style={styles.itemText}>{displayName()}</Text>
       </Pressable>
 
       {/* Menu actions that is displayed with three dots. */}

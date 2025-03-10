@@ -279,9 +279,7 @@ export async function isReportTarget(
   const isReport: Promise<boolean> = new Promise(async (resolve, reject) => {
     try {
       const isReportByMe = await isReportedByMe(targetType, targetId);
-      if (isReportByMe) {
-        resolve(isReportByMe);
-      }
+      resolve(isReportByMe);
     } catch (error) {
       reject(error);
     }

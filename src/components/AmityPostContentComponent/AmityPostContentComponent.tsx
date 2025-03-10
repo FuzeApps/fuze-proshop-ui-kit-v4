@@ -40,6 +40,7 @@ import { AmityPostContentComponentStyleEnum } from '../../enum/AmityPostContentC
 import { PostTargetType } from '../../enum/postTargetType';
 import AmityPostEngagementActionsComponent from '../AmityPostEngagementActionsComponent/AmityPostEngagementActionsComponent';
 
+import ContentLoader, { Rect } from 'react-content-loader/native';
 import { useDispatch } from 'react-redux';
 import { PostTag } from '../../enum/enumPostTag';
 import { useAuthStatic } from '../../hooks/useAuthStatic';
@@ -81,6 +82,7 @@ export interface IPostList {
   post: IPost;
   pageId?: PageID;
   AmityPostContentComponentStyle?: AmityPostContentComponentStyleEnum;
+  isFromCommunityFeed?: boolean;
 }
 export interface MediaUri {
   uri: string;
@@ -96,6 +98,7 @@ const AmityPostContentComponent = ({
   pageId,
   post,
   AmityPostContentComponentStyle = AmityPostContentComponentStyleEnum.detail,
+  isFromCommunityFeed = false,
 }: IPostList) => {
   const {
     AmityPostContentComponentBehavior,
@@ -123,6 +126,8 @@ const AmityPostContentComponent = ({
   const [mentionPositionArr, setMentionsPositionArr] = useState<
     IMentionPosition[]
   >([]);
+  const [isCheckReportLoading, setIsCheckReportLoading] =
+    useState<boolean>(false);
 
   const slideAnimation = useRef(new Animated.Value(0)).current;
 
@@ -158,10 +163,17 @@ const AmityPostContentComponent = ({
 
   useEffect(() => {
     setTextPost(data?.text);
-    if (targetType === 'community' && targetId) {
+    if (targetType === 'community' && targetId && !isFromCommunityFeed) {
       getCommunityInfo(targetId);
     }
-  }, [data?.text, myReactions, reactionCount?.like, targetId, targetType]);
+  }, [
+    data?.text,
+    isFromCommunityFeed,
+    myReactions,
+    reactionCount.like,
+    targetId,
+    targetType,
+  ]);
 
   async function getCommunityInfo(id: string) {
     const { data: community }: { data: Amity.LiveObject<Amity.Community> } =
@@ -215,9 +227,21 @@ const AmityPostContentComponent = ({
     navigation.navigate('EditPost', { post, community: communityData });
   };
 
-  const openModal = () => {
+  const checkIsReport = useCallback(async () => {
+    setIsCheckReportLoading(true);
+    const isReport = await isReportTarget('post', postId);
+    if (isReport) {
+      setIsCheckReportLoading(false);
+      setIsReportByMe(true);
+    } else {
+      setIsCheckReportLoading(false);
+    }
+  }, [postId]);
+
+  const openModal = useCallback(() => {
+    checkIsReport();
     setIsVisible(true);
-  };
+  }, [checkIsReport]);
 
   const closeModal = () => {
     Animated.timing(slideAnimation, {
@@ -226,13 +250,6 @@ const AmityPostContentComponent = ({
       useNativeDriver: true,
     }).start(() => setIsVisible(false));
   };
-
-  const checkIsReport = useCallback(async () => {
-    const isReport = await isReportTarget('post', postId);
-    if (isReport) {
-      setIsReportByMe(true);
-    }
-  }, [postId]);
 
   useEffect(() => {
     checkIsReport();
@@ -311,6 +328,20 @@ const AmityPostContentComponent = ({
             ]}
           >
             <View style={styles.handleBar} />
+
+            {isCheckReportLoading && (
+              <ContentLoader
+                height={140}
+                speed={0.5}
+                backgroundColor={'#ebecef'}
+                foregroundColor={'#a5a9b5'}
+                viewBox="0 0 380 70"
+                opacity={0.4}
+              >
+                <Rect x="0" y="0" rx="5" ry="5" width="100%" height="20" />
+              </ContentLoader>
+            )}
+
             {post?.user?.userId === userId ? (
               <TouchableOpacity
                 onPress={openEditPostModal}
@@ -385,7 +416,12 @@ const AmityPostContentComponent = ({
     }
 
     return null;
-  }, []);
+  }, [
+    AmityPostContentComponentStyle,
+    openModal,
+    post?.tags,
+    styles.threeDotsPressable,
+  ]);
 
   return (
     <View
