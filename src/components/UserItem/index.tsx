@@ -57,9 +57,11 @@ export default function UserItem({
       return null;
     }
 
-    return !showThreeDot ? (
-      <RoundCheckbox isChecked={isCheckmark ?? false} />
-    ) : (
+    if (!showThreeDot) {
+      return <RoundCheckbox isChecked={isCheckmark ?? false} />;
+    }
+
+    return (
       <TouchableOpacity
         style={styles.rightContainer}
         onPress={() => {

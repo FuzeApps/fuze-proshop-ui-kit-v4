@@ -1,4 +1,8 @@
-import { createReport } from '@amityco/ts-sdk-react-native';
+import {
+  createReport,
+  deleteReport,
+  isReportedByMe,
+} from '@amityco/ts-sdk-react-native';
 import React, {
   FC,
   memo,
@@ -6,6 +10,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import {
   Animated,
@@ -43,6 +48,17 @@ const MemberActionModal: FC<IMemberActionModal> = ({
   const styles = useStyles();
   const { userId: currentUserId } = useAuthStatic();
   const slideAnimation = useRef(new Animated.Value(0)).current;
+  const [isReported, setIsReported] = useState<boolean>(false);
+
+  const isUserReportedByMe = useCallback(async () => {
+    const isReport = await isReportedByMe('user', userId);
+    setIsReported(isReport);
+  }, [userId]);
+
+  useEffect(() => {
+    if (isVisible) isUserReportedByMe();
+  }, [isUserReportedByMe, isVisible]);
+
   const actionData = useMemo(
     () => [
       {
@@ -74,12 +90,6 @@ const MemberActionModal: FC<IMemberActionModal> = ({
           ),
       },
       {
-        id: 'report',
-        label: 'Report user',
-        shouldShow: currentUserId !== userId,
-        callBack: async () => await createReport('user', userId),
-      },
-      {
         id: 'remove',
         label: 'Remove from community',
         shouldShow: hasModeratorPermission,
@@ -90,12 +100,29 @@ const MemberActionModal: FC<IMemberActionModal> = ({
             memberIds: [userId],
           }),
       },
+      {
+        id: 'report',
+        label: 'Report user',
+        shouldShow: !isReported,
+        callBack: async () => {
+          await createReport('user', userId);
+        },
+      },
+      {
+        id: 'unreport',
+        label: 'Undo Report',
+        shouldShow: isReported,
+        callBack: async () => {
+          await deleteReport('user', userId);
+        },
+      },
     ],
     [
       communityId,
       currentUserId,
       hasModeratorPermission,
       isInModeratorTab,
+      isReported,
       userId,
     ]
   );

@@ -39,6 +39,9 @@ export const useStyles = () => {
       width: 16,
       height: 12,
     },
+    btnContainer: {
+      padding: amityUIKitTokens.spacing.s2,
+    },
   });
   return styles;
 };
