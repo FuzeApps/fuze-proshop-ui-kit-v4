@@ -11,6 +11,7 @@ import { useAmityComponent } from '../../hooks/useUiKitReference';
 import { RootStackParamList } from '../../routes/RouteParamList';
 import { privateIcon, verifiedIcon } from '../../svg/svg-xml-list';
 import { useStyles } from './styles';
+import { useAuthStatic } from '../../hooks/useAuthStatic';
 
 type SearchResultItemType = {
   pageId?: PageID;
@@ -29,6 +30,9 @@ const SearchResultItem: FC<SearchResultItemType> = ({
     pageId: pageId,
     componentId: componentId,
   });
+  const {
+    minMembersToShowCounter,
+  } = useAuthStatic();
   const styles = useStyles(themeStyles);
 
   const navigation =
@@ -102,13 +106,15 @@ const SearchResultItem: FC<SearchResultItemType> = ({
             >
               {communityCategory?.name ?? ''}
             </Text>
-            <Text
-              style={styles.memberCounts}
-              testID="community_search_result/community_members_count"
-              accessibilityLabel="community_search_result/community_members_count"
-            >
-              {`${item.membersCount} ${memberText}`}
-            </Text>
+            {item.membersCount > minMembersToShowCounter ? (
+              <Text
+                style={styles.memberCounts}
+                testID="community_search_result/community_members_count"
+                accessibilityLabel="community_search_result/community_members_count"
+              >
+                {`${item.membersCount} ${memberText}`}
+              </Text>
+            ) : null}
           </>
         )}
       </View>
