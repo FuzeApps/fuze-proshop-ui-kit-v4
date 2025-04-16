@@ -27,12 +27,7 @@ import CustomTabV4 from '../../components/CustomTabV4';
 import useAuth from '../../hooks/useAuth';
 import Feed from '../Feed';
 import { useStyles } from './styles';
-
-import {
-  StackActions,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
@@ -327,7 +322,7 @@ export default function CommunityHome({ route }: any) {
         <RoundButton
           isTransparent={isStickyHeaderVisible}
           onPress={() => {
-            navigation.dispatch(StackActions.pop(2));
+            navigation.goBack();
           }}
         >
           <SvgXml xml={screenBackIcon()} />

@@ -17,21 +17,26 @@ export const useAmityGlobalSearchViewModel = (
   );
 
   const [searchResult, setSearchResult] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (searchValue?.length < 3) return setSearchResult(null);
     if (searchType === TabName.Communities) {
       setSearchResult(null);
+      setIsLoading(true);
       const unsubscribeCommunity = CommunityRepository.getCommunities(
         {
           displayName: searchValue,
-          membership: 'notMember',
+          membership: 'all',
           limit: 20,
           sortBy: 'displayName',
         },
         ({ error, loading, data, hasNextPage, onNextPage }) => {
-          if (error) return setSearchResult(null);
+          if (error) {
+            setIsLoading(false);
+            return setSearchResult(null);
+          }
           if (!loading) {
+            setIsLoading(false);
             setOnNextCommunityPage(() => (hasNextPage ? onNextPage : null));
             setSearchResult(data);
           }
@@ -40,11 +45,16 @@ export const useAmityGlobalSearchViewModel = (
       return () => unsubscribeCommunity();
     } else if (searchType === TabName.Users) {
       setSearchResult(null);
+      setIsLoading(true);
       const unsubscribeUser = UserRepository.getUsers(
         { displayName: searchValue, limit: 20, sortBy: 'displayName' },
         ({ error, loading, data, hasNextPage, onNextPage }) => {
-          if (error) return setSearchResult(null);
+          if (error) {
+            setIsLoading(false);
+            return setSearchResult(null);
+          }
           if (!loading) {
+            setIsLoading(false);
             setOnNextUserPage(() => (hasNextPage ? onNextPage : null));
             setSearchResult(data);
           }
@@ -53,8 +63,9 @@ export const useAmityGlobalSearchViewModel = (
       return () => unsubscribeUser();
     } else {
       setSearchResult(null);
+      setIsLoading(false);
     }
   }, [searchType, searchValue]);
 
-  return { searchResult, onNextCommunityPage, onNextUserPage };
+  return { searchResult, onNextCommunityPage, onNextUserPage, isLoading };
 };
