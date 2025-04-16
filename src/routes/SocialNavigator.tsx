@@ -8,6 +8,7 @@ import useAuth from '../hooks/useAuth';
 import CategoryList from '../screens/CategorytList';
 import CommunityHome from '../screens/CommunityHome/index';
 import CommunityList from '../screens/CommunityList';
+import AllCommunitiesListing from '../screens/AllCommunitiesListing';
 import CommunityMemberDetail from '../screens/CommunityMemberDetail/CommunityMemberDetail';
 import { CommunitySetting } from '../screens/CommunitySetting/index';
 import Explore from '../screens/Explore';
@@ -204,6 +205,10 @@ export default function SocialNavigator({
             <Stack.Screen
               name={AmityUiKitRoutes.CommunityList}
               component={CommunityList}
+            />
+            <Stack.Screen
+              name={AmityUiKitRoutes.AllCommunitiesListing}
+              component={AllCommunitiesListing}
             />
             <Stack.Screen
               name={AmityUiKitRoutes.AmitySocialGlobalSearchPage}
