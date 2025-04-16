@@ -3,7 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import { ComponentID, PageID, TabName } from '../../enum';
 import { useAmityComponent } from '../../hooks/useUiKitReference';
 import SearchResultItem from '../SearchResultItem/SearchResultItem';
-import { styles } from './AmityCommunitySearchResultComponent.styles';
+import { useStyles } from './AmityCommunitySearchResultComponent.styles';
 
 type AmityCommunitySearchResultComponentType = {
   pageId?: PageID;
@@ -22,6 +22,7 @@ const AmityCommunitySearchResultComponent: FC<
   pageId = PageID.WildCardPage,
   isLoading,
 }) => {
+  const styles = useStyles();
   const componentId = ComponentID.community_search_result;
   const { isExcluded } = useAmityComponent({ pageId, componentId });
 
