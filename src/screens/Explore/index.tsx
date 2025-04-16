@@ -48,6 +48,7 @@ export default function Explore() {
       }
     );
   };
+
   const loadCategories = async () => {
     CategoryRepository.getCategories(
       { sortBy: 'name', limit: 8 },
@@ -170,9 +171,16 @@ export default function Explore() {
         </ScrollView>
       </View>
 
-      {/* Trending Now Section  */}
+      {/* Groups Section  */}
       <View style={styles.trendingContainer}>
-        <Text style={styles.title}>Trending now</Text>
+        <View style={styles.groupsTitleContainer}>
+          <Text style={styles.groupTitle}>Groups</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AllCommunitiesListing')}
+          >
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
+        </View>
         <View>
           {trendingCommunityList.map((community) => (
             <TouchableOpacity
@@ -201,18 +209,13 @@ export default function Explore() {
               )}
 
               <View style={styles.trendingTextContainer}>
-                {/* <Text style={styles.number}>{index + 1}</Text> */}
                 <View style={styles.memberContainer}>
-                  <View style={styles.memberTextContainer}>
-                    <View style={styles.memberTextWrapper}>
-                      <Text numberOfLines={1} style={styles.memberText}>
-                        {community.displayName}
-                      </Text>
-                    </View>
-                    {community.isOfficial && (
-                      <SvgXml width={24} height={24} xml={verifiedIcon()} />
-                    )}
-                  </View>
+                  <Text numberOfLines={1} style={styles.memberText}>
+                    {community.displayName}
+                  </Text>
+                  {community.isOfficial && (
+                    <SvgXml width={24} height={24} xml={verifiedIcon()} />
+                  )}
                 </View>
               </View>
             </TouchableOpacity>
