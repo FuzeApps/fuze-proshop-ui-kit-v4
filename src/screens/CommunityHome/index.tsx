@@ -72,6 +72,7 @@ export default function CommunityHome({ route }: any) {
     onPostStart,
     userId,
     displayName,
+    minMembersToShowCounter,
     CommunityLeaderboardComponent,
   } = useAuthStatic();
 
@@ -425,7 +426,7 @@ export default function CommunityHome({ route }: any) {
   // Community Post and member counter
 
   const communityPostAndMemberCounter = useMemo(() => {
-    if (communityData?.data?.membersCount < 1000) {
+    if (communityData?.data?.membersCount < minMembersToShowCounter) {
       return null;
     }
 
