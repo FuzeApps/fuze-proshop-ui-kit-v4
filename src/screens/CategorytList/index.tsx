@@ -118,7 +118,6 @@ export default function CategoryList({ navigation }: any) {
         renderItem={renderCategory}
         keyExtractor={(item) => item.categoryId.toString()}
         ListFooterComponent={renderFooter}
-        // onEndReached={handleEndReached}
         onEndReached={handleEndReached}
         onMomentumScrollBegin={() =>
           (onEndReachedCalledDuringMomentumRef.current = false)

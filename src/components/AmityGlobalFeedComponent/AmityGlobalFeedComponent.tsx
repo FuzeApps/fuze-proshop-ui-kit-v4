@@ -154,6 +154,7 @@ const AmityGlobalFeedComponent: FC<AmityGlobalFeedComponentType> = ({
       viewabilityConfig={{ viewAreaCoveragePercentThreshold: 60 }}
       onViewableItemsChanged={handleViewChange}
       extraData={postList}
+      showsVerticalScrollIndicator={false}
     />
   ) : (
     <View style={styles.feedWrap}>

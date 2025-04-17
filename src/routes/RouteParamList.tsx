@@ -70,4 +70,5 @@ export type RootStackParamList = {
   MyUserProfile: undefined;
   PreloadCommunityHome: undefined;
   MyCommunity: undefined;
+  AllCommunitiesListing: undefined;
 };

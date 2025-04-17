@@ -8,7 +8,7 @@ export const useStyles = () => {
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.baseShade4,
+      backgroundColor: theme.colors.baseDivider,
     },
     recommendContainer: {
       backgroundColor: theme.colors.baseDivider,
@@ -33,6 +33,7 @@ export const useStyles = () => {
       paddingStart: amityUIKitTokens.spacing.m1,
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
     },
     card: {
       width: 268,
@@ -97,19 +98,16 @@ export const useStyles = () => {
     },
     memberContainer: {
       alignItems: 'flex-start',
-    },
-    memberTextContainer: {
-      alignItems: 'flex-start',
       flexDirection: 'row',
+      flex: 1,
     },
     memberText: {
       fontSize: 18,
       fontWeight: '600',
       marginRight: 4,
       color: theme.colors.base,
+      maxWidth: '80%',
     },
-    memberTextWrapper: { maxWidth: '90%' },
-
     memberCount: {
       fontSize: 13,
       fontWeight: '400',
@@ -120,7 +118,7 @@ export const useStyles = () => {
       paddingTop: 20,
       paddingHorizontal: amityUIKitTokens.spacing.m1,
       paddingBottom: 120,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.baseDivider,
     },
     titleContainer: {
       flexDirection: 'row',
@@ -129,7 +127,7 @@ export const useStyles = () => {
       marginBottom: 10,
     },
     titleText: {
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
       marginBottom: 10,
       color: theme.colors.base,
@@ -181,7 +179,7 @@ export const useStyles = () => {
       flexDirection: 'row',
     },
     categoryName: {
-      fontSize: 12,
+      fontSize: 14,
       lineHeight: 24,
       fontWeight: '600',
       color: theme.colors.base,
@@ -196,6 +194,22 @@ export const useStyles = () => {
     },
     recommendedTitleContainer: {
       paddingHorizontal: amityUIKitTokens.spacing.m1,
+    },
+    groupsTitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+    },
+    viewAllText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: '#118CF7',
+    },
+    groupTitle: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      color: theme.colors.base,
     },
   });
   return styles;

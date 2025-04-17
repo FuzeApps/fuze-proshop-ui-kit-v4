@@ -17,11 +17,12 @@ const AmitySocialGlobalSearchPage = () => {
   const styles = useStyles(themeStyles);
   const [searchValue, setSearchValue] = useState('');
   const [searchType, setSearchType] = useState(TabName.Communities);
-  const { searchResult, onNextCommunityPage, onNextUserPage } =
+  const { searchResult, onNextCommunityPage, onNextUserPage, isLoading } =
     useAmityGlobalSearchViewModel(searchValue, searchType);
   const onNextPage =
     searchType === TabName.Communities ? onNextCommunityPage : onNextUserPage;
   if (isExcluded) return null;
+
   return (
     <SafeAreaView style={styles.container}>
       <AmityTopSearchBarComponent setSearchValue={setSearchValue} />
@@ -36,6 +37,7 @@ const AmitySocialGlobalSearchPage = () => {
           searchType={searchType}
           searchResult={searchResult}
           onNextPage={onNextPage}
+          isLoading={isLoading}
         />
       ) : (
         <SearchPlaceholderLanding themeStyles={themeStyles} />
