@@ -60,11 +60,6 @@ android/app/libs
 android/keystores/debug.keystore
 
 # Yarn
-.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-.yarn/sdks
-.yarn/versions
 .yarn/cache
 .yarn/install-state.gz
 
