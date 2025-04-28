@@ -79,15 +79,21 @@ export default function AllCommunitiesListing({ navigation }: any) {
             }
           }
         );
-        return () => unsubscribe();
+        return unsubscribe;
       } catch (error) {
         console.error('Failed to load communities:', error);
         isFetchingRef.current = false;
         setPaginateLoading(false);
+        return () => {};
       }
     };
 
-    loadCommunities();
+    let unsubscribe = () => {};
+    loadCommunities().then((unsub) => {
+      unsubscribe = unsub || (() => {});
+    });
+
+    return () => unsubscribe();
   }, [getCategory]);
 
   const onPressCommunity = useCallback(
