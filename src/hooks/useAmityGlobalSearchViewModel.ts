@@ -64,6 +64,7 @@ export const useAmityGlobalSearchViewModel = (
     } else {
       setSearchResult(null);
       setIsLoading(false);
+      return () => {};
     }
   }, [searchType, searchValue]);
 
