@@ -1,6 +1,6 @@
 {
   "name": "@amityco/react-native-social-ui-kit",
-  "version": "4.0.33",
+  "version": "4.0.38",
   "description": "Social UIKit",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
