@@ -1,4 +1,4 @@
-import { Animated, Easing, Pressable, Text, View } from 'react-native';
+import { Animated, Easing, Text, TouchableOpacity, View } from 'react-native';
 import React, { FC, memo, useCallback, useEffect, useRef } from 'react';
 import { PageID, ComponentID, mediaAttachment } from '../../enum';
 import { useAmityComponent } from '../../hooks';
@@ -59,21 +59,30 @@ const AmityDetailedMediaAttachmentComponent: FC<
     >
       <View style={styles.handleBar} />
       <View style={styles.buttonsContainer}>
-        <Pressable style={styles.mediaAttachmentBtn} onPress={onPressCamera}>
+        <TouchableOpacity
+          style={styles.mediaAttachmentBtn}
+          onPress={onPressCamera}
+        >
           <CameraIcon style={styles.iconBtn} />
           <Text style={styles.iconText}>Camera</Text>
-        </Pressable>
+        </TouchableOpacity>
         {(!chosenMediaType || chosenMediaType === mediaAttachment.image) && (
-          <Pressable style={styles.mediaAttachmentBtn} onPress={onPressImage}>
+          <TouchableOpacity
+            style={styles.mediaAttachmentBtn}
+            onPress={onPressImage}
+          >
             <GalleryIcon style={styles.iconBtn} />
             <Text style={styles.iconText}>Photo</Text>
-          </Pressable>
+          </TouchableOpacity>
         )}
         {(!chosenMediaType || chosenMediaType === mediaAttachment.video) && (
-          <Pressable style={styles.mediaAttachmentBtn} onPress={onPressVideo}>
+          <TouchableOpacity
+            style={styles.mediaAttachmentBtn}
+            onPress={onPressVideo}
+          >
             <PlayVideoIcon style={styles.iconBtn} />
-            <Text style={styles.iconText}>Video</Text>
-          </Pressable>
+            <Text style={styles.iconText}>Videoo</Text>
+          </TouchableOpacity>
         )}
         {/* will use later
         <Pressable style={styles.mediaAttachmentBtn}>
