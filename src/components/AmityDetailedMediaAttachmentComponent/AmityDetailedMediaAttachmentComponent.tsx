@@ -81,7 +81,7 @@ const AmityDetailedMediaAttachmentComponent: FC<
             onPress={onPressVideo}
           >
             <PlayVideoIcon style={styles.iconBtn} />
-            <Text style={styles.iconText}>Videoo</Text>
+            <Text style={styles.iconText}>Video</Text>
           </TouchableOpacity>
         )}
         {/* will use later
