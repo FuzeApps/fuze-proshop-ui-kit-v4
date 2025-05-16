@@ -18,6 +18,7 @@ export const useStyles = (theme: MyMD3Theme) => {
       position: 'absolute',
       bottom: 0,
       paddingBottom: 14,
+      zIndex: 100,
     },
     handleBar: {
       alignSelf: 'center',

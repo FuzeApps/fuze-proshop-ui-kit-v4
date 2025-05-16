@@ -48,7 +48,7 @@ __metadata:
     expo: ~51.0.39
     expo-asset: ~10.0.10
     expo-dev-client: ~4.0.29
-    expo-image-picker: ~15.1.0
+    expo-image-picker: ~16.0.6
     expo-status-bar: ~1.12.1
     expo-video: 1.2.7
     expo-video-thumbnails: ~8.0.0
@@ -87,7 +87,7 @@ __metadata:
     eslint-plugin-prettier: ^5.0.1
     expo-asset: ~10.0.10
     expo-constants: ~16.0.2
-    expo-image-picker: ~15.1.0
+    expo-image-picker: ~16.0.6
     expo-video: 1.2.7
     expo-video-thumbnails: ~8.0.0
     i18next: 22.4.10
@@ -12888,23 +12888,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-loader@npm:~4.7.0":
-  version: 4.7.0
-  resolution: "expo-image-loader@npm:4.7.0"
+"expo-image-loader@npm:~5.0.0":
+  version: 5.0.0
+  resolution: "expo-image-loader@npm:5.0.0"
   peerDependencies:
     expo: "*"
-  checksum: 1630e988443f87fe86761fb2909e3de88978004a55f769cce7d7965c3ff6e4497e73e9607e826d9a1d5588361b92350e8d4ec0111c9a3243d04a565eddfcf346
+  checksum: 7741b4b926124a1f85e51b0b8c8c9adc37fccf0654eaa0e715cb55cffc716bdc149c0421120f9bec69a69643d3328ec8562899b4aa37a0fdcecfb6fe3cf6f985
   languageName: node
   linkType: hard
 
-"expo-image-picker@npm:~15.1.0":
-  version: 15.1.0
-  resolution: "expo-image-picker@npm:15.1.0"
+"expo-image-picker@npm:~16.0.6":
+  version: 16.0.6
+  resolution: "expo-image-picker@npm:16.0.6"
   dependencies:
-    expo-image-loader: ~4.7.0
+    expo-image-loader: ~5.0.0
   peerDependencies:
     expo: "*"
-  checksum: bc95921dca770130a8535563e48d23147dadbb7530ed3bc5d528337bd234c5d80c33dfe2a00031fd034d04a19d3ce89d171b10965e034b9e659e599dd9a470fc
+  checksum: 448097075ad08c99a9c2857547e36f07e5e491fe5264fe03e77418271f077478a89f1ad462febedb9070013bf90f826b75ad4b2855d98a93593f76ae20c121de
   languageName: node
   linkType: hard
 
