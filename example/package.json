@@ -20,7 +20,7 @@
     "expo": "~51.0.39",
     "expo-asset": "~10.0.10",
     "expo-dev-client": "~4.0.29",
-    "expo-image-picker": "~15.1.0",
+    "expo-image-picker": "~16.0.6",
     "expo-status-bar": "~1.12.1",
     "expo-video": "1.2.7",
     "expo-video-thumbnails": "~8.0.0",
