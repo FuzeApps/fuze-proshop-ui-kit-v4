@@ -23,6 +23,8 @@ import { RootStackParamList } from '../../routes/RouteParamList';
 import { privateIcon, verifiedIcon } from '../../svg/svg-xml-list';
 import { formatNumber } from '../../util/numberUtil';
 
+const MIN_MEMBERS_TO_SHOW_COUNTER = 1000;
+
 type AmityMyCommunitiesComponentType = {
   pageId?: PageID;
   componentId?: ComponentID;
@@ -104,13 +106,16 @@ const AmityMyCommunitiesComponent: FC<AmityMyCommunitiesComponentType> = ({
               </Text>
             )}
           </View>
-          <TextElement
-            style={styles.communityCount}
-            pageID={pageId}
-            componentID={componentId}
-            elementID={ElementID.community_members_count}
-            text={`${formatNumber(item.membersCount)} members`}
-          />
+          {item?.membersCount &&
+            item.membersCount > MIN_MEMBERS_TO_SHOW_COUNTER && (
+              <TextElement
+                style={styles.communityCount}
+                pageID={pageId}
+                componentID={componentId}
+                elementID={ElementID.community_members_count}
+                text={`${formatNumber(item.membersCount)} members`}
+              />
+            )}
         </View>
       </TouchableOpacity>
     );
