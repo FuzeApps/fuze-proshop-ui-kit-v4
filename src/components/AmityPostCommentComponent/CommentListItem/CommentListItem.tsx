@@ -428,6 +428,7 @@ const CommentListItem = ({
                 />
               )}
               keyExtractor={(item) => item.commentId}
+              showsVerticalScrollIndicator={false}
             />
           )}
 
