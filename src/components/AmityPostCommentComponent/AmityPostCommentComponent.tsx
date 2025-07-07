@@ -204,6 +204,8 @@ const AmityPostCommentComponent: FC<AmityPostCommentComponentType> = ({
         onEndReached={() => {
           onNextPageRef.current && onNextPageRef.current();
         }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
       />
     </View>
   );
